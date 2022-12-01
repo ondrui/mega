@@ -1,6 +1,7 @@
-export const expressions = {
+const data = {
   ru: {
-    breadcrumb: {
+    breadcrumbs: {
+      main: "главная",
       weather: "погода",
     },
     header: {
@@ -18,7 +19,8 @@ export const expressions = {
       wind: "ветер",
       main: "главная",
       windDirSpeed: "направление и скорость ветра",
-      windGust: ["порывы ветра", "до"],
+      windGust_1: "порывы ветра",
+      windGust_2: "до",
       humidity: "влажность",
       precSum: "кол-во осадков",
       precProb: "вер. осадков:",
@@ -35,7 +37,7 @@ export const expressions = {
   },
   en: {
     en: {
-      breadcrumb: {
+      breadcrumbs: {
         main: "home",
         weather: "weather",
       },
@@ -53,7 +55,8 @@ export const expressions = {
         pressure: "pressure",
         wind: "wind",
         windDirSpeed: "wind direction and speed",
-        windGust: ["wind gust", "up to"],
+        windGust_1: "wind gust",
+        windGust_2: "up to",
         humidity: "humidity",
         precSum: "precipitation",
         precProb: "precip chance",
@@ -70,4 +73,12 @@ export const expressions = {
     },
   },
   fr: {},
+};
+
+export const expressions = (locales, key, name) => {
+  const lang = locales ?? "ru";
+  return key !== undefined && name !== undefined
+    ? data[lang][key][name]
+    : (console.log("Не найден ключ и/или имя параметра в языковых константах!"),
+      undefined);
 };

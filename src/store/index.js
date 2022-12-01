@@ -1,14 +1,17 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { expressions } from "@/constants/locales";
+// import { expressions } from "@/constants/locales";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    expressions: expressions,
+    locales: "ru",
   },
   getters: {
+    getLocales(state) {
+      return state.locales;
+    },
     current: (state) => {
       state;
       return {
