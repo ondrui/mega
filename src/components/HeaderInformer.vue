@@ -1,16 +1,14 @@
 <template>
-  <div>
-    <BreadcrumbHeader />
-  </div>
+  <BreadcrumbsHeader />
 </template>
 
 <script>
-import BreadcrumbHeader from "./BreadcrumbHeader.vue";
+import BreadcrumbsHeader from "./BreadcrumbsHeader.vue";
 export default {
   components: {
-    BreadcrumbHeader,
+    BreadcrumbsHeader,
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss"></style>

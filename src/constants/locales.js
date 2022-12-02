@@ -3,6 +3,7 @@ const data = {
     breadcrumbs: {
       main: "главная",
       weather: "погода",
+      city: "Луховицы (Московская область, Россия)",
     },
     header: {
       now: "сейчас в",
