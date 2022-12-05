@@ -1,5 +1,5 @@
 <template>
-  <div class="breadcrumbs">
+  <div class="breadcrumbs-header">
     <div class="crumbs">
       <div v-for="(item, index) in crumbs" :key="item">
         <a v-if="isLast(index)" href="#">{{ item }}</a>
@@ -23,9 +23,7 @@ export default {
     };
   },
   mounted() {
-    this.crumbs.push(expressions(this.getLocales, "breadcrumbs", "main"));
-    this.crumbs.push(expressions(this.getLocales, "breadcrumbs", "weather"));
-    this.crumbs.push(expressions(this.getLocales, "breadcrumbs", "city"));
+    this.breadcrumbs("breadcrumbs", ["main", "weather", "city"]);
   },
   computed: {
     getLocales() {
@@ -37,35 +35,38 @@ export default {
     isLast(index) {
       return index !== this.crumbs.length - 1;
     },
+    breadcrumbs(key, arr) {
+      arr.forEach((element) => {
+        this.crumbs.push(expressions(this.getLocales, key, element));
+      });
+    },
   },
 };
 </script>
 
 <style lang="scss">
-.breadcrumbs {
+.breadcrumbs-header {
   display: flex;
   align-items: center;
-  overflow-x: auto;
-  padding: 18px;
-  border: 1px solid teal;
+  margin-bottom: 22px;
+}
 
-  & .crumbs {
-    display: flex;
-    align-items: center;
-    max-width: 950px;
-    min-width: max-content;
-    width: 100%;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
+.crumbs {
+  display: flex;
+  align-items: center;
+  max-width: 950px;
+  min-width: max-content;
+  width: 100%;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+
+  & div::first-letter {
+    text-transform: capitalize;
   }
 
   & a {
     color: #04569c;
-
-    &::first-letter {
-      text-transform: capitalize;
-    }
   }
 
   & span {

@@ -14,6 +14,9 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  height: 100vh;
+}
 * {
   margin: 0;
   padding: 0;
@@ -22,7 +25,9 @@ export default {
 a {
   text-decoration: none;
 }
-.app {
-  padding: 50px;
+#app {
+  padding: 20px;
+  background-color: #f5f5f5;
+  height: 100vh;
 }
 </style>
