@@ -1,17 +1,61 @@
 <template>
   <div class="climate-index">
-    <div class="icon"></div>
+    <div class="block-icon">
+      <BaseIcon name="rect-background" class="background" />
+      <BaseIcon :name="value.icon" class="icon" />
+    </div>
     <div class="descr">
-      <div class="title"></div>
-      <div class="value"></div>
+      <div class="title">
+        {{ value.title }}
+      </div>
+      <div class="value">
+        {{ value.value }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["indicatorKey"],
+  props: ["value"],
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.descr {
+  display: flex;
+  flex-direction: column;
+  padding-left: 6px;
+  justify-content: center;
+  white-space: nowrap;
+
+  & .title {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #9c9c9c;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+
+  & .value {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    color: #000000;
+  }
+}
+.block-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  .icon {
+    position: absolute;
+    transform: rotate(0deg);
+  }
+}
+</style>

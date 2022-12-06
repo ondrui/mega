@@ -29,6 +29,6 @@ export default {
 <style lang="scss">
 .main-container {
   background-color: #ffffff;
-  min-width: 400px;
+  min-width: 500px;
 }
 </style>

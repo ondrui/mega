@@ -12,11 +12,10 @@ export default new Vuex.Store({
     getLocales(state) {
       return state.locales;
     },
-    current: (state) => {
-      state;
+    current: () => {
       return {
         currDateDescr: "сейчас в 15:38 по прогнозу ",
-        iconCode: "cloudy_snow_0",
+        icon: "partly-cloudy_rain_0",
         descr: "переменная облачность небольшой дождь",
         temp: {
           value: "-3",
@@ -27,27 +26,66 @@ export default new Vuex.Store({
           title: "ощущается",
         },
         pressure: {
+          icon: "pressure",
           title: "давление",
           value: "755",
-          unit: "мм.рт.ст.",
+          unit: " мм.рт.ст.",
         },
         wind: {
+          icon: "wind-direction",
           title: "ветер",
           value: "4",
-          unit: "м/c",
+          unit: " м/c",
           direction: "e",
         },
         windGust: {
+          icon: "wind-gust",
           title: "порывы ветра",
           value: "14",
-          unit: "м/с",
+          unit: " м/с",
+          direction: "e",
         },
         humidity: {
+          icon: "humidity",
           title: "влажность",
           value: "65",
           unit: "%",
         },
       };
+    },
+    nowcast() {
+      return {
+        icon: "partly-cloudy_rain_0",
+        descr: "переменная облачность небольшой дождь",
+        temp: "14°",
+        realFeel: "14",
+      };
+    },
+    forecastForItemHeader() {
+      return [
+        {
+          icon: "pressure",
+          title: "давление:",
+          value: "755 мм.рт.ст.",
+        },
+        {
+          icon: "wind-direction",
+          title: "ветер:",
+          value: "4 м/c",
+          direction: "e",
+        },
+        {
+          icon: "wind-gust",
+          title: "порывы ветра:",
+          value: "14 м/c",
+          direction: "e",
+        },
+        {
+          icon: "humidity",
+          title: "влажность:",
+          value: "65%",
+        },
+      ];
     },
     forecastTenBasic: (state) => {
       state;

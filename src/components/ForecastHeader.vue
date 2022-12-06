@@ -11,15 +11,20 @@
     </div>
     <div class="forecast-content">
       <div class="forecast-content-left">
-        <div class="weather-icon"></div>
+        <div class="weather-icon">
+          <BaseIcon :name="nowcast.icon" />
+        </div>
         <div class="temp"></div>
-        <div class="descr-block"></div>
+        <div class="descr-block">
+          <div class="descr"></div>
+          <div class="feeling"></div>
+        </div>
       </div>
       <div class="forecast-content-right">
         <ForecastHeaderItem
-          v-for="(key, index) in climateindicatorKeys"
+          v-for="(value, index) in forecastForItemHeader"
           :key="`cn-${index}`"
-          :indicatorKey="key"
+          :value="value"
         />
       </div>
     </div>
@@ -43,6 +48,12 @@ export default {
     getLocales() {
       return this.$store.getters.getLocales;
     },
+    forecastForItemHeader() {
+      return this.$store.getters.forecastForItemHeader;
+    },
+    nowcast() {
+      return this.$store.getters.nowcast;
+    },
   },
   methods: {
     expressions,
@@ -56,27 +67,26 @@ export default {
   font-size: 11px;
   line-height: 13px;
   color: #9c9c9c;
-  margin-top: 16px;
+  margin-bottom: 16px;
 }
 .forecast-content {
   display: flex;
+
+  & .descr-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 .forecast-content-left {
   display: flex;
 }
 .forecast-content-right {
   display: flex;
+  justify-content: space-around;
+  min-width: 470px;
 }
 .climate-index {
   display: flex;
-}
-.icon {
-  display: flex;
-}
-.descr {
-  display: flex;
-}
-.title::first-letter {
-  text-transform: capitalize;
 }
 </style>

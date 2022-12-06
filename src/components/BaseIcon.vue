@@ -32,6 +32,7 @@ requireComponents.keys().forEach((fileName) => {
 
 export default {
   props: {
+    pick: String,
     name: {
       type: String,
       required: true,
