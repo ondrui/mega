@@ -4,7 +4,11 @@
       <div v-for="(item, index) in crumbs" :key="item">
         <a v-if="isLast(index)" href="#">{{ item }}</a>
         <span v-else>{{ item }}</span>
-        <ChevronCrumbRight v-if="isLast(index)" class="breadcrumbs-chevron" />
+        <BaseIcon
+          name="chevron-breadcrumb-right"
+          v-if="isLast(index)"
+          class="breadcrumbs-chevron"
+        />
       </div>
     </div>
   </div>
@@ -12,11 +16,7 @@
 
 <script>
 import { expressions } from "@/constants/locales";
-import ChevronCrumbRight from "@/assets/images/common-icons/icon-chevron-breadcrumb-right.svg";
 export default {
-  components: {
-    ChevronCrumbRight,
-  },
   data() {
     return {
       crumbs: [],

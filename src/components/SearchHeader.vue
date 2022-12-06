@@ -7,18 +7,13 @@
       v-model="searchQuery"
     />
     <div class="search-icon-container">
-      <SearchIcon class="search-icon" />
+      <BaseIcon name="search" class="search-icon" />
     </div>
   </div>
 </template>
 
 <script>
-import SearchIcon from "@/assets/images/common-icons/icon-search.svg";
-
 export default {
-  components: {
-    SearchIcon,
-  },
   data() {
     return {
       searchQuery: "Луховицы",
