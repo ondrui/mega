@@ -1,8 +1,13 @@
 <template>
   <div class="climate-index">
     <div class="block-icon">
-      <BaseIcon name="rect-background" class="background" />
-      <BaseIcon :name="value.icon" class="icon" />
+      <BaseIcon
+        name="rect-background"
+        pick="common"
+        class="background"
+        width="40"
+      />
+      <BaseIcon :name="value.icon" pick="common" class="icon" width="14" />
     </div>
     <div class="descr">
       <div class="title">
@@ -27,6 +32,7 @@ export default {
   flex-direction: column;
   padding-left: 6px;
   justify-content: center;
+  row-gap: 2px;
   white-space: nowrap;
 
   & .title {

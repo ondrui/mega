@@ -55,7 +55,7 @@ export default new Vuex.Store({
     },
     nowcast() {
       return {
-        icon: "partly-cloudy_rain_0",
+        icon: "mainly-clear_rain_0",
         descr: "переменная облачность небольшой дождь",
         temp: "14°",
         realFeel: "14",

@@ -23,6 +23,5 @@ export default {
 <style lang="scss">
 .header-container {
   padding: 20px;
-  border: 1px solid teal;
 }
 </style>

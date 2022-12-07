@@ -7,7 +7,7 @@
       v-model="searchQuery"
     />
     <div class="search-icon-container">
-      <BaseIcon name="search" class="search-icon" />
+      <BaseIcon name="search" pick="common" width="23" class="search-icon" />
     </div>
   </div>
 </template>

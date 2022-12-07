@@ -6,6 +6,8 @@
         <span v-else>{{ item }}</span>
         <BaseIcon
           name="chevron-breadcrumb-right"
+          width="5"
+          pick="common"
           v-if="isLast(index)"
           class="breadcrumbs-chevron"
         />

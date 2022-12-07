@@ -12,12 +12,18 @@
     <div class="forecast-content">
       <div class="forecast-content-left">
         <div class="weather-icon">
-          <BaseIcon :name="nowcast.icon" />
+          <BaseIcon :name="nowcast.icon" pick="light" width="49" />
         </div>
-        <div class="temp"></div>
+        <div class="temp">{{ nowcast.temp }}</div>
         <div class="descr-block">
-          <div class="descr"></div>
-          <div class="feeling"></div>
+          <div class="text-descr">{{ nowcast.descr }}</div>
+          <div class="feeling">
+            {{
+              `${expressions(getLocales, "header", "feelsLike")} ${
+                nowcast.realFeel
+              }`
+            }}
+          </div>
         </div>
       </div>
       <div class="forecast-content-right">
@@ -71,15 +77,45 @@ export default {
 }
 .forecast-content {
   display: flex;
+}
+.forecast-content-left {
+  display: flex;
+
+  & .temp {
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 56px;
+    color: #333333;
+  }
 
   & .descr-block {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 130px;
+
+    & .text-descr {
+      font-weight: 400;
+      font-size: 11px;
+      line-height: 13px;
+      color: #9c9c9c;
+    }
+
+    & .text-descr::first-letter {
+      text-transform: capitalize;
+    }
+
+    & .feeling {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
+      color: #000000;
+    }
+
+    & .feeling::first-letter {
+      text-transform: capitalize;
+    }
   }
-}
-.forecast-content-left {
-  display: flex;
 }
 .forecast-content-right {
   display: flex;
