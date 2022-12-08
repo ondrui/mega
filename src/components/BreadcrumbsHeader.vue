@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { expressions } from "@/constants/locales";
+import { languageExpressions } from "@/constants/locales";
 export default {
   data() {
     return {
@@ -33,13 +33,13 @@ export default {
     },
   },
   methods: {
-    expressions,
+    languageExpressions,
     isLast(index) {
       return index !== this.crumbs.length - 1;
     },
     breadcrumbs(key, arr) {
       arr.forEach((element) => {
-        this.crumbs.push(expressions(this.getLocales, key, element));
+        this.crumbs.push(languageExpressions(this.getLocales, key, element));
       });
     },
   },
@@ -78,6 +78,12 @@ export default {
   & .breadcrumbs-chevron,
   & a {
     margin-right: 8px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .breadcrumbs-header {
+    margin-bottom: 16px;
   }
 }
 </style>

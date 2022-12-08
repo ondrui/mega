@@ -9,7 +9,7 @@
 
 <script>
 import HeaderInformer from "./HeaderInformer.vue";
-import { expressions } from "@/constants/locales";
+import { languageExpressions } from "@/constants/locales";
 
 export default {
   components: {
@@ -21,7 +21,7 @@ export default {
     },
   },
   methods: {
-    expressions,
+    languageExpressions,
   },
 };
 </script>
@@ -29,6 +29,7 @@ export default {
 <style lang="scss">
 .main-container {
   background-color: #ffffff;
-  min-width: 500px;
+  max-width: 900px;
+  min-width: 400px;
 }
 </style>

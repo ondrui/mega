@@ -2,11 +2,11 @@
   <div class="forecast-container">
     <div class="forecast-date-info">
       {{
-        `${expressions(getLocales, "header", "now")} 15:38 ${expressions(
+        `${languageExpressions(
           getLocales,
           "header",
-          "forecast"
-        )}`
+          "now"
+        )} 15:38 ${languageExpressions(getLocales, "header", "forecast")}`
       }}
     </div>
     <div class="forecast-content">
@@ -19,7 +19,7 @@
           <div class="text-descr">{{ nowcast.descr }}</div>
           <div class="feeling">
             {{
-              `${expressions(getLocales, "header", "feelsLike")} ${
+              `${languageExpressions(getLocales, "header", "feelsLike")} ${
                 nowcast.realFeel
               }`
             }}
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { expressions } from "@/constants/locales";
+import { languageExpressions } from "@/constants/locales";
 import ForecastHeaderItem from "./ForecastHeaderItem.vue";
 
 export default {
@@ -62,7 +62,7 @@ export default {
     },
   },
   methods: {
-    expressions,
+    languageExpressions,
   },
 };
 </script>
@@ -70,34 +70,42 @@ export default {
 <style lang="scss">
 .forecast-date-info {
   font-weight: 400;
-  font-size: 11px;
-  line-height: 13px;
+  font-size: 12px;
+  line-height: 14px;
   color: #9c9c9c;
   margin-bottom: 16px;
 }
 .forecast-content {
   display: flex;
+  column-gap: 14px;
+  row-gap: 22px;
+  flex-wrap: wrap;
 }
 .forecast-content-left {
   display: flex;
+  align-items: center;
 
   & .temp {
     font-weight: 400;
     font-size: 48px;
     line-height: 56px;
     color: #333333;
+    padding-left: 8px;
   }
 
   & .descr-block {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 130px;
+    align-self: center;
+    row-gap: 2px;
+    width: 180px;
+    padding-left: 15px;
 
     & .text-descr {
       font-weight: 400;
-      font-size: 11px;
-      line-height: 13px;
+      font-size: 14px;
+      line-height: 16px;
       color: #9c9c9c;
     }
 
@@ -119,10 +127,27 @@ export default {
 }
 .forecast-content-right {
   display: flex;
-  justify-content: space-around;
-  min-width: 470px;
+  flex: 1;
+  column-gap: 8px;
+  // flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  // padding-left: 14px;
 }
-.climate-index {
-  display: flex;
+
+@media only screen and (max-width: 870px) {
+  .forecast-content-right {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 8px 17px;
+  }
 }
+
+// @media only screen and (max-width: 600px) {
+//   .forecast-content-right {
+//     display: grid;
+//     grid-template-columns: repeat(2, 1fr);
+//     grid-gap: 8px;
+//   }
+// }
 </style>

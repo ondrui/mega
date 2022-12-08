@@ -1,4 +1,4 @@
-const data = {
+const dataLocales = {
   ru: {
     breadcrumbs: {
       main: "главная",
@@ -76,10 +76,10 @@ const data = {
   fr: {},
 };
 
-export const expressions = (locales, key, name) => {
+export const languageExpressions = (locales, key, name) => {
   const lang = locales ?? "ru";
   return key !== undefined && name !== undefined
-    ? data[lang][key][name]
+    ? dataLocales[lang][key][name]
     : (console.log("Не найден ключ и/или имя параметра в языковых константах!"),
       undefined);
 };

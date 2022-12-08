@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import { expressions } from "@/constants/locales";
+// import { languageExpressions } from "@/constants/locales";
 
 Vue.use(Vuex);
 
@@ -55,19 +55,14 @@ export default new Vuex.Store({
     },
     nowcast() {
       return {
-        icon: "mainly-clear_rain_0",
+        icon: "mainly-clear_rain_1_thunderstorm_1",
         descr: "переменная облачность небольшой дождь",
         temp: "14°",
-        realFeel: "14",
+        realFeel: "14°",
       };
     },
     forecastForItemHeader() {
       return [
-        {
-          icon: "pressure",
-          title: "давление:",
-          value: "755 мм.рт.ст.",
-        },
         {
           icon: "wind-direction",
           title: "ветер:",
@@ -79,6 +74,11 @@ export default new Vuex.Store({
           title: "порывы ветра:",
           value: "14 м/c",
           direction: "e",
+        },
+        {
+          icon: "pressure",
+          title: "давление:",
+          value: "755 мм.рт.ст.",
         },
         {
           icon: "humidity",

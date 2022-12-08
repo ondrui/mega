@@ -27,6 +27,9 @@ export default {
 </script>
 
 <style lang="scss">
+.climate-index {
+  display: flex;
+}
 .descr {
   display: flex;
   flex-direction: column;
@@ -37,8 +40,8 @@ export default {
 
   & .title {
     font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
+    font-size: 12px;
+    line-height: 14px;
     color: #9c9c9c;
 
     &::first-letter {
