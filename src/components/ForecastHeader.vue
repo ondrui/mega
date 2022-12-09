@@ -129,10 +129,8 @@ export default {
   display: flex;
   flex: 1;
   column-gap: 8px;
-  // flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  // padding-left: 14px;
 }
 
 @media only screen and (max-width: 870px) {
@@ -142,12 +140,4 @@ export default {
     grid-gap: 8px 17px;
   }
 }
-
-// @media only screen and (max-width: 600px) {
-//   .forecast-content-right {
-//     display: grid;
-//     grid-template-columns: repeat(2, 1fr);
-//     grid-gap: 8px;
-//   }
-// }
 </style>

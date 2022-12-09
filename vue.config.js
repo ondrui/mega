@@ -13,7 +13,16 @@ module.exports = {
       rules: [
         {
           test: /\.svg$/,
-          loader: "vue-svg-loader",
+          use: [
+            {
+              loader: "vue-svg-loader",
+              options: {
+                svgo: {
+                  plugins: [{ removeUselessStrokeAndFill: false }],
+                },
+              },
+            },
+          ],
         },
       ],
     },

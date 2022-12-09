@@ -31,7 +31,7 @@ export default {
   height: 50px;
   width: 100%;
   padding-left: 13px;
-  background: #f0f7fc;
+  background-color: #f0f7fc;
   border: 1px solid #b2d3e8;
   border-radius: 4px;
   font-weight: 400;

@@ -1,14 +1,17 @@
 <template>
   <div id="app">
     <MainInformer />
+    <AllSVGIcons />
   </div>
 </template>
 
 <script>
 import MainInformer from "@/components/MainInformer.vue";
+import AllSVGIcons from "./components/AllSVGIcons.vue";
 export default {
   components: {
     MainInformer,
+    AllSVGIcons,
   },
 };
 </script>

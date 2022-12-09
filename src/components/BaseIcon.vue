@@ -19,11 +19,17 @@ export default {
       type: String,
       required: true,
     },
+    isTest: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     iconComponent() {
-      const nameComponent = this.name + "-" + this.pick;
+      const nameComponent = !this.isTest
+        ? this.name + "-" + this.pick
+        : this.name;
       if (!Object.prototype.hasOwnProperty.call(icons, nameComponent)) {
         return (
           console.log(`${nameComponent} иконка с таким именем не найдена!!!`),
@@ -36,8 +42,3 @@ export default {
   },
 };
 </script>
-<style>
-svg {
-  /* border: 1px solid teal; */
-}
-</style>
