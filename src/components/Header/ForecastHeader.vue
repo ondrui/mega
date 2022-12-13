@@ -45,11 +45,6 @@ export default {
   components: {
     ForecastHeaderItem,
   },
-  data() {
-    return {
-      climateindicatorKeys: ["pressure", "wind", "windGust_1", "humidity"],
-    };
-  },
   computed: {
     getLocales() {
       return this.$store.getters.getLocales;

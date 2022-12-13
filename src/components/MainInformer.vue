@@ -1,19 +1,20 @@
 <template>
   <div class="main-container">
     <HeaderInformer />
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere, non a
-    laboriosam veritatis fuga culpa aliquam harum quaerat ipsa ipsum labore
-    dolor, corporis laudantium odio consequuntur impedit, sunt expedita ratione.
+    <TabsInformer />
+    <br />
   </div>
 </template>
 
 <script>
-import HeaderInformer from "./HeaderInformer.vue";
+import HeaderInformer from "./Header/HeaderInformer.vue";
+import TabsInformer from "./Tabs/TabsInformer.vue";
 import { languageExpressions } from "@/constants/locales";
 
 export default {
   components: {
     HeaderInformer,
+    TabsInformer,
   },
   computed: {
     getLocales() {

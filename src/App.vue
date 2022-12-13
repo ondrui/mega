@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="p-20">
     <MainInformer />
     <AllSVGIcons />
   </div>
@@ -29,7 +29,6 @@ a {
   text-decoration: none;
 }
 #app {
-  padding: 20px;
   background-color: #f5f5f5;
   height: 100vh;
 }

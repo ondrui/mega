@@ -1,5 +1,5 @@
 <template>
-  <div class="header-container">
+  <div class="p-20">
     <BreadcrumbsHeader />
     <SearchHeader />
     <ForecastHeader />
@@ -20,8 +20,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.header-container {
-  padding: 20px;
-}
-</style>
+<style lang="scss"></style>

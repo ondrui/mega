@@ -11,8 +11,8 @@ const dataLocales = {
       feelsLike: "ощущается",
     },
     tabsDescr: {
-      hourly: "почасовой прогноз",
-      daily: "прогноз погоды на 10 дней",
+      HourlyTabContent: "почасовой прогноз",
+      TenDayTabContent: "прогноз погоды на 10 дней",
     },
     climateIndicators: {
       temp: "температура",
@@ -80,6 +80,8 @@ export const languageExpressions = (locales, key, name) => {
   const lang = locales ?? "ru";
   return key !== undefined && name !== undefined
     ? dataLocales[lang][key][name]
+    : key !== undefined
+    ? dataLocales[lang][key]
     : (console.log("Не найден ключ и/или имя параметра в языковых константах!"),
       undefined);
 };
