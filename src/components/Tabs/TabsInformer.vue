@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tabs-container">
     <div class="buttons-tabs">
       <button
         :class="['button-tab', { active: currentTab === key }]"
@@ -7,7 +7,7 @@
         v-for="(value, key) in tabsList"
         :key="key"
       >
-        {{ value }}
+        <span>{{ value }}</span>
       </button>
     </div>
 
@@ -48,9 +48,14 @@ export default {
 </script>
 
 <style lang="scss">
+.tabs-container {
+  padding: 0 8px;
+}
 .tab {
-  border: 1px solid #ccc;
   padding: 10px;
+  background-color: #f0f7fc;
+  border: 1px solid #b2d3e8;
+  border-top: none;
 }
 .buttons-tabs {
   display: flex;
@@ -58,21 +63,49 @@ export default {
   .button-tab {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex: 1;
     cursor: pointer;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 15px;
-    color: #04569c;
-    padding: 10px 0;
+    box-shadow: inset 0 1px 0 0 #b2d3e8;
     border: 1px solid #b2d3e8;
+    border-top: none;
     background-color: #ffffff;
+    outline: none;
+    &:nth-child(odd) {
+      margin-right: -1px;
+    }
+
+    & span {
+      display: inline-block;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 15px;
+      color: #04569c;
+      padding: 10px 0;
+
+      &::first-letter {
+        text-transform: capitalize;
+      }
+    }
+
+    &:hover {
+      background-color: #d6e8f3;
+
+      & span {
+        color: #04569c;
+        text-decoration: underline;
+      }
+    }
 
     &.active {
-      color: #000000;
       background-color: #f0f7fc;
-      border-bottom: 4px solid #04569c;
+      box-shadow: inset 0 3px 0 0 #04569c;
+      border-bottom: none;
+
+      & span {
+        color: #000000;
+        text-decoration: none;
+      }
     }
   }
 }

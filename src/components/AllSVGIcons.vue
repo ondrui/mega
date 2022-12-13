@@ -1,6 +1,9 @@
 <template>
   <div>
-    <BaseIcon v-for="icon in icons" :key="icon" :name="icon" isTest />
+    <div v-for="icon in icons" :key="icon">
+      <BaseIcon :name="icon" isTest />
+      <div>{{ icon }}</div>
+    </div>
   </div>
 </template>
 
