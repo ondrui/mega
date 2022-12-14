@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="days-container">
-      <div class="svg-chart">
-        <svg class="svg" xmlns="http://www.w3.org/2000/svg"></svg>>
+      <div class="svg-charts">
+        <SVGCharts />
       </div>
       <div
         class="day"
@@ -15,7 +15,7 @@
           <div>{{ day.date }}</div>
         </div>
         <div class="icon">
-          <BaseIcon width="100%" :name="day.iconCode" pick="light" />
+          <BaseIcon width="40" :name="day.iconCode" pick="light" />
         </div>
         <div class="charts"></div>
         <div>
@@ -53,7 +53,12 @@
 </template>
 
 <script>
+import SVGCharts from "../SVGCharts.vue";
+
 export default {
+  components: {
+    SVGCharts,
+  },
   computed: {
     forecastTenBasic() {
       return this.$store.getters.forecastTenBasic;
@@ -92,6 +97,9 @@ export default {
 .weekend {
   background-color: #f7fafd;
 }
+.icon {
+  height: 80px;
+}
 .day-title {
   position: absolute;
   z-index: 11;
@@ -105,15 +113,11 @@ export default {
   top: -6px;
   left: 6px;
 }
-.svg-chart {
+.svg-charts {
   position: absolute;
-  top: 145px;
-  width: 100%;
-}
-.svg {
-  fill: none;
+  top: 120px;
   width: 100%;
   height: 100px;
-  border: 1px solid teal;
+  z-index: 10;
 }
 </style>

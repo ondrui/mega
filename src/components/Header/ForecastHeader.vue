@@ -128,7 +128,7 @@ export default {
   align-items: center;
 }
 
-@media only screen and (max-width: 870px) {
+@media only screen and (max-width: 890px) {
   .forecast-content-right {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
