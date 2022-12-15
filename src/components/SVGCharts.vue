@@ -6,21 +6,27 @@
       :view-box.camel="viewbox"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <SVGChatsItem />
+      <SVGChartsItem
+        :width="width"
+        :height="height"
+        v-for="(value, index) in tenDayPoints"
+        :key="`ch-${index}`"
+        :points="value"
+      />
     </svg>
   </div>
 </template>
 
 <script>
+import SVGChartsItem from "./SVGChartsItem.vue";
 export default {
+  components: {
+    SVGChartsItem,
+  },
   data() {
     return {
       width: 300,
-      height: 100,
-      textSize: 16,
-      marginFromCell: 12,
-      marginText: 7,
-      circleRadius: 5.5,
+      height: 170,
     };
   },
   mounted() {
@@ -43,14 +49,11 @@ export default {
     window.removeEventListener("resize", this.resizeBrowserHandler);
   },
   computed: {
-    tenDaysCharts() {
-      return this.$store.getters.tenDaysCharts;
+    tenDayPoints() {
+      return this.$store.getters.tenDayPoints;
     },
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;
-    },
-    renderCharts() {
-      return "";
     },
   },
   methods: {
@@ -80,7 +83,7 @@ export default {
 .svg {
   fill: none;
   width: 100%;
-  height: 100px;
+  height: 170px;
   box-shadow: 0 0 0 1px teal;
 }
 </style>

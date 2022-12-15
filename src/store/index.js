@@ -411,10 +411,17 @@ export default new Vuex.Store({
         },
       ];
     },
-    tenDaysCharts: () => {
+    tenDayPoints: () => {
       const minTemp = [11, 12, 10, 11, 14, 14, 15, 14, 12, 12];
       const maxTemp = [18, 17, 16, 17, 18, 18, 17, 16, 16, 16];
-      return { minTemp, maxTemp, unit: "°" };
+      const delta = Math.max(...maxTemp) - Math.min(...minTemp);
+      const min = Math.min(...minTemp);
+      const max = Math.max(...maxTemp);
+      const unit = "°";
+      return [
+        { unit, value: minTemp, descr: "min", delta, min, max },
+        { unit, value: maxTemp, descr: "max", delta, min, max },
+      ];
     },
     forecastTenDeepHeader: (state) => {
       state;
