@@ -5,38 +5,22 @@
       stroke-width="1"
       :d="svgPath"
     ></path>
-    <g v-for="(p, index) in calcPointsSVG" :key="`c-${index}`">
-      <circle
-        :cx="p.x"
-        :cy="p.y"
-        :r="circleRadius"
-        stroke="#0BC2FF"
-        stroke-width="1"
-        fill="#ffffff"
-      />
-      <text
-        :class="['text-meter', textMeter(index).thin]"
-        :x="p.x"
-        :y="textMeter(index).y"
-      >
-        <tspan ref="tspan" class="tspan">{{ textMeter(index).value }}</tspan>
-        <tspan>{{ textMeter(index).unit }}</tspan>
-      </text>
-    </g>
+    <circle
+      v-for="(p, index) in points.coord"
+      :key="`c-${index}`"
+      :cx="p.x"
+      :cy="p.y"
+      :r="circleRadius"
+      stroke="#0BC2FF"
+      stroke-width="1"
+      fill="#ffffff"
+    />
   </g>
 </template>
 
 <script>
 export default {
   props: {
-    width: {
-      type: Number,
-      required: true,
-    },
-    height: {
-      type: Number,
-      required: true,
-    },
     points: {
       type: Object,
       required: true,
@@ -50,37 +34,10 @@ export default {
       circleRadius: 5.5,
     };
   },
-  mounted() {
-    this.calcPointsSVG;
-  },
   computed: {
-    /**
-     * Вычисляет и возвращает массив координат Х и У в системе координат элемента svg.
-     * @example
-     * [
-     *   { "x": 42.35, "y": 32 },
-     *   { "x": 127.05, "y": 36 },
-     *   { "x": 211.75, "y": 138 },
-     *   { "x": 296.45, "y": 36 },
-     * ]
-     */
-    calcPointsSVG() {
-      let x = this.width / 20;
-      const points = this.points.value.map((e, i) => {
-        if (i === 0) {
-          return { x, y: this.transformYToSVG(e) };
-        }
-        return { x: (x += this.width / 10), y: this.transformYToSVG(e) };
-      });
-      return points;
-    },
-    /**
-     * Принимает массив объектов с координатами и
-     * возвращает список команд пути для отображения графика.
-     */
     svgPath() {
       // build the d attributes by looping over the points
-      const d = this.calcPointsSVG.reduce(
+      const d = this.points.coord.reduce(
         (acc, point, i, a) =>
           i === 0
             ? // if first point
@@ -96,41 +53,6 @@ export default {
     },
   },
   methods: {
-    textMeter(index) {
-      const points = this.points;
-      const value = points.value[index];
-      const unit = points.unit;
-      const y =
-        points.descr === "min"
-          ? this.calcPointsSVG[index].y + this.marginText + this.textSize
-          : this.calcPointsSVG[index].y + this.marginText - this.textSize;
-      const thin = points.descr === "min" ? "thin" : "";
-
-      return {
-        value,
-        unit,
-        y,
-        thin,
-      };
-    },
-    /**
-     * Переводит принимаемый параметр в координату У элемента svg
-     * с учетом текстовой метки и других морджинов.
-     * @param pointY - м
-     */
-    transformYToSVG(pointY) {
-      const { max, min } = this.points;
-      const totalYMargin =
-        this.textSize +
-        this.marginFromCell +
-        this.marginText +
-        this.circleRadius / 2;
-      const y = Math.round(
-        ((this.height - 2 * totalYMargin) * (max - pointY)) / (max - min) +
-          totalYMargin
-      );
-      return y;
-    },
     /**
      * Конвертирует принимаемые точки в контрольные точки кривой Безье.
      * @param points - Массив объектов с координатами точек через которые нужно

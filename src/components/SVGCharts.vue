@@ -7,10 +7,15 @@
       xmlns="http://www.w3.org/2000/svg"
     >
       <SVGChartsItem
+        v-for="(points, index) in dataPoints"
+        :key="`ch-${index}`"
+        :points="points"
+      />
+      <SVGChartsTextItem
         :width="width"
         :height="height"
-        v-for="(value, index) in tenDayPoints"
-        :key="`ch-${index}`"
+        v-for="(value, index) in tenDay"
+        :key="`tx-${index}`"
         :points="value"
       />
     </svg>
@@ -19,17 +24,24 @@
 
 <script>
 import SVGChartsItem from "./SVGChartsItem.vue";
+import SVGChartsTextItem from "./SVGChartsTextItem.vue";
 export default {
   components: {
     SVGChartsItem,
+    SVGChartsTextItem,
   },
   data() {
     return {
       width: 300,
       height: 170,
+      textSize: 16,
+      marginFromCell: 8,
+      marginText: 5,
+      circleRadius: 5.5,
     };
   },
   mounted() {
+    this.points;
     /**
      * После монтирования компоненты вызываем функцию обработчик, которая
      * отвечает за вычисление и установку следующих значений:
@@ -49,14 +61,48 @@ export default {
     window.removeEventListener("resize", this.resizeBrowserHandler);
   },
   computed: {
-    tenDayPoints() {
-      return this.$store.getters.tenDayPoints;
+    tenDay() {
+      return this.$store.getters.tenDay;
     },
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;
     },
+    dataPoints() {
+      const arr = this.tenDay.map((item) => {
+        let x = this.width / 20;
+        const coord = item.value.map((e, i) => {
+          if (i === 0) {
+            return { x, y: this.transformYToSVG(e, item) };
+          }
+          return {
+            x: (x += this.width / 10),
+            y: this.transformYToSVG(e, item),
+          };
+        });
+        return { descr: item.descr, coord };
+      });
+      return arr;
+    },
   },
   methods: {
+    /**
+     * Переводит принимаемый параметр в координату У элемента svg
+     * с учетом текстовой метки и других морджинов.
+     * @param pointY - м
+     */
+    transformYToSVG(pointY, item) {
+      const { max, min } = item;
+      const totalYMargin =
+        this.textSize +
+        this.marginFromCell +
+        this.marginText +
+        this.circleRadius / 2;
+      const y = Math.round(
+        ((this.height - 2 * totalYMargin) * (max - pointY)) / (max - min) +
+          totalYMargin
+      );
+      return y;
+    },
     /**
      * Функция обработчик вызывается, когда изменяется размер окна страницы.
      */
