@@ -98,7 +98,7 @@ export default {
   background-color: #f7fafd;
 }
 .icon {
-  height: 50px;
+  height: 70px;
 }
 .day-title {
   position: absolute;
@@ -115,7 +115,7 @@ export default {
 }
 .svg-charts {
   position: absolute;
-  top: 92px;
+  top: 110px;
   width: 100%;
   height: 170px;
   z-index: 10;
