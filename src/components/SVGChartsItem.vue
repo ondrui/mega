@@ -6,7 +6,7 @@
       :d="svgPath"
     ></path>
     <circle
-      v-for="(p, index) in points.coord"
+      v-for="(p, index) in points.dataset"
       :key="`c-${index}`"
       :cx="p.x"
       :cy="p.y"
@@ -37,7 +37,7 @@ export default {
   computed: {
     svgPath() {
       // build the d attributes by looping over the points
-      const d = this.points.coord.reduce(
+      const d = this.points.dataset.reduce(
         (acc, point, i, a) =>
           i === 0
             ? // if first point

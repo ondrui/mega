@@ -69,17 +69,17 @@ export default {
     },
     dataPoints() {
       const arr = this.tenDay.map((item) => {
-        let x = this.width / 20;
-        const coord = item.value.map((e, i) => {
+        let x = this.width / (item.value.length * 2);
+        const dataset = item.value.map((e, i) => {
           if (i === 0) {
             return { x, y: this.transformYToSVG(e, item) };
           }
           return {
-            x: (x += this.width / 10),
+            x: (x += this.width / item.value.length),
             y: this.transformYToSVG(e, item),
           };
         });
-        return { descr: item.descr, coord };
+        return { descr: item.descr, dataset };
       });
       return arr;
     },
@@ -87,7 +87,7 @@ export default {
   methods: {
     /**
      * Переводит принимаемый параметр в координату У элемента svg
-     * с учетом текстовой метки и других морджинов.
+     * с учетом текстовой метки и других маржинов.
      * @param pointY - м
      */
     transformYToSVG(pointY, item) {
@@ -131,5 +131,20 @@ export default {
   width: 100%;
   height: 170px;
   box-shadow: 0 0 0 1px teal;
+}
+.text-meter {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  fill: #333333;
+}
+.color-path {
+  stroke: #0bc2ff;
+}
+.dotted {
+  stroke-dasharray: 8 4;
+}
+.thin {
+  font-weight: 300;
 }
 </style>
