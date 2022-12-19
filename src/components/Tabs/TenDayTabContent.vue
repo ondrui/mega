@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="days-container">
-      <div class="svg-charts">
-        <SVGCharts />
+      <div class="svg-charts-temp">
+        <ChartsList />
       </div>
       <div
         class="day"
@@ -17,9 +17,13 @@
         <div class="icon">
           <BaseIcon width="40" :name="day.iconCode" pick="light" />
         </div>
-        <div class="charts"></div>
-        <div>
-          Осадки
+        <div class="charts-temp"></div>
+        <div class="precipitation">
+          <ChartPrecip
+            v-if="day.precSum.value !== 0"
+            :data="day.precSum"
+            :max="max"
+          />
           <div class="day-title" v-if="index === 0">
             {{ day.precSum.title }}
           </div>
@@ -53,15 +57,27 @@
 </template>
 
 <script>
-import SVGCharts from "../SVGCharts.vue";
+import ChartsList from "../SVGCharts/10-day-temp/ChartsList.vue";
+import ChartPrecip from "../SVGCharts/10-day-precipitation/ChartPrecip.vue";
 
 export default {
   components: {
-    SVGCharts,
+    ChartsList,
+    ChartPrecip,
   },
   computed: {
     forecastTenBasic() {
       return this.$store.getters.forecastTenBasic;
+    },
+    /**
+     *
+     */
+    precipMax() {
+      const max = Math.max(
+        ...this.forecastTenBasic.map((e) => e.precSum.value)
+      );
+      const y = Math.round(((this.height - 11) * (max - temp)) / max);
+      return y;
     },
   },
 };
@@ -91,7 +107,7 @@ export default {
     }
   }
 }
-.charts {
+.charts-temp {
   height: 170px;
 }
 .weekend {
@@ -110,14 +126,20 @@ export default {
   line-height: 12px;
   color: #333333;
   white-space: nowrap;
-  top: -6px;
+  top: 0px;
   left: 6px;
 }
-.svg-charts {
+.svg-charts-temp {
   position: absolute;
   top: 110px;
   width: 100%;
   height: 170px;
   z-index: 10;
+}
+.precipitation {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  height: 60px;
 }
 </style>

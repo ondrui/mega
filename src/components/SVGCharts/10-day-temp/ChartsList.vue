@@ -1,34 +1,34 @@
 <template>
   <div>
     <svg
-      ref="svg"
-      class="svg"
+      ref="svg-temp"
+      class="svg-temp"
       :view-box.camel="viewbox"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <SVGChartsItem
+      <ChartsItem
         v-for="(points, index) in dataPoints"
         :key="`ch-${index}`"
         :points="points"
       />
-      <SVGChartsTextItem
-        :width="width"
-        :height="height"
-        v-for="(value, index) in tenDay"
+      <ChartsTextItem
+        v-for="(value, index) in dataPoints"
         :key="`tx-${index}`"
         :points="value"
+        :textSize="textSize"
+        :marginText="marginText"
       />
     </svg>
   </div>
 </template>
 
 <script>
-import SVGChartsItem from "./SVGChartsItem.vue";
-import SVGChartsTextItem from "./SVGChartsTextItem.vue";
+import ChartsItem from "./ChartsItem.vue";
+import ChartsTextItem from "./ChartsTextItem.vue";
 export default {
   components: {
-    SVGChartsItem,
-    SVGChartsTextItem,
+    ChartsItem,
+    ChartsTextItem,
   },
   data() {
     return {
@@ -41,7 +41,6 @@ export default {
     };
   },
   mounted() {
-    this.points;
     /**
      * После монтирования компоненты вызываем функцию обработчик, которая
      * отвечает за вычисление и установку следующих значений:
@@ -54,32 +53,60 @@ export default {
      */
     window.addEventListener("resize", this.resizeBrowserHandler);
   },
-  unmounted() {
+  destroyed() {
     /**
      * Удаляем оброботчик на событие resize когда компонент размонтирован.
      */
     window.removeEventListener("resize", this.resizeBrowserHandler);
   },
   computed: {
+    /**
+     * Получаем массив объектов со стора, которые содержит свойства
+     * необходимые для отрисовки графиков и меток температурных.
+     */
     tenDay() {
-      return this.$store.getters.tenDay;
+      return this.$store.getters.tenDayTemp;
     },
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;
     },
+    /**
+     * Возвращает массив объектов, которые содержат координаты для
+     * отображения графиков и меток температурных.
+     * @example
+     *[
+     *  {
+     *    descr: "min",
+     *    unit: "°",
+     *    dataset: [
+     *      { x: 27.35, y: 85, temp: 11 },
+     *      { x: 82.05, y: 77, temp: 12 },
+     *    ],
+     *  },
+     *  {
+     *    descr: "max",
+     *    unit: "°",
+     *    dataset: [
+     *      { x: 27.35, y: 32, temp: 18 },
+     *      { x: 82.05, y: 39, temp: 17 },
+     *    ],
+     *  },
+     *];
+     */
     dataPoints() {
       const arr = this.tenDay.map((item) => {
         let x = this.width / (item.value.length * 2);
         const dataset = item.value.map((e, i) => {
           if (i === 0) {
-            return { x, y: this.transformYToSVG(e, item) };
+            return { x, y: this.transformYToSVG(e, item), temp: e };
           }
           return {
             x: (x += this.width / item.value.length),
             y: this.transformYToSVG(e, item),
+            temp: e,
           };
         });
-        return { descr: item.descr, dataset };
+        return { descr: item.descr, unit: item.unit, dataset };
       });
       return arr;
     },
@@ -88,17 +115,19 @@ export default {
     /**
      * Переводит принимаемый параметр в координату У элемента svg
      * с учетом текстовой метки и других маржинов.
-     * @param pointY - м
+     * @param temp - Значение температуры.
+     * @param obj - Объект содержит свойства необходимые для отрисовки
+     * графиков и меток температурных.
      */
-    transformYToSVG(pointY, item) {
-      const { max, min } = item;
+    transformYToSVG(temp, obj) {
+      const { max, min } = obj;
       const totalYMargin =
         this.textSize +
         this.marginFromCell +
         this.marginText +
         this.circleRadius / 2;
       const y = Math.round(
-        ((this.height - 2 * totalYMargin) * (max - pointY)) / (max - min) +
+        ((this.height - 2 * totalYMargin) * (max - temp)) / (max - min) +
           totalYMargin
       );
       return y;
@@ -118,19 +147,19 @@ export default {
       const getHeight = (element) => {
         return Math.round(this.$refs[element].getBoundingClientRect().height);
       };
-      this.width = getWidth("svg");
-      this.height = getHeight("svg");
+      this.width = getWidth("svg-temp");
+      this.height = getHeight("svg-temp");
     },
   },
 };
 </script>
 
 <style lang="scss">
-.svg {
+.svg-temp {
   fill: none;
   width: 100%;
   height: 170px;
-  box-shadow: 0 0 0 1px teal;
+  // box-shadow: 0 0 0 1px teal;
 }
 .text-meter {
   font-weight: 500;

@@ -101,7 +101,7 @@ export default new Vuex.Store({
           },
           precSum: {
             title: "кол-во осадков",
-            value: null,
+            value: 3,
             unit: "мм",
           },
           wind: {
@@ -133,7 +133,7 @@ export default new Vuex.Store({
           },
           precSum: {
             title: "кол-во осадков",
-            value: null,
+            value: 0,
             unit: "мм",
           },
           wind: {
@@ -165,7 +165,7 @@ export default new Vuex.Store({
           },
           precSum: {
             title: "кол-во осадков",
-            value: null,
+            value: 0,
             unit: "мм",
           },
           wind: {
@@ -197,7 +197,7 @@ export default new Vuex.Store({
           },
           precSum: {
             title: "кол-во осадков",
-            value: null,
+            value: 4,
             unit: "мм",
           },
           wind: {
@@ -229,7 +229,7 @@ export default new Vuex.Store({
           },
           precSum: {
             title: "кол-во осадков",
-            value: null,
+            value: 0,
             unit: "мм",
           },
           wind: {
@@ -325,7 +325,7 @@ export default new Vuex.Store({
           },
           precSum: {
             title: "кол-во осадков",
-            value: null,
+            value: 0,
             unit: "мм",
           },
           wind: {
@@ -357,7 +357,7 @@ export default new Vuex.Store({
           },
           precSum: {
             title: "кол-во осадков",
-            value: null,
+            value: 2,
             unit: "мм",
           },
           wind: {
@@ -389,7 +389,7 @@ export default new Vuex.Store({
           },
           precSum: {
             title: "кол-во осадков",
-            value: null,
+            value: 0,
             unit: "мм",
           },
           wind: {
@@ -411,7 +411,7 @@ export default new Vuex.Store({
         },
       ];
     },
-    tenDay: () => {
+    tenDayTemp: () => {
       const maxTemp = [18, 17, 12, 17, 8, 18, 17, 14, 16, 16];
       const minTemp = [11, 12, 10, 11, 4, 14, 15, 13, 12, 12];
       const min = Math.min(...minTemp, ...maxTemp);
@@ -421,6 +421,12 @@ export default new Vuex.Store({
         { unit, value: minTemp, descr: "min", min, max },
         { unit, value: maxTemp, descr: "max", min, max },
       ];
+    },
+    tenDayPrecip: () => {
+      return {
+        unit: "мм",
+        value: [3, 0, 0, 4, 0, 0, 7, 0, 0],
+      };
     },
     forecastTenDeepHeader: (state) => {
       state;
