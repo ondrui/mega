@@ -5,10 +5,17 @@
     class="svg-precip"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <text text-anchor="middle" :x="width / 2" y="9">
-      {{ `${data.value} ${data.unit}` }}
-    </text>
-    <rect :height="bar.height" :width="bar.width" :y="bar.y" />
+    <g v-for="(item, index) in barDataset" :key="index">
+      <text text-anchor="middle" :x="item.xText" y="9">
+        {{ `${item.precip} ${item.unit}` }}
+      </text>
+      <rect
+        :height="item.heightRect"
+        :width="item.widthRect"
+        :y="item.y"
+        :x="item.xRect"
+      />
+    </g>
   </svg>
 </template>
 
@@ -16,22 +23,19 @@
 export default {
   props: {
     data: {
-      type: Object,
-      required: true,
-    },
-    rect: {
-      type: Number,
+      type: Array,
       required: true,
     },
   },
   data() {
     return {
-      width: 50,
+      width: 300,
       height: 50,
+      textSize: 12,
+      marginFromBar: 2,
     };
   },
   mounted() {
-    this.points;
     /**
      * После монтирования компоненты вызываем функцию обработчик, которая
      * отвечает за вычисление и установку следующих значений:
@@ -54,34 +58,48 @@ export default {
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;
     },
-    bar() {
-      return {
-        height: this.height - this.rect,
-        y: this.rect,
-        width: this.width,
-      };
+    /**
+     *
+     */
+    barDataset() {
+      let w = this.width / this.data.length;
+      let max = Math.max(...this.data.map((e) => e.precSum.value));
+      max = max > 6 ? max : 6;
+      const dataset = this.data.reduce(
+        (total, { precSum: { value, unit } }, index) => {
+          if (value !== 0) {
+            let x = index === 0 ? w / 2 : w * index + w / 2;
+            const widthRect = this.width / 10 - 20;
+            const obj = {
+              xText: x,
+              xRect: x - widthRect / 2,
+              unit,
+              y: this.height - this.heightRect(value, max),
+              precip: value,
+              widthRect: widthRect,
+              heightRect: this.heightRect(value, max),
+            };
+            total.push(obj);
+          }
+          return total;
+        },
+        []
+      );
+      return dataset;
     },
   },
   methods: {
     /**
      * Переводит принимаемый параметр в координату У элемента svg
      * с учетом текстовой метки и других маржинов.
-     * @param temp - Значение температуры.
-     * @param obj - Объект содержит свойства необходимые для отрисовки
+     * @param value -
+     * @param max -
      * графиков и меток температурных.
      */
-    transformYToSVG(temp, obj) {
-      const { max, min } = obj;
-      const totalYMargin =
-        this.textSize +
-        this.marginFromCell +
-        this.marginText +
-        this.circleRadius / 2;
-      const y = Math.round(
-        ((this.height - 2 * totalYMargin) * (max - temp)) / (max - min) +
-          totalYMargin
-      );
-      return y;
+    heightRect(value, max) {
+      const totalYMargin = this.textSize + this.marginFromBar;
+      const h = Math.round(((this.height - totalYMargin) * value) / max);
+      return h;
     },
     /**
      * Функция обработчик вызывается, когда изменяется размер окна страницы.
@@ -110,7 +128,7 @@ export default {
   fill: none;
   height: 45px;
   // box-shadow: 0 0 0 1px teal;
-  width: 70%;
+  width: 100%;
 
   & text {
     fill: #0099cc;

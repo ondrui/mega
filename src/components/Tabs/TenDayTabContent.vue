@@ -4,6 +4,9 @@
       <div class="svg-charts-temp">
         <ChartsList />
       </div>
+      <div class="svg-charts-precip">
+        <ChartPrecip :data="forecastTenBasic" />
+      </div>
       <div
         class="day"
         :class="['day', { weekend: day.weekend === true }]"
@@ -18,12 +21,7 @@
           <BaseIcon width="40" :name="day.iconCode" pick="light" />
         </div>
         <div class="charts-temp"></div>
-        <div class="precipitation">
-          <ChartPrecip
-            v-if="day.precSum.value !== 0"
-            :data="day.precSum"
-            :max="max"
-          />
+        <div class="charts-precip">
           <div class="day-title" v-if="index === 0">
             {{ day.precSum.title }}
           </div>
@@ -69,16 +67,6 @@ export default {
     forecastTenBasic() {
       return this.$store.getters.forecastTenBasic;
     },
-    /**
-     *
-     */
-    precipMax() {
-      const max = Math.max(
-        ...this.forecastTenBasic.map((e) => e.precSum.value)
-      );
-      const y = Math.round(((this.height - 11) * (max - temp)) / max);
-      return y;
-    },
   },
 };
 </script>
@@ -110,6 +98,9 @@ export default {
 .charts-temp {
   height: 170px;
 }
+.charts-precip {
+  height: 60px;
+}
 .weekend {
   background-color: #f7fafd;
 }
@@ -136,10 +127,14 @@ export default {
   height: 170px;
   z-index: 10;
 }
-.precipitation {
+.svg-charts-precip {
+  position: absolute;
+  top: 280px;
   display: flex;
-  justify-content: center;
-  align-items: end;
+  align-items: flex-end;
+  width: 100%;
   height: 60px;
+  z-index: 10;
+  opacity: 0.6;
 }
 </style>

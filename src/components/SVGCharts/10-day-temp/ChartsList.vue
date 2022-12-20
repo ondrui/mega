@@ -96,17 +96,21 @@ export default {
     dataPoints() {
       const arr = this.tenDay.map((item) => {
         let x = this.width / (item.value.length * 2);
-        const dataset = item.value.map((e, i) => {
-          if (i === 0) {
-            return { x, y: this.transformYToSVG(e, item), temp: e };
+
+        const dataset = item.value.reduce((total, current, index) => {
+          if (current !== 0 && current !== null) {
+            let x1 = index === 0 ? x : 2 * x * index + x;
+            const obj = {
+              x: x1,
+              y: this.transformYToSVG(current, item),
+              temp: current,
+            };
+            total.push(obj);
           }
-          return {
-            x: (x += this.width / item.value.length),
-            y: this.transformYToSVG(e, item),
-            temp: e,
-          };
-        });
-        return { descr: item.descr, unit: item.unit, dataset };
+          return total;
+        }, []);
+
+        return { descr: item.descr, unit: item.unit, dataset: dataset };
       });
       return arr;
     },
