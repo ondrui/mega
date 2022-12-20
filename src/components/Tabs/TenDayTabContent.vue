@@ -103,9 +103,31 @@ export default {
 }
 .weekend {
   background-color: #f7fafd;
+
+  & .weekday > div:first-child {
+    color: #ff1616;
+  }
+}
+.weekday {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 23px 13px 23px;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 16px;
+}
+.weekday > div:first-child {
+  text-transform: uppercase;
+  font-size: 16px;
+  line-height: 21px;
+  text-align: center;
 }
 .icon {
+  display: flex;
+  flex-direction: column;
   height: 70px;
+  align-items: center;
+  padding-top: 5px;
 }
 .day-title {
   position: absolute;
@@ -122,14 +144,14 @@ export default {
 }
 .svg-charts-temp {
   position: absolute;
-  top: 110px;
+  top: 136px;
   width: 100%;
   height: 170px;
   z-index: 10;
 }
 .svg-charts-precip {
   position: absolute;
-  top: 280px;
+  top: 306px;
   display: flex;
   align-items: flex-end;
   width: 100%;

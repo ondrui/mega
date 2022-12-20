@@ -59,7 +59,8 @@ export default {
       return `0 0 ${this.width} ${this.height}`;
     },
     /**
-     *
+     * Возвращает массив объектов, которые содержат координаты для
+     * отображения баров и текстовых меток.
      */
     barDataset() {
       let w = this.width / this.data.length;
@@ -91,10 +92,9 @@ export default {
   methods: {
     /**
      * Переводит принимаемый параметр в координату У элемента svg
-     * с учетом текстовой метки и других маржинов.
-     * @param value -
-     * @param max -
-     * графиков и меток температурных.
+     * с учетом высоты текстовой метки и других маржинов.
+     * @param value - Значение необходимое для отображения бара графика.
+     * @param max - Максимальное количество осадков за выбранный период.
      */
     heightRect(value, max) {
       const totalYMargin = this.textSize + this.marginFromBar;
