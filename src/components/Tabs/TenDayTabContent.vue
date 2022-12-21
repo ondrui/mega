@@ -30,12 +30,14 @@
             <div class="ten-days-row-caption" v-if="index === 0">
               {{ day.wind.title }}
             </div>
-            <BaseIcon
-              width="10"
-              name="wind-direction-blue"
-              pick="common"
-              :transform="windDirection(index)"
-            />
+            <div>
+              <BaseIcon
+                width="8"
+                name="wind-direction-blue"
+                pick="common"
+                :transform="windDirection(index)"
+              />
+            </div>
             <span>{{ day.wind.direction[1] }}</span>
           </div>
           <div>{{ day.wind.value }}{{ day.wind.unit }}</div>
