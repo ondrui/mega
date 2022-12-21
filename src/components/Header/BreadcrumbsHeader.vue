@@ -46,7 +46,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .breadcrumbs-header {
   display: flex;
   align-items: center;

@@ -1,6 +1,6 @@
 <template>
-  <div class="forecast-container">
-    <div class="forecast-date-info">
+  <div>
+    <div class="header-date-info">
       {{
         `${languageExpressions(
           getLocales,
@@ -9,14 +9,14 @@
         )} 15:38 ${languageExpressions(getLocales, "header", "forecast")}`
       }}
     </div>
-    <div class="forecast-content">
-      <div class="forecast-content-left">
-        <div class="weather-icon">
+    <div class="header-content">
+      <div class="header-content-left">
+        <div>
           <BaseIcon :name="nowcast.icon" pick="light" width="49" />
         </div>
-        <div class="temp">{{ nowcast.temp }}</div>
-        <div class="descr-block">
-          <div class="text-descr">{{ nowcast.descr }}</div>
+        <div class="header-content-left-temp">{{ nowcast.temp }}</div>
+        <div class="header-content-left-descr">
+          <div class="header-content-left-text">{{ nowcast.descr }}</div>
           <div class="feeling">
             {{
               `${languageExpressions(getLocales, "header", "feelsLike")} ${
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <div class="forecast-content-right">
+      <div class="header-content-right">
         <ForecastHeaderItem
           v-for="(value, index) in forecastForItemHeader"
           :key="`cn-${index}`"
@@ -63,24 +63,24 @@ export default {
 </script>
 
 <style lang="scss">
-.forecast-date-info {
+.header-date-info {
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
   color: #9c9c9c;
   margin-bottom: 16px;
 }
-.forecast-content {
+.header-content {
   display: flex;
   column-gap: 14px;
   row-gap: 22px;
   flex-wrap: wrap;
 }
-.forecast-content-left {
+.header-content-left {
   display: flex;
   align-items: center;
 
-  & .temp {
+  & .header-content-left-temp {
     font-weight: 400;
     font-size: 48px;
     line-height: 56px;
@@ -88,7 +88,7 @@ export default {
     padding-left: 8px;
   }
 
-  & .descr-block {
+  & .header-content-left-descr {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -97,14 +97,14 @@ export default {
     width: 180px;
     padding-left: 15px;
 
-    & .text-descr {
+    & .header-content-left-text {
       font-weight: 400;
       font-size: 14px;
       line-height: 16px;
       color: #9c9c9c;
     }
 
-    & .text-descr::first-letter {
+    & .header-content-left-text::first-letter {
       text-transform: capitalize;
     }
 
@@ -120,7 +120,7 @@ export default {
     }
   }
 }
-.forecast-content-right {
+.header-content-right {
   display: flex;
   flex: 1;
   column-gap: 8px;
@@ -129,7 +129,7 @@ export default {
 }
 
 @media only screen and (max-width: 890px) {
-  .forecast-content-right {
+  .header-content-right {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 8px 17px;

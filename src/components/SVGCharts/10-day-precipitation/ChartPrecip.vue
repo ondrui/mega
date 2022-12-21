@@ -6,13 +6,13 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <g v-for="(item, index) in barDataset" :key="index">
-      <text text-anchor="middle" :x="item.xText" y="9">
+      <text text-anchor="middle" :x="item.xText" :y="item.yText">
         {{ `${item.precip} ${item.unit}` }}
       </text>
       <rect
         :height="item.heightRect"
         :width="item.widthRect"
-        :y="item.y"
+        :y="item.yRect"
         :x="item.xRect"
       />
     </g>
@@ -69,13 +69,15 @@ export default {
       const dataset = this.data.reduce(
         (total, { precSum: { value, unit } }, index) => {
           if (value !== 0) {
-            let x = index === 0 ? w / 2 : w * index + w / 2;
-            const widthRect = this.width / 10 - 20;
+            const x = index === 0 ? w / 2 : w * index + w / 2;
+            const y = this.height - this.heightRect(value, max);
+            const widthRect = this.width / 10 - 10;
             const obj = {
               xText: x,
               xRect: x - widthRect / 2,
               unit,
-              y: this.height - this.heightRect(value, max),
+              yRect: y,
+              yText: y - 2,
               precip: value,
               widthRect: widthRect,
               heightRect: this.heightRect(value, max),
@@ -127,7 +129,6 @@ export default {
 .svg-precip {
   fill: none;
   height: 45px;
-  // box-shadow: 0 0 0 1px teal;
   width: 100%;
 
   & text {

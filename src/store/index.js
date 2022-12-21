@@ -55,7 +55,7 @@ export default new Vuex.Store({
     },
     nowcast() {
       return {
-        icon: "mainly-clear_rain_1_thunderstorm_1",
+        icon: "partly-cloudy_rain_1_hail_1_thunderstorm_1",
         descr: "переменная облачность небольшой дождь",
         temp: "14°",
         realFeel: "14°",
@@ -64,7 +64,7 @@ export default new Vuex.Store({
     forecastForItemHeader() {
       return [
         {
-          icon: "wind-direction",
+          icon: "wind-direction-grey",
           title: "ветер:",
           value: "4 м/c",
           direction: "e",
@@ -189,7 +189,7 @@ export default new Vuex.Store({
           weekday: "чт",
           weekend: false,
           date: "24.09",
-          iconCode: "partly-cloudy",
+          iconCode: "mainly-clear_rain_1_thunderstorm_1",
           temp: {
             min: "11",
             max: "17",
@@ -412,8 +412,8 @@ export default new Vuex.Store({
       ];
     },
     tenDayTemp: () => {
-      const maxTemp = [18, 17, 12, 17, null, 18, 17, 14, 16, 16];
-      const minTemp = [null, 12, 10, null, null, 14, 15, 13, 12, 12];
+      const maxTemp = [18, 17, 15, 17, 15, 18, 17, 14, 16, 16];
+      const minTemp = [15, 15, 13, 12, 13, 14, 15, 13, 12, 12];
       const min = Math.min(...minTemp, ...maxTemp);
       const max = Math.max(...maxTemp, ...minTemp);
       const unit = "°";

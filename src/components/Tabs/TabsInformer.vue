@@ -52,7 +52,7 @@ export default {
   padding: 0 8px;
 }
 .tab {
-  padding: 10px;
+  padding: 22px 24px;
   background-color: #f0f7fc;
   border: 1px solid #b2d3e8;
   border-top: none;
