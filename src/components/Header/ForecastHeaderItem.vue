@@ -7,7 +7,13 @@
         class="background"
         width="40"
       />
-      <BaseIcon :name="value.icon" pick="common" class="icon" width="14" />
+      <BaseIcon
+        :name="value.icon"
+        pick="common"
+        class="icon"
+        width="14"
+        :transform="windDirection"
+      />
     </div>
     <div class="descr">
       <div class="title">
@@ -21,8 +27,27 @@
 </template>
 
 <script>
+import { languageExpressions } from "@/constants/locales";
+
 export default {
   props: ["value"],
+  computed: {
+    getLocales() {
+      return this.$store.getters.getLocales;
+    },
+    windDirection() {
+      return this.value.icon.includes("wind") && this.value.direction
+        ? `rotate(${languageExpressions(
+            this.getLocales,
+            "windDir",
+            this.value?.direction
+          )})`
+        : "rotate(0)";
+    },
+  },
+  methods: {
+    languageExpressions,
+  },
 };
 </script>
 
@@ -64,7 +89,6 @@ export default {
 
   .icon {
     position: absolute;
-    transform: rotate(0deg);
   }
 }
 </style>

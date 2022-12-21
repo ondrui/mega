@@ -66,14 +66,14 @@ export default new Vuex.Store({
         {
           icon: "wind-direction-grey",
           title: "ветер:",
-          value: "4 м/c",
-          direction: "e",
+          value: "4 м/c     ЮЗ",
+          direction: "sw",
         },
         {
           icon: "wind-gust",
           title: "порывы ветра:",
           value: "14 м/c",
-          direction: "e",
+          direction: "sw",
         },
         {
           icon: "pressure",
@@ -87,7 +87,7 @@ export default new Vuex.Store({
         },
       ];
     },
-    forecastTenBasic: () => {
+    tenBasic: () => {
       return [
         {
           weekday: "пн",
@@ -108,7 +108,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["n", "с"],
           },
           pressure: {
             title: "давление",
@@ -140,7 +140,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["e", "в"],
           },
           pressure: {
             title: "давление",
@@ -172,7 +172,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["w", "з"],
           },
           pressure: {
             title: "давление",
@@ -204,7 +204,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["n", "с"],
           },
           pressure: {
             title: "давление",
@@ -236,7 +236,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["n", "с"],
           },
           pressure: {
             title: "давление",
@@ -268,7 +268,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["sw", "юз"],
           },
           pressure: {
             title: "давление",
@@ -300,7 +300,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["s", "ю"],
           },
           pressure: {
             title: "давление",
@@ -332,7 +332,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["n", "с"],
           },
           pressure: {
             title: "давление",
@@ -364,7 +364,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["n", "с"],
           },
           pressure: {
             title: "давление",
@@ -396,7 +396,7 @@ export default new Vuex.Store({
             title: "направление и скорость ветра",
             value: "3",
             unit: "м/c",
-            direction: ["n", "С"],
+            direction: ["n", "с"],
           },
           pressure: {
             title: "давление",

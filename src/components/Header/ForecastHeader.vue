@@ -74,7 +74,7 @@ export default {
   display: flex;
   column-gap: 14px;
   row-gap: 22px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .header-content-left {
   display: flex;
@@ -133,6 +133,9 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 8px 17px;
+  }
+  .header-content {
+    flex-wrap: wrap;
   }
 }
 </style>

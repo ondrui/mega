@@ -5,11 +5,11 @@
         <ChartsList />
       </div>
       <div class="ten-days-charts-precip">
-        <ChartPrecip :data="forecastTenBasic" />
+        <ChartPrecip :data="tenBasic" />
       </div>
       <div
         :class="['ten-days-day', { 'ten-days-weekend': day.weekend === true }]"
-        v-for="(day, index) in forecastTenBasic"
+        v-for="(day, index) in tenBasic"
         :key="`d-${index}`"
       >
         <div class="ten-days-weekday">
@@ -30,7 +30,12 @@
             <div class="ten-days-row-caption" v-if="index === 0">
               {{ day.wind.title }}
             </div>
-            <BaseIcon width="10" name="wind-direction-blue" pick="common" />
+            <BaseIcon
+              width="10"
+              name="wind-direction-blue"
+              pick="common"
+              :transform="windDirection(index)"
+            />
             <span>{{ day.wind.direction[1] }}</span>
           </div>
           <div>{{ day.wind.value }}{{ day.wind.unit }}</div>
@@ -58,6 +63,7 @@
 <script>
 import ChartsList from "../SVGCharts/10-day-temp/ChartsList.vue";
 import ChartPrecip from "../SVGCharts/10-day-precipitation/ChartPrecip.vue";
+import { languageExpressions } from "@/constants/locales";
 
 export default {
   components: {
@@ -65,8 +71,22 @@ export default {
     ChartPrecip,
   },
   computed: {
-    forecastTenBasic() {
-      return this.$store.getters.forecastTenBasic;
+    tenBasic() {
+      return this.$store.getters.tenBasic;
+    },
+    getLocales() {
+      return this.$store.getters.getLocales;
+    },
+  },
+  methods: {
+    languageExpressions,
+    windDirection(index) {
+      const { direction } = this.tenBasic[index].wind;
+      return `rotate(${languageExpressions(
+        this.getLocales,
+        "windDir",
+        direction[0]
+      )})`;
     },
   },
 };
@@ -178,6 +198,10 @@ export default {
   line-height: 14px;
   text-align: center;
   color: #333333;
+
+  & span {
+    text-transform: uppercase;
+  }
 
   & > div:first-child {
     display: flex;

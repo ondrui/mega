@@ -35,6 +35,18 @@ const dataLocales = {
       percent: "%",
       precSum: ["мм"],
     },
+    windDir: {
+      calm: -1,
+      n: 0,
+      variable: -111,
+      ne: 45,
+      e: 90,
+      se: 135,
+      s: 180,
+      sw: 225,
+      w: 270,
+      nw: 315,
+    },
   },
   en: {
     en: {
