@@ -109,4 +109,9 @@ export default {
     }
   }
 }
+@media only screen and (max-width: 550px) {
+  .tab {
+    padding: 22px 5px;
+  }
+}
 </style>

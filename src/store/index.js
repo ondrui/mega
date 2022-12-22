@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     locales: "ru",
+    datasetsHourly: {},
   },
   getters: {
     getLocales(state) {
@@ -422,12 +423,6 @@ export default new Vuex.Store({
         { unit, value: maxTemp, descr: "max", min, max },
       ];
     },
-    tenDayPrecip: () => {
-      return {
-        unit: "мм",
-        value: [3, 0, 0, 4, 0, 0, 7, 0, 0],
-      };
-    },
     forecastTenDeepHeader: (state) => {
       state;
       return {
@@ -557,7 +552,17 @@ export default new Vuex.Store({
       };
     },
   },
-  mutations: {},
+  mutations: {
+    setHourly(state, { forecast_1 }) {
+      const filteredDatasets = Object.keys(forecast_1)
+        .filter((key) => key !== "3")
+        .reduce((obj, key) => {
+          obj[key] = forecast_1[key];
+          return obj;
+        }, {});
+      state.datasetsHourly = filteredDatasets;
+    },
+  },
   actions: {},
   modules: {},
 });

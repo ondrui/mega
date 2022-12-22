@@ -231,7 +231,7 @@ export default {
 
 @media only screen and (max-width: 550px) {
   .ten-days-icon svg {
-    width: 35px;
+    width: 30px;
   }
 }
 </style>

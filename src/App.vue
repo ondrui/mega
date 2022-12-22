@@ -13,6 +13,22 @@ export default {
     MainInformer,
     AllSVGIcons,
   },
+  created() {
+    this.getData();
+  },
+  methods: {
+    async getData() {
+      try {
+        const res = await fetch("/forecastHourly72.json");
+        const answer = await res.json();
+        setTimeout(() => {
+          this.$store.commit("setHourly", answer);
+        }, 5000);
+      } catch (error) {
+        this.answer = "Error! Could not reach the API. " + error;
+      }
+    },
+  },
 };
 </script>
 
