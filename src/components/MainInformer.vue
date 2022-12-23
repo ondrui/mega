@@ -1,5 +1,19 @@
 <template>
   <div class="main-container">
+    <div>
+      <b>{{
+        setTimeFormat("2022-12-22T22:00:00+03:00", "l d F", "ru")
+          .split(" ")
+          .slice(0, 1)
+          .join("")
+      }}</b>
+      {{
+        setTimeFormat("2022-12-22T22:00:00+03:00", "l d F", "ru")
+          .split(" ")
+          .slice(1)
+          .join(" ")
+      }}
+    </div>
     <HeaderInformer />
     <TabsInformer />
     <br />
@@ -10,6 +24,7 @@
 import HeaderInformer from "./Header/HeaderInformer.vue";
 import TabsInformer from "./Tabs/TabsInformer.vue";
 import { languageExpressions } from "@/constants/locales";
+import { setTimeFormat } from "@/constants/functions";
 
 export default {
   components: {
@@ -23,6 +38,7 @@ export default {
   },
   methods: {
     languageExpressions,
+    setTimeFormat,
   },
 };
 </script>

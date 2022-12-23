@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import { languageExpressions } from "@/constants/locales";
+import { languageExpressions } from "@/constants/locales";
+import { setTimeFormat } from "@/constants/functions";
 
 Vue.use(Vuex);
 
@@ -423,6 +424,75 @@ export default new Vuex.Store({
         { unit, value: maxTemp, descr: "max", min, max },
       ];
     },
+    hourlyDatasets({ datasetsHourly }) {
+      console.log(datasetsHourly);
+      const sortData = (el) => {
+        return parseInt(el.date.split("T")[1].slice(0, 2));
+      };
+      const obj = {};
+      for (const key in datasetsHourly) {
+        const arr = Object.values(datasetsHourly[key])
+          .filter((i) => typeof i === "object")
+          .sort((a, b) => sortData(a) - sortData(b));
+        obj[key] = arr;
+      }
+      console.log(obj);
+      return obj;
+    },
+    hourlyPropTitle(state, { hourlyDatasets, getLocales }) {
+      const obj = {};
+      for (const key in hourlyDatasets) {
+        const arr = hourlyDatasets[key];
+        const weekday = setTimeFormat(arr[0].date, "l", "ru");
+        const day = setTimeFormat(arr[0].date, "d F", "ru");
+        const showArr = arr.map(
+          ({
+            condition,
+            date,
+            humidity,
+            prec_sum,
+            pressure,
+            temp_max,
+            temp_min,
+            wind_dir,
+            wind_speed,
+          }) => {
+            return {
+              hour: date.split("T")[1].slice(0, 5),
+              condition,
+              date,
+              humidity: `${humidity}${
+                languageExpressions(getLocales, "units", "percent")[0]
+              }`,
+              prec_sum: `${prec_sum} ${
+                languageExpressions(getLocales, "units", "precSum")[0]
+              }`,
+              pressure,
+              temp_max: `${temp_max}${
+                languageExpressions(getLocales, "units", "temp")[0]
+              }`,
+              temp_min: `${temp_min}${
+                languageExpressions(getLocales, "units", "temp")[0]
+              }`,
+              wind_dir: `${
+                languageExpressions(getLocales, "windDir", wind_dir)[1]
+              }`,
+              wind_speed: `${wind_speed} ${
+                languageExpressions(getLocales, "units", "speed")[0]
+              }`,
+            };
+          }
+        );
+        obj[key] = {
+          values: showArr,
+          date: [weekday, day],
+          sunrise: state.datasetsHourly[key]["sunrise"],
+          sunset: state.datasetsHourly[key]["sunset"],
+        };
+      }
+      console.log(obj);
+      return obj;
+    },
     forecastTenDeepHeader: (state) => {
       state;
       return {
@@ -555,7 +625,7 @@ export default new Vuex.Store({
   mutations: {
     setHourly(state, { forecast_1 }) {
       const filteredDatasets = Object.keys(forecast_1)
-        .filter((key) => key !== "3")
+        .filter((key) => key !== "3" && key !== "start_date")
         .reduce((obj, key) => {
           obj[key] = forecast_1[key];
           return obj;

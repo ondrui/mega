@@ -7,55 +7,63 @@
       <div class="ten-days-charts-precip">
         <ChartPrecip :data="tenBasic" />
       </div>
-      <div
-        :class="['ten-days-day', { 'ten-days-weekend': day.weekend === true }]"
-        v-for="(day, index) in tenBasic"
-        :key="`d-${index}`"
-      >
-        <div class="ten-days-weekday">
-          <div>{{ day.weekday }}</div>
-          <div>{{ day.date }}</div>
-        </div>
-        <div class="ten-days-icon">
-          <BaseIcon width="40" :name="day.iconCode" pick="light" />
-        </div>
-        <div class="ten-days-temp-item"></div>
-        <div class="ten-days-precip-item">
-          <div class="ten-days-row-caption" v-if="index === 0">
-            {{ day.precSum.title }}
-          </div>
-        </div>
-        <div class="ten-days-wind-descr">
-          <div>
-            <div class="ten-days-row-caption" v-if="index === 0">
-              {{ day.wind.title }}
+      <div class="day-container" v-for="(day, index) in 3" :key="`d-${index}`">
+        <div class="date-header"><b>Понедельник</b> 16 октября</div>
+        <div class="hourly-data">
+          <div
+            :class="[
+              'ten-days-day',
+              { 'ten-days-weekend': day.weekend === true },
+            ]"
+            v-for="(day, index) in tenBasic"
+            :key="`d-${index}`"
+          >
+            <div class="ten-days-weekday">
+              <div>{{ day.weekday }}</div>
+              <div>{{ day.date }}</div>
             </div>
-            <div>
-              <BaseIcon
-                width="8"
-                name="wind-direction-blue"
-                pick="common"
-                :transform="windDirection(index)"
-              />
+            <div class="ten-days-icon">
+              <BaseIcon width="40" :name="day.iconCode" pick="light" />
             </div>
-            <span>{{ day.wind.direction[1] }}</span>
+            <div class="ten-days-temp-item"></div>
+            <div class="ten-days-precip-item">
+              <div class="ten-days-row-caption" v-if="index === 0">
+                {{ day.precSum.title }}
+              </div>
+            </div>
+            <div class="ten-days-wind-descr">
+              <div>
+                <div class="ten-days-row-caption" v-if="index === 0">
+                  {{ day.wind.title }}
+                </div>
+                <div>
+                  <BaseIcon
+                    width="8"
+                    name="wind-direction-blue"
+                    pick="common"
+                    :transform="windDirection(index)"
+                  />
+                </div>
+                <span>{{ day.wind.direction[1] }}</span>
+              </div>
+              <div>{{ day.wind.value }}{{ day.wind.unit }}</div>
+            </div>
+            <div class="ten-days-pressure">
+              <div class="ten-days-row-caption" v-if="index === 0">
+                {{ day.pressure.title }}, {{ day.pressure.unit }}
+              </div>
+              {{ day.pressure.value }}
+            </div>
+            <div class="ten-day-humidity">
+              <div class="ten-days-row-caption" v-if="index === 0">
+                {{ day.humidity.title }}
+              </div>
+              {{ day.humidity.value }}{{ day.humidity.unit }}
+            </div>
+            <div class="ten-days-chevron-down">
+              <BaseIcon width="7" name="chevron-more-down" pick="common" />
+            </div>
           </div>
-          <div>{{ day.wind.value }}{{ day.wind.unit }}</div>
-        </div>
-        <div class="ten-days-pressure">
-          <div class="ten-days-row-caption" v-if="index === 0">
-            {{ day.pressure.title }}, {{ day.pressure.unit }}
-          </div>
-          {{ day.pressure.value }}
-        </div>
-        <div class="ten-day-humidity">
-          <div class="ten-days-row-caption" v-if="index === 0">
-            {{ day.humidity.title }}
-          </div>
-          {{ day.humidity.value }}{{ day.humidity.unit }}
-        </div>
-        <div class="ten-days-chevron-down">
-          <BaseIcon width="7" name="chevron-more-down" pick="common" />
         </div>
       </div>
     </div>
@@ -84,11 +92,9 @@ export default {
     languageExpressions,
     windDirection(index) {
       const { direction } = this.tenBasic[index].wind;
-      return `rotate(${languageExpressions(
-        this.getLocales,
-        "windDir",
-        direction[0]
-      )})`;
+      return `rotate(${
+        languageExpressions(this.getLocales, "windDir", direction[0])[0]
+      })`;
     },
   },
 };

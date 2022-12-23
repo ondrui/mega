@@ -37,11 +37,13 @@ export default {
     },
     windDirection() {
       return this.value.icon.includes("wind") && this.value.direction
-        ? `rotate(${languageExpressions(
-            this.getLocales,
-            "windDir",
-            this.value?.direction
-          )})`
+        ? `rotate(${
+            languageExpressions(
+              this.getLocales,
+              "windDir",
+              this.value?.direction
+            )[0]
+          })`
         : "rotate(0)";
     },
   },

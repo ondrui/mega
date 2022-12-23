@@ -1,14 +1,15 @@
 import { defaultOptionsDateTimeFormat, formatListDateTime } from "./locales";
 /**
  * Возвращает строку с датой и временем в заданном формате.
- * @param date.
+ * @param date Строковое представление даты получаемое с
+ * сервера.
  * @param format Строковое представление формата.
  * @param locales Языковая метка для определения локали.
  * @returns {string}
  * @example
  * "20:30"
  */
-const setTimeFormat = (date, format, locales) => {
+export const setTimeFormat = (date, format, locales) => {
   /**
    * Объект options настраивает формат даты и времени и передается
    *  аргументом в конструктор new Intl.DateTimeFormat.
@@ -30,11 +31,13 @@ const setTimeFormat = (date, format, locales) => {
    * Формируем объект с заданными свойствами форматирования даты и времени.
    */
   for (const key in formatListDateTime) {
-    const value = getField(formatListDateTime, key, []);
+    const value = formatListDateTime[key];
     if (format.includes(key) && value.length > 0) {
-      setProperty(options, value[0], value[1]);
+      options[value[0]] = value[1];
     }
   }
+
+  const localDate = new Date(date);
   /**
    * Массив объектов, содержащий отформатированную дату по частям.
    * @example
@@ -55,7 +58,7 @@ const setTimeFormat = (date, format, locales) => {
    * ];
    */
   const datePartsArr = new Intl.DateTimeFormat(locales, options).formatToParts(
-    timestamp
+    localDate
   );
   /**
    * Формируем строку дата-время с заданным форматированием.
@@ -63,13 +66,11 @@ const setTimeFormat = (date, format, locales) => {
   let dateFormated = format;
 
   for (const item of format) {
-    const value = getField(formatListDateTime, item, []);
-    if (value.length > 0) {
-      const replaceValue = datePartsArr.find((i) => i.type === value[0]);
+    const value = formatListDateTime[item];
+    if (value && value.length > 0) {
+      let replaceValue = datePartsArr.find((i) => i.type === value[0]);
       dateFormated = dateFormated.replace(item, replaceValue?.value ?? "");
     }
   }
   return dateFormated;
 };
-
-console.log(setTimeFormat("2022-12-22T22:00:00+03:00", "l d F", "ru"));

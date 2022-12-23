@@ -84,11 +84,9 @@ export default {
     languageExpressions,
     windDirection(index) {
       const { direction } = this.tenBasic[index].wind;
-      return `rotate(${languageExpressions(
-        this.getLocales,
-        "windDir",
-        direction[0]
-      )})`;
+      return `rotate(${
+        languageExpressions(this.getLocales, "windDir", direction[0])[0]
+      })`;
     },
   },
 };
