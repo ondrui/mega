@@ -425,7 +425,6 @@ export default new Vuex.Store({
       ];
     },
     hourlyDatasets({ datasetsHourly }) {
-      console.log(datasetsHourly);
       const sortData = (el) => {
         return parseInt(el.date.split("T")[1].slice(0, 2));
       };

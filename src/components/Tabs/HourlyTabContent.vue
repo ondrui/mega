@@ -5,7 +5,7 @@
         <ChartsList />
       </div>
       <div class="ten-days-charts-precip">
-        <ChartPrecip :data="tenBasic" />
+        <ChartPrecip :data="hourlyPropTitle" />
       </div>
       <div class="day-container" v-for="(day, index) in 3" :key="`d-${index}`">
         <div class="date-header"><b>Понедельник</b> 16 октября</div>
@@ -81,8 +81,11 @@ export default {
     ChartPrecip,
   },
   computed: {
-    tenBasic() {
-      return this.$store.getters.tenBasic;
+    hourlyDatasets() {
+      return this.$store.getters.hourlyDatasets;
+    },
+    hourlyPropTitle() {
+      return this.$store.getters.hourlyPropTitle;
     },
     getLocales() {
       return this.$store.getters.getLocales;
@@ -90,12 +93,12 @@ export default {
   },
   methods: {
     languageExpressions,
-    windDirection(index) {
-      const { direction } = this.tenBasic[index].wind;
-      return `rotate(${
-        languageExpressions(this.getLocales, "windDir", direction[0])[0]
-      })`;
-    },
+    // windDirection(index) {
+    //   const { direction } = this.tenBasic[index].wind;
+    //   return `rotate(${
+    //     languageExpressions(this.getLocales, "windDir", direction[0])[0]
+    //   })`;
+    // },
   },
 };
 </script>
