@@ -35,10 +35,10 @@
                 width="8"
                 name="wind-direction-blue"
                 pick="common"
-                :transform="windDirection(index)"
+                :transform="windDirection(getLocales, day.wind)"
               />
             </div>
-            <span>{{ day.wind.direction[1] }}</span>
+            <span>{{ day.wind.wind_dir[1] }}</span>
           </div>
           <div>{{ day.wind.value }}{{ day.wind.unit }}</div>
         </div>
@@ -66,6 +66,7 @@
 import ChartsList from "../SVGCharts/10-day-temp/ChartsList.vue";
 import ChartPrecip from "../SVGCharts/10-day-precipitation/ChartPrecip.vue";
 import { languageExpressions } from "@/constants/locales";
+import { windDirection } from "@/constants/functions";
 
 export default {
   components: {
@@ -82,12 +83,7 @@ export default {
   },
   methods: {
     languageExpressions,
-    windDirection(index) {
-      const { direction } = this.tenBasic[index].wind;
-      return `rotate(${
-        languageExpressions(this.getLocales, "windDir", direction[0])[0]
-      })`;
-    },
+    windDirection,
   },
 };
 </script>

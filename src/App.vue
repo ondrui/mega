@@ -40,7 +40,31 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  /** styling scrollbar component*/
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    border: 4px solid #cfd6e4;
+    background: #cfd6e4;
+  }
 }
+// *::-webkit-scrollbar {
+//   width: 4px;
+// }
+// *::-webkit-scrollbar-thumb {
+//   border-radius: 10px;
+//   background: #cfd6e4;
+// }
 a {
   text-decoration: none;
 }

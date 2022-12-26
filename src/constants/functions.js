@@ -1,4 +1,8 @@
-import { defaultOptionsDateTimeFormat, formatListDateTime } from "./locales";
+import {
+  defaultOptionsDateTimeFormat,
+  formatListDateTime,
+  languageExpressions,
+} from "./locales";
 /**
  * Возвращает строку с датой и временем в заданном формате.
  * @param date Строковое представление даты получаемое с
@@ -73,4 +77,11 @@ export const setTimeFormat = (date, format, locales) => {
     }
   }
   return dateFormated;
+};
+
+export const windDirection = (locales, obj) => {
+  const { wind_dir } = obj;
+  return wind_dir
+    ? `rotate(${languageExpressions(locales, "windDir", wind_dir[0])[0]})`
+    : "rotate(0)";
 };

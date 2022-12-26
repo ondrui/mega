@@ -12,7 +12,7 @@
         pick="common"
         class="icon"
         width="14"
-        :transform="windDirection"
+        :transform="windDirection(getLocales, value)"
       />
     </div>
     <div class="descr">
@@ -21,6 +21,7 @@
       </div>
       <div class="value">
         {{ value.value }}
+        <span v-if="value.direction">{{ value.direction[1] }}</span>
       </div>
     </div>
   </div>
@@ -28,6 +29,7 @@
 
 <script>
 import { languageExpressions } from "@/constants/locales";
+import { windDirection } from "@/constants/functions";
 
 export default {
   props: ["value"],
@@ -35,20 +37,10 @@ export default {
     getLocales() {
       return this.$store.getters.getLocales;
     },
-    windDirection() {
-      return this.value.icon.includes("wind") && this.value.direction
-        ? `rotate(${
-            languageExpressions(
-              this.getLocales,
-              "windDir",
-              this.value?.direction
-            )[0]
-          })`
-        : "rotate(0)";
-    },
   },
   methods: {
     languageExpressions,
+    windDirection,
   },
 };
 </script>
@@ -81,6 +73,11 @@ export default {
     font-size: 12px;
     line-height: 14px;
     color: #000000;
+
+    & span {
+      display: inline-block;
+      text-transform: uppercase;
+    }
   }
 }
 .block-icon {

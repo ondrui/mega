@@ -1,67 +1,85 @@
 <template>
   <div>
-    <div class="ten-days-container">
-      <div class="ten-days-charts-temp">
-        <ChartsList />
+    <div class="hourly-tab-container">
+      <div class="scroll-button-container">
+        <button class="left-btn btn">
+          <BaseIcon width="7" name="chevron-scroll-left" pick="common" />
+        </button>
+        <button class="rightt-btn btn">
+          <BaseIcon width="7" name="chevron-scroll-right" pick="common" />
+        </button>
       </div>
-      <div class="ten-days-charts-precip">
-        <ChartPrecip :data="hourlyPropTitle" />
+      <div class="hourly-row-caption prec-sum">
+        {{ languageExpressions(getLocales, "climateIndicators", "precSum") }}
       </div>
-      <div class="day-container" v-for="(day, index) in 3" :key="`d-${index}`">
-        <div class="date-header"><b>Понедельник</b> 16 октября</div>
-        <div class="hourly-data">
+      <div class="hourly-row-caption wind">
+        {{
+          languageExpressions(getLocales, "climateIndicators", "windDirSpeed")
+        }}
+      </div>
+      <div class="hourly-row-caption pressure">
+        {{ languageExpressions(getLocales, "climateIndicators", "pressure") }},
+        {{ languageExpressions(getLocales, "units", "pressure")[0] }}
+      </div>
+      <div class="hourly-row-caption humidity">
+        {{ languageExpressions(getLocales, "climateIndicators", "humidity") }}
+      </div>
+      <div class="content-wrapper">
+        <div class="wrapper">
+          <div class="hourly-charts-temp">
+            <ChartHourlyTemp />
+          </div>
+          <div class="hourly-charts-precip">
+            <ChartHourlyPrecip :data="hourlyPropTitle" />
+          </div>
           <div
-            :class="[
-              'ten-days-day',
-              { 'ten-days-weekend': day.weekend === true },
-            ]"
-            v-for="(day, index) in tenBasic"
+            class="date-container"
+            v-for="(date, index) in hourlyPropTitle"
             :key="`d-${index}`"
           >
-            <div class="ten-days-weekday">
-              <div>{{ day.weekday }}</div>
-              <div>{{ day.date }}</div>
+            <div class="date-header">
+              <span
+                ><b>{{ date.date[0] }}</b></span
+              >
+              <span>&nbsp; {{ date.date[1] }}</span>
             </div>
-            <div class="ten-days-icon">
-              <BaseIcon width="40" :name="day.iconCode" pick="light" />
-            </div>
-            <div class="ten-days-temp-item"></div>
-            <div class="ten-days-precip-item">
-              <div class="ten-days-row-caption" v-if="index === 0">
-                {{ day.precSum.title }}
-              </div>
-            </div>
-            <div class="ten-days-wind-descr">
-              <div>
-                <div class="ten-days-row-caption" v-if="index === 0">
-                  {{ day.wind.title }}
-                </div>
-                <div>
+            <div class="hourly-data-container">
+              <div
+                class="hourly-item"
+                v-for="(value, index) in date.values"
+                :key="`h-${index}`"
+              >
+                <div class="time">{{ value.hour }}</div>
+                <div class="hourly-icon">
                   <BaseIcon
-                    width="8"
-                    name="wind-direction-blue"
-                    pick="common"
-                    :transform="windDirection(index)"
+                    width="34"
+                    :name="value.condition"
+                    :pick="value.light"
                   />
                 </div>
-                <span>{{ day.wind.direction[1] }}</span>
+                <div class="hourly-temp-item"></div>
+                <div class="hourly-precip-item"></div>
+                <div class="hourly-wind-descr">
+                  <div>
+                    <div>
+                      <BaseIcon
+                        width="8"
+                        name="wind-direction-blue"
+                        pick="common"
+                        :transform="windDirection(getLocales, value)"
+                      />
+                    </div>
+                    <span>{{ value.wind_dir[1] }}</span>
+                  </div>
+                  <div>{{ value.wind_speed }}</div>
+                </div>
+                <div class="hourly-pressure">
+                  {{ value.pressure }}
+                </div>
+                <div class="hourly-day-humidity">
+                  {{ value.humidity }}{{ value.humidity.unit }}
+                </div>
               </div>
-              <div>{{ day.wind.value }}{{ day.wind.unit }}</div>
-            </div>
-            <div class="ten-days-pressure">
-              <div class="ten-days-row-caption" v-if="index === 0">
-                {{ day.pressure.title }}, {{ day.pressure.unit }}
-              </div>
-              {{ day.pressure.value }}
-            </div>
-            <div class="ten-day-humidity">
-              <div class="ten-days-row-caption" v-if="index === 0">
-                {{ day.humidity.title }}
-              </div>
-              {{ day.humidity.value }}{{ day.humidity.unit }}
-            </div>
-            <div class="ten-days-chevron-down">
-              <BaseIcon width="7" name="chevron-more-down" pick="common" />
             </div>
           </div>
         </div>
@@ -71,14 +89,15 @@
 </template>
 
 <script>
-import ChartsList from "../SVGCharts/10-day-temp/ChartsList.vue";
-import ChartPrecip from "../SVGCharts/10-day-precipitation/ChartPrecip.vue";
+import ChartHourlyTemp from "../SVGCharts/hourly-temp/ChartHourlyTemp.vue";
+import ChartHourlyPrecip from "../SVGCharts/hourly-temp/ChartHourlyPrecip.vue";
 import { languageExpressions } from "@/constants/locales";
+import { windDirection } from "@/constants/functions";
 
 export default {
   components: {
-    ChartsList,
-    ChartPrecip,
+    ChartHourlyTemp,
+    ChartHourlyPrecip,
   },
   computed: {
     hourlyDatasets() {
@@ -93,30 +112,56 @@ export default {
   },
   methods: {
     languageExpressions,
-    // windDirection(index) {
-    //   const { direction } = this.tenBasic[index].wind;
-    //   return `rotate(${
-    //     languageExpressions(this.getLocales, "windDir", direction[0])[0]
-    //   })`;
-    // },
+    windDirection,
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.ten-days-container {
+.hourly-tab-container {
   position: relative;
-  display: grid;
-  // height: 480px;
   background-color: #ffffff;
+  border: 1px solid #d8e9f3;
+  // margin: 0 -1px;
+}
+.content-wrapper {
+  display: flex;
   max-width: 100%;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  & .ten-days-day {
-    // display: flex;
-    flex-direction: column;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.wrapper {
+  display: flex;
+  position: relative;
+}
+.date-container {
+  display: flex;
+  flex-direction: column;
+}
+.date-header {
+  white-space: nowrap;
+  padding: 9px 0 8px 13px;
+  border-right: 1px solid #d8e9f3;
+  margin-right: -1px;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 16px;
+  color: #333333;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
+}
+.date-container:last-child .date-header {
+  border-right: none;
+}
+.hourly-data-container {
+  display: flex;
+
+  & .hourly-item {
     border: 1px solid #d8e9f3;
     margin-right: -1px;
-    // min-width: 40px;
+    width: 56px;
     & > div {
       // flex: 1;
       border-bottom: 1px solid #d8e9f3;
@@ -129,45 +174,36 @@ export default {
     }
   }
 }
-.ten-days-temp-item {
-  height: 170px;
+.date-container:last-child .hourly-item:last-child {
+  border-right: none;
 }
-.ten-days-precip-item {
-  height: 60px;
+.date-container:first-child .hourly-item:first-child {
+  border-left: none;
 }
-.ten-days-weekend {
-  background-color: #f7fafd;
-
-  & .ten-days-weekday > div:first-child {
-    color: #ff1616;
-  }
-}
-.ten-days-weekday {
+.time {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 15px 0 13px 0;
   font-weight: 300;
   font-size: 12px;
   line-height: 16px;
+  color: #333333;
+  padding: 7px 0;
 }
-.ten-days-weekday > div {
-  text-align: center;
+.hourly-temp-item {
+  height: 180px;
 }
-.ten-days-weekday > div:first-child {
-  text-transform: uppercase;
-  font-size: 16px;
-  line-height: 21px;
+.hourly-precip-item {
+  height: 60px;
 }
-.ten-days-icon {
+.hourly-icon {
   display: flex;
   flex-direction: column;
-  height: 70px;
+  height: 80px;
   align-items: center;
   padding-top: 5px;
 }
-.ten-days-row-caption {
+.hourly-row-caption {
   position: absolute;
   z-index: 11;
   background: #f5f5f5;
@@ -178,17 +214,30 @@ export default {
   padding: 0 4px;
   color: #333333;
   white-space: nowrap;
-  top: 0px;
   left: 6px;
+
+  &.prec-sum {
+    top: 325px;
+  }
+
+  &.wind {
+    top: 385px;
+  }
+  &.pressure {
+    top: 438px;
+  }
+  &.humidity {
+    top: 474px;
+  }
 }
-.ten-days-charts-temp {
+.hourly-charts-temp {
   position: absolute;
   top: 136px;
   width: 100%;
   height: 170px;
   z-index: 10;
 }
-.ten-days-charts-precip {
+.hourly-charts-precip {
   position: absolute;
   top: 306px;
   display: flex;
@@ -198,7 +247,7 @@ export default {
   z-index: 10;
   opacity: 0.6;
 }
-.ten-days-wind-descr {
+.hourly-wind-descr {
   display: flex;
   flex-direction: column;
   height: 53px;
@@ -219,8 +268,8 @@ export default {
     column-gap: 3px;
   }
 }
-.ten-days-pressure,
-.ten-day-humidity {
+.hourly-pressure,
+.hourly-day-humidity {
   display: flex;
   flex-direction: column;
   height: 36px;
@@ -231,15 +280,29 @@ export default {
   line-height: 14px;
   color: #333333;
 }
-.ten-days-chevron-down {
+
+.scroll-button-container {
+  position: absolute;
+  top: calc(50% - 18px);
+  left: 18px;
+  z-index: 20;
+  width: calc(100% - 36px);
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 22px;
+  justify-content: space-between;
+  & .btn {
+    pointer-events: auto;
+    background-color: rgba(29, 125, 188, 0.08);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    touch-action: manipulation;
+  }
 }
 
 @media only screen and (max-width: 550px) {
-  .ten-days-icon svg {
+  .hourly-icon svg {
     width: 30px;
   }
 }
