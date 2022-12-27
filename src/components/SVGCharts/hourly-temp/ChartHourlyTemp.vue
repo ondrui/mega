@@ -46,6 +46,9 @@ export default {
       marginText: 5,
     };
   },
+  mounted() {
+    this.size();
+  },
   watch: {
     numData() {
       this.size();
