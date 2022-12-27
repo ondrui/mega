@@ -21,7 +21,7 @@
       </div>
       <div class="value">
         {{ value.value }}
-        <span v-if="value.direction">{{ value.direction[1] }}</span>
+        <span v-if="value.wind_dir">{{ value.wind_dir[1] }}</span>
       </div>
     </div>
   </div>

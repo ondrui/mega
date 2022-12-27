@@ -27,10 +27,16 @@
       <div class="content-wrapper">
         <div class="wrapper">
           <div class="hourly-charts-temp">
-            <ChartHourlyTemp />
+            <ChartHourlyTemp
+              :numData="hourlyChartsData"
+              :unitValues="hourlyPropTitle"
+            />
           </div>
           <div class="hourly-charts-precip">
-            <ChartHourlyPrecip :data="hourlyPropTitle" />
+            <ChartHourlyPrecip
+              :numValues="hourlyChartsData"
+              :unitValues="hourlyPropTitle"
+            />
           </div>
           <div
             class="date-container"
@@ -100,8 +106,8 @@ export default {
     ChartHourlyPrecip,
   },
   computed: {
-    hourlyDatasets() {
-      return this.$store.getters.hourlyDatasets;
+    hourlyChartsData() {
+      return this.$store.getters.hourlyChartsData;
     },
     hourlyPropTitle() {
       return this.$store.getters.hourlyPropTitle;

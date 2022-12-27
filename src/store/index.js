@@ -424,24 +424,39 @@ export default new Vuex.Store({
         { unit, value: maxTemp, descr: "max", min, max },
       ];
     },
-    hourlyDatasets({ datasetsHourly }) {
+    hourlyChartsData({ datasetsHourly }) {
+      const sortData = (el) => {
+        return parseInt(el.date.split("T")[1].slice(0, 2));
+      };
+      let dataArr = [];
+      for (const key in datasetsHourly) {
+        const arr = Object.values(datasetsHourly[key])
+          .filter((i) => typeof i === "object")
+          .map(({ temp_max, temp_min, prec_sum, date, feels_like }) => {
+            return {
+              date,
+              temp_max,
+              temp_min,
+              prec_sum,
+              feels_like,
+            };
+          })
+          .sort((a, b) => sortData(a) - sortData(b));
+        dataArr = dataArr.concat(arr);
+      }
+      console.log(dataArr);
+      return dataArr;
+    },
+
+    hourlyPropTitle(state, { getLocales }) {
       const sortData = (el) => {
         return parseInt(el.date.split("T")[1].slice(0, 2));
       };
       const obj = {};
-      for (const key in datasetsHourly) {
-        const arr = Object.values(datasetsHourly[key])
+      for (const key in state.datasetsHourly) {
+        const arr = Object.values(state.datasetsHourly[key])
           .filter((i) => typeof i === "object")
           .sort((a, b) => sortData(a) - sortData(b));
-        obj[key] = arr;
-      }
-      console.log(obj);
-      return obj;
-    },
-    hourlyPropTitle(state, { hourlyDatasets, getLocales }) {
-      const obj = {};
-      for (const key in hourlyDatasets) {
-        const arr = hourlyDatasets[key];
         const weekday = setTimeFormat(arr[0].date, "l", "ru");
         const day = setTimeFormat(arr[0].date, "d F", "ru");
         const showArr = arr.map(
@@ -456,6 +471,7 @@ export default new Vuex.Store({
             temp_min,
             wind_dir,
             wind_speed,
+            feels_like,
           }) => {
             return {
               hour: date.split("T")[1].slice(0, 5),
@@ -473,6 +489,9 @@ export default new Vuex.Store({
                 languageExpressions(getLocales, "units", "temp")[0]
               }`,
               temp_min: `${temp_min}${
+                languageExpressions(getLocales, "units", "temp")[0]
+              }`,
+              feels_like: `${feels_like}${
                 languageExpressions(getLocales, "units", "temp")[0]
               }`,
               wind_dir: [
