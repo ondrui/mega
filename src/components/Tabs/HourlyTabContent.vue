@@ -2,10 +2,10 @@
   <div>
     <div class="hourly-tab-container">
       <div class="scroll-button-container">
-        <button class="left-btn btn">
+        <button class="left-btn btn" @click="scrollLeft">
           <BaseIcon width="7" name="chevron-scroll-left" pick="common" />
         </button>
-        <button class="rightt-btn btn">
+        <button class="rightt-btn btn" @click="scrollRight">
           <BaseIcon width="7" name="chevron-scroll-right" pick="common" />
         </button>
       </div>
@@ -24,19 +24,13 @@
       <div class="hourly-row-caption humidity">
         {{ languageExpressions(getLocales, "climateIndicators", "humidity") }}
       </div>
-      <div class="content-wrapper">
-        <div class="wrapper">
+      <div class="content-wrapper" ref="content-wrapper">
+        <div class="wrapper" ref="scroll-content">
           <div class="hourly-charts-temp">
-            <ChartHourlyTemp
-              :numData="hourlyChartsData"
-              :unitValues="hourlyPropTitle"
-            />
+            <ChartHourlyTemp :numData="hourlyChartsData" />
           </div>
           <div class="hourly-charts-precip">
-            <ChartHourlyPrecip
-              :numValues="hourlyChartsData"
-              :unitValues="hourlyPropTitle"
-            />
+            <ChartHourlyPrecip :numData="hourlyChartsData" />
           </div>
           <div
             class="date-container"
@@ -115,10 +109,34 @@ export default {
     getLocales() {
       return this.$store.getters.getLocales;
     },
+    scrollSize() {
+      console.log(this.$refs["scroll-content"].clientWidth);
+      return (
+        (this.$refs["scroll-content"].clientWidth /
+          this.hourlyChartsData.length) *
+        3
+      );
+      // this.scrollWidth =
+      //   (this.$refs["scroll-content"].clientWidth /
+      //     this.hourlyChartsData.length) *
+      //   3;
+    },
   },
   methods: {
     languageExpressions,
     windDirection,
+    scrollRight() {
+      this.$refs["content-wrapper"].scrollBy({
+        left: this.scrollSize,
+        behavior: "smooth",
+      });
+    },
+    scrollLeft() {
+      this.$refs["content-wrapper"].scrollBy({
+        left: -this.scrollSize,
+        behavior: "smooth",
+      });
+    },
   },
 };
 </script>
@@ -245,7 +263,7 @@ export default {
 }
 .hourly-charts-precip {
   position: absolute;
-  top: 306px;
+  top: 324px;
   display: flex;
   align-items: flex-end;
   width: 100%;

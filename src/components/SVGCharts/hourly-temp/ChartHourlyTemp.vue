@@ -43,10 +43,6 @@ export default {
       type: Array,
       required: true,
     },
-    unitValues: {
-      type: Object,
-      required: true,
-    },
   },
   data() {
     return {

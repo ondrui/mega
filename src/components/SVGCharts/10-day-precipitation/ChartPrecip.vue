@@ -67,11 +67,11 @@ export default {
       let max = Math.max(...this.data.map((e) => e.precSum.value));
       max = max > 6 ? max : 6;
       const dataset = this.data.reduce(
-        (total, { precSum: { value, unit } }, index) => {
+        (total, { precSum: { value, unit } }, index, arr) => {
           if (value !== 0) {
             const x = index === 0 ? w / 2 : w * index + w / 2;
             const y = this.height - this.heightRect(value, max);
-            const widthRect = this.width / 10 - 10;
+            const widthRect = this.width / arr.length - 10;
             const obj = {
               xText: x,
               xRect: x - widthRect / 2,
@@ -141,20 +141,5 @@ export default {
   & rect {
     fill: #0bc2ff;
   }
-}
-.text-meter {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  fill: #333333;
-}
-.color-path {
-  stroke: #0bc2ff;
-}
-.dotted {
-  stroke-dasharray: 8 4;
-}
-.thin {
-  font-weight: 300;
 }
 </style>

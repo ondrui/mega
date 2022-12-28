@@ -452,7 +452,6 @@ export default new Vuex.Store({
           .sort((a, b) => sortData(a) - sortData(b));
         dataArr = dataArr.concat(arr);
       }
-      console.log(dataArr);
       return dataArr;
     },
 
@@ -519,7 +518,6 @@ export default new Vuex.Store({
           sunset: state.datasetsHourly[key]["sunset"],
         };
       }
-      console.log(obj);
       return obj;
     },
     forecastTenDeepHeader: (state) => {
@@ -669,7 +667,6 @@ export default new Vuex.Store({
           obj[key] = addObj;
           return obj;
         }, {});
-      console.log(filteredDatasets);
       state.datasetsHourly = filteredDatasets;
     },
   },
