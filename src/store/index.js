@@ -432,13 +432,21 @@ export default new Vuex.Store({
       for (const key in datasetsHourly) {
         const arr = Object.values(datasetsHourly[key])
           .filter((i) => typeof i === "object")
-          .map(({ temp_max, temp_min, prec_sum, date, feels_like }) => {
+          .map(({ temp_max, prec_sum, date, feels_like }) => {
             return {
               date,
-              temp_max,
-              temp_min,
-              prec_sum,
-              feels_like,
+              temp_max: {
+                value: temp_max,
+                unit: "°",
+              },
+              prec_sum: {
+                value: prec_sum,
+                unit: "мм",
+              },
+              feels_like: {
+                value: feels_like,
+                unit: "°",
+              },
             };
           })
           .sort((a, b) => sortData(a) - sortData(b));
@@ -648,9 +656,20 @@ export default new Vuex.Store({
       const filteredDatasets = Object.keys(forecast_1)
         .filter((key) => key !== "3" && key !== "start_date")
         .reduce((obj, key) => {
-          obj[key] = forecast_1[key];
+          const addObj = Object.keys(forecast_1[key]).reduce((total, p) => {
+            total[p] =
+              typeof forecast_1[key][p] === "object"
+                ? {
+                    ...forecast_1[key][p],
+                    prec_sum: +(Math.random() * 10).toFixed(1),
+                  }
+                : forecast_1[key][p];
+            return total;
+          }, {});
+          obj[key] = addObj;
           return obj;
         }, {});
+      console.log(filteredDatasets);
       state.datasetsHourly = filteredDatasets;
     },
   },

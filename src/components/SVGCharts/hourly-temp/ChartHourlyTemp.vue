@@ -19,6 +19,19 @@
           fill="#ffffff"
         />
       </g>
+      <g v-for="(p, index) in dataPoints" :key="`c-${index}`">
+        <text class="temp-max" text-anchor="middle" :x="p.x" :y="p.textYMax">
+          {{ `${p.temp_max}${p.unit}` }}
+        </text>
+        <text
+          class="temp-feels"
+          text-anchor="middle"
+          :x="p.x"
+          :y="p.textYFeels"
+        >
+          {{ `${p.feels_like}${p.unit}` }}
+        </text>
+      </g>
     </svg>
   </div>
 </template>
@@ -58,6 +71,10 @@ export default {
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;
     },
+    /**
+     * Вычисление общего отступа графика от
+     * соседних ячеек.
+     */
     totalYMargin() {
       return (
         this.textSizeMax +
@@ -66,42 +83,49 @@ export default {
         this.circleRadius / 2
       );
     },
+    /**
+     * Составляет строку с командами для атрибута d элемента path графика.
+     */
     svgPath() {
-      // build the d attributes by looping over the points
       const d = this.dataPoints.reduce(
         (acc, point, i, a) =>
           i === 0
-            ? // if first point
-              `M ${point.x},${point.y}`
-            : // else
-              `${acc} ${this.catmullRom2bezier(a, i - 1)}`,
+            ? `M ${point.x},${point.y}`
+            : `${acc} ${this.catmullRom2bezier(a, i - 1)}`,
         ""
       );
       return `${d}`;
     },
     /**
-     * Возвращает массив объектов, которые содержат координаты и другие параметры
-     * необходимые для отображения баров и текстовых меток.
+     * Возвращает массив объектов, которые содержат координаты для
+     * отображения графиков и меток температурных.
+     * @example
+     *[
+     *  { x: 27.35, y: 85, temp_max: 11, feels_like: 12 },
+     *  { x: 27.35, y: 85, temp_max: 14, feels_like: 17 },
+     *];
      */
-    barDataset() {
-      let w = this.width / this.data.length;
-      let max = Math.max(...this.data.map((e) => e.precSum.value));
-      max = max > 6 ? max : 6;
-      const dataset = this.data.reduce(
-        (total, { precSum: { value, unit } }, index) => {
-          if (value !== 0) {
-            const x = index === 0 ? w / 2 : w * index + w / 2;
-            const y = this.height - this.heightRect(value, max);
-            const widthRect = this.width / 10 - 10;
+    dataPoints() {
+      let max = Math.max(...this.numData.map((e) => e.temp_max.value));
+      let min = Math.min(...this.numData.map((e) => e.temp_max.value));
+      let x = this.width / (this.numData.length * 2);
+
+      const dataset = this.numData.reduce(
+        (total, { temp_max, feels_like }, index) => {
+          if (temp_max.value !== undefined && temp_max.value !== null) {
+            let x1 = index === 0 ? x : 2 * x * index + x;
             const obj = {
-              xText: x,
-              xRect: x - widthRect / 2,
-              unit,
-              yRect: y,
-              yText: y - 2,
-              precip: value,
-              widthRect: widthRect,
-              heightRect: this.heightRect(value, max),
+              x: x1,
+              y: this.calcY(temp_max.value, max, min),
+              textYMax:
+                this.calcY(temp_max.value, max, min) -
+                (this.circleRadius + this.marginText + 2),
+              textYFeels:
+                this.calcY(temp_max.value, max, min) +
+                (this.circleRadius + this.textSizeMin + 2),
+              temp_max: temp_max.value,
+              feels_like: feels_like.value,
+              unit: temp_max.unit,
             };
             total.push(obj);
           }
@@ -109,50 +133,6 @@ export default {
         },
         []
       );
-      return dataset;
-    },
-    /**
-     * Возвращает массив объектов, которые содержат координаты для
-     * отображения графиков и меток температурных.
-     * @example
-     *[
-     *  {
-     *    descr: "min",
-     *    unit: "°",
-     *    dataset: [
-     *      { x: 27.35, y: 85, temp: 11 },
-     *      { x: 82.05, y: 77, temp: 12 },
-     *    ],
-     *  },
-     *  {
-     *    descr: "max",
-     *    unit: "°",
-     *    dataset: [
-     *      { x: 27.35, y: 32, temp: 18 },
-     *      { x: 82.05, y: 39, temp: 17 },
-     *    ],
-     *  },
-     *];
-     */
-    dataPoints() {
-      let max = Math.max(...this.numData.map((e) => e.temp_max));
-      let min = Math.min(...this.numData.map((e) => e.temp_max));
-      console.log(this.numData.length);
-      let x = this.width / (this.numData.length * 2);
-      console.log(x);
-
-      const dataset = this.numData.reduce((total, { temp_max }, index) => {
-        if (temp_max !== 0 && temp_max !== null) {
-          let x1 = index === 0 ? x : 2 * x * index + x;
-          const obj = {
-            x: x1,
-            y: this.transformYToSVG(temp_max, max, min),
-            temp: temp_max,
-          };
-          total.push(obj);
-        }
-        return total;
-      }, []);
 
       return dataset;
     },
@@ -164,8 +144,7 @@ export default {
      * @param temp - Значение температуры.
      *  @param max - Максимальное количество осадков за выбранный период.
      */
-    transformYToSVG(temp, max, min) {
-      console.log("totalYMargin", this.totalYMargin);
+    calcY(temp, max, min) {
       const y = Math.round(
         ((this.height - 2 * this.totalYMargin) * (max - temp)) / (max - min) +
           this.totalYMargin
@@ -220,7 +199,7 @@ export default {
       return `C ${bp[0].x},${bp[0].y} ${bp[1].x},${bp[1].y} ${bp[2].x},${bp[2].y}`;
     },
     /**
-     * Функция обработчик вызывается, когда изменяется размер окна страницы.
+     * Находим размеры SVG элемента и записываем их в объект data.
      */
     size() {
       /**
@@ -236,8 +215,6 @@ export default {
       };
       this.width = getWidth("svg-temp-hourly");
       this.height = getHeight("svg-temp-hourly");
-      console.log("getWidth", getWidth("svg-temp-hourly"));
-      console.log("getHeight", getHeight("svg-temp-hourly"));
     },
   },
 };
@@ -248,7 +225,6 @@ export default {
   fill: none;
   width: 100%;
   height: 188px;
-  box-shadow: 0 0 0 1px teal;
 }
 .text-meter {
   font-weight: 500;
@@ -259,10 +235,16 @@ export default {
 .color-path {
   stroke: #0bc2ff;
 }
-.dotted {
-  stroke-dasharray: 8 4;
+.temp-max {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  fill: #333333;
 }
-.thin {
+.temp-feels {
   font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  fill: #9c9c9c;
 }
 </style>

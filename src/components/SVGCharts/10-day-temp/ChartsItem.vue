@@ -35,15 +35,15 @@ export default {
     };
   },
   computed: {
+    /**
+     * Составляет строку с командами для атрибута d элемента path графика.
+     */
     svgPath() {
-      // build the d attributes by looping over the points
       const d = this.points.dataset.reduce(
         (acc, point, i, a) =>
           i === 0
-            ? // if first point
-              `M ${point.x},${point.y}`
-            : // else
-              `${acc} ${this.catmullRom2bezier(a, i - 1)}`,
+            ? `M ${point.x},${point.y}`
+            : `${acc} ${this.catmullRom2bezier(a, i - 1)}`,
         ""
       );
       return `${d}`;
