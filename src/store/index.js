@@ -8,13 +8,17 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     locales: "ru",
-    datasetsHourly: {},
+    datasetsHourly: null,
+    datasetsTenDays: null,
   },
   getters: {
+    loading(state) {
+      return state.datasetsHourly;
+    },
     getLocales(state) {
       return state.locales;
     },
-    current: () => {
+    currentWhat: () => {
       return {
         currDateDescr: "сейчас в 15:38 по прогнозу ",
         icon: "partly-cloudy_rain_0",
@@ -55,37 +59,78 @@ export default new Vuex.Store({
         },
       };
     },
-    nowcast() {
+    current(state, { getLocales }) {
+      let obj = {};
+      if (!state.datasetsHourly) {
+        return obj;
+      }
+      const data = state.datasetsHourly[0][1];
+      const time = setTimeFormat(new Date(), "H:i", getLocales);
       return {
-        icon: "partly-cloudy_rain_1_hail_1_thunderstorm_1",
-        descr: "переменная облачность небольшой дождь",
-        temp: "14°",
-        realFeel: "14°",
+        timeText: `сейчас в ${time} по прогнозу`,
+        icon: data.condition,
+        descr: data.condition_s,
+        temp: `${data.temp_max}${
+          languageExpressions(getLocales, "units", "temp")[0]
+        }`,
+        realFeel: `ощущается ${data.feels_like}`,
       };
     },
-    forecastForItemHeader() {
+    forecastForItemHeader(state, { getLocales }) {
+      let obj = {};
+      if (!state.datasetsHourly) {
+        return obj;
+      }
+      const data = state.datasetsHourly[0][1];
       return [
         {
           icon: "wind-direction-grey",
-          title: "ветер:",
-          value: "4 м/c",
-          wind_dir: ["ne", "св"],
+          title: `${languageExpressions(
+            getLocales,
+            "climateIndicators",
+            "wind"
+          )}:`,
+          value: `${data.wind_speed} ${
+            languageExpressions(getLocales, "units", "speed")[0]
+          }`,
+          wind_dir: [
+            data.wind_dir,
+            languageExpressions(getLocales, "windDir", data.wind_dir)[1],
+          ],
         },
         {
           icon: "wind-gust",
-          title: "порывы ветра:",
-          value: "14 м/c",
-          wind_dir: ["ne"],
+          title: `${languageExpressions(
+            getLocales,
+            "climateIndicators",
+            "windGust_1"
+          )}:`,
+          value: `${data.wind_gust} ${
+            languageExpressions(getLocales, "units", "speed")[0]
+          }`,
+          wind_dir: [data.wind_dir],
         },
         {
           icon: "pressure",
-          title: "давление:",
-          value: "755 мм.рт.ст.",
+          title: `${languageExpressions(
+            getLocales,
+            "climateIndicators",
+            "pressure"
+          )}:`,
+          value: `${data.pressure} ${
+            languageExpressions(getLocales, "units", "pressure")[0]
+          }`,
         },
         {
           icon: "humidity",
-          title: "влажность:",
-          value: "65%",
+          title: `${languageExpressions(
+            getLocales,
+            "climateIndicators",
+            "humidity"
+          )}:`,
+          value: `${data.humidity}${
+            languageExpressions(getLocales, "units", "percent")[0]
+          }`,
         },
       ];
     },
@@ -413,7 +458,13 @@ export default new Vuex.Store({
         },
       ];
     },
-    tenDayTemp: () => {
+    tenDayTemp: ({ datasetsTenDays }) => {
+      console.log("datasetsTenDays", datasetsTenDays);
+      let dataArr = [];
+      const arr = Object.values(datasetsTenDays);
+      console.log("arr", arr);
+
+      console.log("dataArr", dataArr);
       const maxTemp = [18, 17, 15, 17, 15, 18, 17, 14, 16, 16];
       const minTemp = [15, 15, 13, 12, 13, 14, 15, 13, 12, 12];
       const min = Math.min(...minTemp, ...maxTemp);
@@ -518,6 +569,7 @@ export default new Vuex.Store({
           sunset: state.datasetsHourly[key]["sunset"],
         };
       }
+      console.log(obj);
       return obj;
     },
     forecastTenDeepHeader: (state) => {
@@ -668,6 +720,26 @@ export default new Vuex.Store({
           return obj;
         }, {});
       state.datasetsHourly = filteredDatasets;
+    },
+    setTenDays(state, { forecast_24 }) {
+      console.log(forecast_24);
+      const filteredDatasets = Object.keys(forecast_24)
+        .filter((key) => key !== "3" && key !== "start_date")
+        .reduce((obj, key) => {
+          const addObj = Object.keys(forecast_24[key]).reduce((total, p) => {
+            total[p] =
+              typeof forecast_24[key][p] === "object"
+                ? {
+                    ...forecast_24[key][p],
+                    prec_sum: +(Math.random() * 10).toFixed(1),
+                  }
+                : forecast_24[key][p];
+            return total;
+          }, {});
+          obj[key] = addObj;
+          return obj;
+        }, {});
+      state.datasetsTenDays = filteredDatasets;
     },
   },
   actions: {},

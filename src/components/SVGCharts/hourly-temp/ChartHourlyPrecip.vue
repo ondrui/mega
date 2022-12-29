@@ -54,7 +54,6 @@ export default {
     barDataset() {
       let w = this.width / this.numData.length;
       let max = Math.max(...this.numData.map((e) => e.prec_sum.value));
-      console.log("max", max);
       max = max > 6 ? max : 6;
       const dataset = this.numData.reduce(
         (total, { prec_sum: { value, unit } }, index, arr) => {

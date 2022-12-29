@@ -110,7 +110,6 @@ export default {
       return this.$store.getters.getLocales;
     },
     scrollSize() {
-      console.log(this.$refs["scroll-content"].clientWidth);
       return (
         (this.$refs["scroll-content"].clientWidth /
           this.hourlyChartsData.length) *

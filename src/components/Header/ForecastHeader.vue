@@ -1,28 +1,18 @@
 <template>
   <div>
     <div class="header-date-info">
-      {{
-        `${languageExpressions(
-          getLocales,
-          "header",
-          "now"
-        )} 15:38 ${languageExpressions(getLocales, "header", "forecast")}`
-      }}
+      {{ current.timeText }}
     </div>
     <div class="header-content">
       <div class="header-content-left">
         <div>
-          <BaseIcon :name="nowcast.icon" pick="light" width="49" />
+          <BaseIcon :name="current.icon" pick="light" width="49" />
         </div>
-        <div class="header-content-left-temp">{{ nowcast.temp }}</div>
+        <div class="header-content-left-temp">{{ current.temp }}</div>
         <div class="header-content-left-descr">
-          <div class="header-content-left-text">{{ nowcast.descr }}</div>
+          <div class="header-content-left-text">{{ current.descr }}</div>
           <div class="feeling">
-            {{
-              `${languageExpressions(getLocales, "header", "feelsLike")} ${
-                nowcast.realFeel
-              }`
-            }}
+            {{ current.realFeel }}
           </div>
         </div>
       </div>
@@ -52,8 +42,8 @@ export default {
     forecastForItemHeader() {
       return this.$store.getters.forecastForItemHeader;
     },
-    nowcast() {
-      return this.$store.getters.nowcast;
+    current() {
+      return this.$store.getters.current;
     },
   },
   methods: {
@@ -69,6 +59,10 @@ export default {
   line-height: 14px;
   color: #9c9c9c;
   margin-bottom: 16px;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 }
 .header-content {
   display: flex;
@@ -109,9 +103,9 @@ export default {
     }
 
     & .feeling {
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 16px;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 18px;
       color: #000000;
     }
 

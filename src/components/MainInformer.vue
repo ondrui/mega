@@ -1,14 +1,19 @@
 <template>
   <div class="main-container">
-    <HeaderInformer />
-    <TabsInformer />
-    <br />
+    <div v-if="!loading">Loading...</div>
+    <div v-else>
+      <HeaderInformer />
+      <TabsInformer />
+      <br />
+      <AllSVGIcons />
+    </div>
   </div>
 </template>
 
 <script>
 import HeaderInformer from "./Header/HeaderInformer.vue";
 import TabsInformer from "./Tabs/TabsInformer.vue";
+import AllSVGIcons from "./AllSVGIcons.vue";
 import { languageExpressions } from "@/constants/locales";
 import { setTimeFormat } from "@/constants/functions";
 
@@ -16,10 +21,14 @@ export default {
   components: {
     HeaderInformer,
     TabsInformer,
+    AllSVGIcons,
   },
   computed: {
     getLocales() {
       return this.$store.getters.getLocales;
+    },
+    loading() {
+      return this.$store.getters.loading;
     },
   },
   methods: {

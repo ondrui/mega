@@ -1,29 +1,35 @@
 <template>
-  <div id="app" class="p-20">
+  <div id="app">
     <MainInformer />
-    <AllSVGIcons />
   </div>
 </template>
 
 <script>
 import MainInformer from "@/components/MainInformer.vue";
-import AllSVGIcons from "./components/AllSVGIcons.vue";
 export default {
   components: {
     MainInformer,
-    AllSVGIcons,
   },
   created() {
     this.getData();
   },
   methods: {
+    /**
+     * Get data from API.
+     */
     async getData() {
       try {
-        const res = await fetch("/forecastHourly72.json");
-        const answer = await res.json();
+        const res = await Promise.all([
+          fetch("/forecastHourly72.json"),
+          fetch("/forecastTenDays.json"),
+        ]);
+        const [a, b] = res.map((e) => e.json());
+        const hourly = await a;
+        const tenDays = await b;
         setTimeout(() => {
-          this.$store.commit("setHourly", answer);
-        }, 2000);
+          this.$store.commit("setHourly", hourly);
+          this.$store.commit("setTenDays", tenDays);
+        }, 3000);
       } catch (error) {
         this.answer = "Error! Could not reach the API. " + error;
       }
