@@ -462,6 +462,7 @@ export default new Vuex.Store({
       console.log("datasetsTenDays", datasetsTenDays);
       let dataArr = [];
       const arr = Object.values(datasetsTenDays);
+      // const dayTemp = arr.map(e => e.)
       console.log("arr", arr);
 
       console.log("dataArr", dataArr);
