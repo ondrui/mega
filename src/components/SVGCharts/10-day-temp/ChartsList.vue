@@ -94,16 +94,13 @@ export default {
      *];
      */
     dataPoints() {
+      const colCount = this.tenDay[0].value.length;
       const arr = this.tenDay.map((item) => {
-        let x = item.descr === "day" ? this.width / (item.value.length * 2) : 0;
+        let x = this.width / (colCount * 2);
+
         const dataset = item.value.reduce((total, current, index) => {
           if (current !== undefined && current !== null) {
-            let x1 =
-              index === 0
-                ? x
-                : x
-                ? 2 * x * index + x
-                : (this.width / item.value.length) * index;
+            let x1 = index === 0 ? x : 2 * x * index + x;
             const obj = {
               x: x1,
               y: this.transformYToSVG(current, item),

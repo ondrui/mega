@@ -17,7 +17,7 @@
           <div>{{ day.date }}</div>
         </div>
         <div class="ten-days-icon">
-          <BaseIcon width="40" :name="day.iconCode" pick="light" />
+          <BaseIcon width="40" :name="day.condition" pick="light" />
         </div>
         <div class="ten-days-temp-item"></div>
         <div class="ten-days-precip-item">
@@ -40,7 +40,7 @@
             </div>
             <span>{{ day.wind.wind_dir[1] }}</span>
           </div>
-          <div>{{ day.wind.value }}{{ day.wind.unit }}</div>
+          <div>{{ day.wind.value }} {{ day.wind.unit }}</div>
         </div>
         <div class="ten-days-pressure">
           <div class="ten-days-row-caption" v-if="index === 0">

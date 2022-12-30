@@ -137,345 +137,398 @@ export default new Vuex.Store({
     tenBasic: ({ datasetsTenDays }, { getLocales }) => {
       console.log("datasetsTenDays", datasetsTenDays);
       console.log(getLocales);
-      const arr = Object.values(datasetsTenDays).map((e) => {
-        e;
-      });
+      const arr = Object.values(datasetsTenDays)
+        .filter((f, i, a) => i !== a.length - 1)
+        .map((e) => {
+          const weekday = setTimeFormat(e.start_date, "D", "ru");
+          return {
+            weekday: weekday,
+            weekend: weekday === "сб" || weekday === "вс",
+            date: setTimeFormat(e.start_date, "d.m", "ru"),
+            condition: e.day.condition,
+            precSum: {
+              title: languageExpressions(
+                getLocales,
+                "climateIndicators",
+                "precSum"
+              ),
+              value: e.day.prec_sum,
+              unit: languageExpressions(getLocales, "units", "precSum")[0],
+            },
+            wind: {
+              title: languageExpressions(
+                getLocales,
+                "climateIndicators",
+                "wind"
+              ),
+              value: e.day.wind_speed,
+              unit: languageExpressions(getLocales, "units", "speed")[0],
+              wind_dir: [
+                e.day.wind_dir,
+                languageExpressions(getLocales, "windDir", e.day.wind_dir)[1],
+              ],
+            },
+            pressure: {
+              title: languageExpressions(
+                getLocales,
+                "climateIndicators",
+                "pressure"
+              ),
+              value: e.day.pressure,
+              unit: languageExpressions(getLocales, "units", "pressure")[0],
+            },
+            humidity: {
+              title: languageExpressions(
+                getLocales,
+                "climateIndicators",
+                "humidity"
+              ),
+              value: e.day.humidity,
+              unit: languageExpressions(getLocales, "units", "percent")[0],
+            },
+          };
+        });
       console.log(arr);
-      return [
-        {
-          weekday: "пн",
-          weekend: false,
-          date: "21.09",
-          iconCode: "partly-cloudy",
-          temp: {
-            min: "11",
-            max: "18",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 3,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["n", "с"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "вт",
-          weekend: false,
-          date: "22.09",
-          iconCode: "partly-cloudy",
-          temp: {
-            min: "12",
-            max: "17",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 0,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["e", "в"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "ср",
-          weekend: false,
-          date: "23.09",
-          iconCode: "partly-cloudy",
-          temp: {
-            min: "10",
-            max: "16",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 0,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["w", "з"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "чт",
-          weekend: false,
-          date: "24.09",
-          iconCode: "mainly-clear_rain_1_thunderstorm_1",
-          temp: {
-            min: "11",
-            max: "17",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 4,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["n", "с"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "пт",
-          weekend: false,
-          date: "24.09",
-          iconCode: "cloudy",
-          temp: {
-            min: "14",
-            max: "18",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 0,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["n", "с"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "сб",
-          weekend: true,
-          date: "25.09",
-          iconCode: "cloudy_rain_1",
-          temp: {
-            min: "14",
-            max: "18",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 5,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["sw", "юз"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "вс",
-          weekend: true,
-          date: "26.09",
-          iconCode: "cloudy_rain_1",
-          temp: {
-            min: "15",
-            max: "17",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 9,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["s", "ю"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "пн",
-          weekend: false,
-          date: "28.09",
-          iconCode: "cloudy",
-          temp: {
-            min: "14",
-            max: "16",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 0,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["n", "с"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "вт",
-          weekend: false,
-          date: "29.09",
-          iconCode: "cloudy",
-          temp: {
-            min: "12",
-            max: "16",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 2,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["n", "с"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-        {
-          weekday: "ср",
-          weekend: false,
-          date: "30.09",
-          iconCode: "partly-cloudy",
-          temp: {
-            min: "12",
-            max: "16",
-            unit: "°",
-          },
-          precSum: {
-            title: "кол-во осадков",
-            value: 0,
-            unit: "мм",
-          },
-          wind: {
-            title: "направление и скорость ветра",
-            value: "3",
-            unit: "м/c",
-            wind_dir: ["n", "с"],
-          },
-          pressure: {
-            title: "давление",
-            value: "755",
-            unit: "мм.рт.ст.",
-          },
-          humidity: {
-            title: "влажность",
-            value: "75",
-            unit: "%",
-          },
-        },
-      ];
+      return arr;
+      // return [
+      //   {
+      //     weekday: "пн",
+      //     weekend: false,
+      //     date: "21.09",
+      //     condition: "partly-cloudy",
+      //     temp: {
+      //       min: "11",
+      //       max: "18",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 3,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["n", "с"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "вт",
+      //     weekend: false,
+      //     date: "22.09",
+      //     condition: "partly-cloudy",
+      //     temp: {
+      //       min: "12",
+      //       max: "17",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 0,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["e", "в"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "ср",
+      //     weekend: false,
+      //     date: "23.09",
+      //     condition: "partly-cloudy",
+      //     temp: {
+      //       min: "10",
+      //       max: "16",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 0,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["w", "з"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "чт",
+      //     weekend: false,
+      //     date: "24.09",
+      //     condition: "mainly-clear_rain_1_thunderstorm_1",
+      //     temp: {
+      //       min: "11",
+      //       max: "17",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 4,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["n", "с"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "пт",
+      //     weekend: false,
+      //     date: "24.09",
+      //     condition: "cloudy",
+      //     temp: {
+      //       min: "14",
+      //       max: "18",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 0,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["n", "с"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "сб",
+      //     weekend: true,
+      //     date: "25.09",
+      //     condition: "cloudy_rain_1",
+      //     temp: {
+      //       min: "14",
+      //       max: "18",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 5,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["sw", "юз"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "вс",
+      //     weekend: true,
+      //     date: "26.09",
+      //     condition: "cloudy_rain_1",
+      //     temp: {
+      //       min: "15",
+      //       max: "17",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 9,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["s", "ю"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "пн",
+      //     weekend: false,
+      //     date: "28.09",
+      //     condition: "cloudy",
+      //     temp: {
+      //       min: "14",
+      //       max: "16",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 0,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["n", "с"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "вт",
+      //     weekend: false,
+      //     date: "29.09",
+      //     condition: "cloudy",
+      //     temp: {
+      //       min: "12",
+      //       max: "16",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 2,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["n", "с"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      //   {
+      //     weekday: "ср",
+      //     weekend: false,
+      //     date: "30.09",
+      //     condition: "partly-cloudy",
+      //     temp: {
+      //       min: "12",
+      //       max: "16",
+      //       unit: "°",
+      //     },
+      //     precSum: {
+      //       title: "кол-во осадков",
+      //       value: 0,
+      //       unit: "мм",
+      //     },
+      //     wind: {
+      //       title: "направление и скорость ветра",
+      //       value: "3",
+      //       unit: "м/c",
+      //       wind_dir: ["n", "с"],
+      //     },
+      //     pressure: {
+      //       title: "давление",
+      //       value: "755",
+      //       unit: "мм.рт.ст.",
+      //     },
+      //     humidity: {
+      //       title: "влажность",
+      //       value: "75",
+      //       unit: "%",
+      //     },
+      //   },
+      // ];
     },
     tenDayTemp: ({ datasetsTenDays }) => {
       const arr = Object.values(datasetsTenDays);
-      const dayTemp = arr.map((e) =>
-        e.day && e.day.temp_max !== undefined && e.day.temp_max !== null
-          ? e.day.temp_max
-          : null
-      );
-      const nightTemp = arr.map((e) =>
-        e.night && e.day.temp_min !== undefined && e.day.temp_min !== null
-          ? e.night.temp_min
-          : null
-      );
+      const dayTemp = arr
+        .map((e) =>
+          e.day && e.day.temp_max !== undefined && e.day.temp_max !== null
+            ? e.day.temp_max
+            : null
+        )
+        .filter((f, i, a) => i !== a.length - 1);
+      const nightTemp = arr
+        .map((e) =>
+          e.night && e.day.temp_min !== undefined && e.day.temp_min !== null
+            ? e.night.temp_min
+            : null
+        )
+        .filter((f, i) => i !== 0);
 
       const min = Math.min(...nightTemp, ...dayTemp);
       const max = Math.max(...dayTemp, ...nightTemp);
@@ -586,7 +639,7 @@ export default new Vuex.Store({
       return {
         weekday: "пн",
         date: "21.09",
-        iconCode: "cloudy_snow_0",
+        condition: "cloudy_snow_0",
         descr: "переменная облачность небольшой дождь",
         precProb: {
           title: "вер. осадков:",
@@ -632,7 +685,7 @@ export default new Vuex.Store({
       state;
       return {
         time: "03:00",
-        iconCode: "cloudy_snow_0",
+        condition: "cloudy_snow_0",
         temp: {
           value: "13",
           unit: "°",
@@ -672,7 +725,7 @@ export default new Vuex.Store({
             //Enum Tenses: {past, present, future}
             tense: "future",
             hour: "00:00",
-            iconCode: "cloudy_snow_0",
+            condition: "cloudy_snow_0",
             temp: {
               min: "11",
               max: "18",
