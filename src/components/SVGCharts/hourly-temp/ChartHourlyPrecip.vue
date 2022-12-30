@@ -58,7 +58,7 @@ export default {
       const dataset = this.numData.reduce(
         (total, { prec_sum: { value, unit } }, index, arr) => {
           if (value !== 0) {
-            const x = index === 0 ? w / 2 : w * index + w / 2;
+            const x = index === 0 ? w / 2 : w * index + w / 2 + 0.5;
             const y = this.height - this.heightRect(value, max);
             const widthRect = this.width / arr.length - 5;
             const obj = {

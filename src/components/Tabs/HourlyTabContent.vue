@@ -5,7 +5,7 @@
         <button class="left-btn btn" @click="scrollLeft">
           <BaseIcon width="7" name="chevron-scroll-left" pick="common" />
         </button>
-        <button class="rightt-btn btn" @click="scrollRight">
+        <button class="right-btn btn" @click="scrollRight">
           <BaseIcon width="7" name="chevron-scroll-right" pick="common" />
         </button>
       </div>
@@ -38,10 +38,12 @@
             :key="`d-${index}`"
           >
             <div class="date-header">
-              <span
-                ><b>{{ date.date[0] }}</b></span
-              >
-              <span>&nbsp; {{ date.date[1] }}</span>
+              <div class="date-text" ref="date-text">
+                <span
+                  ><b>{{ date.date[0] }}</b></span
+                >
+                <span>&nbsp; {{ date.date[1] }}</span>
+              </div>
             </div>
             <div class="hourly-data-container">
               <div
@@ -152,6 +154,7 @@ export default {
   max-width: 100%;
   overflow-y: hidden;
   overflow-x: auto;
+  position: relative;
 }
 .wrapper {
   display: flex;
@@ -160,10 +163,19 @@ export default {
 .date-container {
   display: flex;
   flex-direction: column;
+  border-right: 2px solid #d8e9f3;
+}
+.date-text {
+  position: sticky;
+  left: 0;
+  top: 0;
+  display: inline;
+  padding-left: 13px;
 }
 .date-header {
+  // height: 33px;
   white-space: nowrap;
-  padding: 9px 0 8px 13px;
+  padding: 9px 10px 13px 0;
   border-right: 1px solid #d8e9f3;
   margin-right: -1px;
   font-weight: 300;
@@ -197,10 +209,11 @@ export default {
     }
   }
 }
+.date-container:last-child,
 .date-container:last-child .hourly-item:last-child {
   border-right: none;
 }
-.date-container:first-child .hourly-item:first-child {
+.date-container .hourly-item:first-child {
   border-left: none;
 }
 .time {
