@@ -31,7 +31,7 @@ export default {
       textSize: 16,
       marginFromCell: 8,
       marginText: 5,
-      circleRadius: 5.5,
+      circleRadius: 3,
     };
   },
   computed: {
@@ -49,7 +49,7 @@ export default {
       return `${d}`;
     },
     classChart() {
-      return this.points.descr === "min" ? "dotted" : "";
+      return this.points.descr === "night" ? "dotted" : "";
     },
   },
   methods: {

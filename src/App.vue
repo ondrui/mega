@@ -29,7 +29,7 @@ export default {
         setTimeout(() => {
           this.$store.commit("setHourly", hourly);
           this.$store.commit("setTenDays", tenDays);
-        }, 3000);
+        }, 1000);
       } catch (error) {
         this.answer = "Error! Could not reach the API. " + error;
       }

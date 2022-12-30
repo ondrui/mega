@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      width: 300,
+      width: 500,
       height: 50,
       textSize: 12,
       marginFromBar: 2,

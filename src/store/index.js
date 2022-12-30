@@ -134,7 +134,13 @@ export default new Vuex.Store({
         },
       ];
     },
-    tenBasic: () => {
+    tenBasic: ({ datasetsTenDays }, { getLocales }) => {
+      console.log("datasetsTenDays", datasetsTenDays);
+      console.log(getLocales);
+      const arr = Object.values(datasetsTenDays).map((e) => {
+        e;
+      });
+      console.log(arr);
       return [
         {
           weekday: "пн",
@@ -459,21 +465,24 @@ export default new Vuex.Store({
       ];
     },
     tenDayTemp: ({ datasetsTenDays }) => {
-      console.log("datasetsTenDays", datasetsTenDays);
-      let dataArr = [];
       const arr = Object.values(datasetsTenDays);
-      // const dayTemp = arr.map(e => e.)
-      console.log("arr", arr);
+      const dayTemp = arr.map((e) =>
+        e.day && e.day.temp_max !== undefined && e.day.temp_max !== null
+          ? e.day.temp_max
+          : null
+      );
+      const nightTemp = arr.map((e) =>
+        e.night && e.day.temp_min !== undefined && e.day.temp_min !== null
+          ? e.night.temp_min
+          : null
+      );
 
-      console.log("dataArr", dataArr);
-      const maxTemp = [18, 17, 15, 17, 15, 18, 17, 14, 16, 16];
-      const minTemp = [15, 15, 13, 12, 13, 14, 15, 13, 12, 12];
-      const min = Math.min(...minTemp, ...maxTemp);
-      const max = Math.max(...maxTemp, ...minTemp);
+      const min = Math.min(...nightTemp, ...dayTemp);
+      const max = Math.max(...dayTemp, ...nightTemp);
       const unit = "°";
       return [
-        { unit, value: minTemp, descr: "min", min, max },
-        { unit, value: maxTemp, descr: "max", min, max },
+        { unit, value: dayTemp, descr: "day", min, max },
+        { unit, value: nightTemp, descr: "night", min, max },
       ];
     },
     hourlyChartsData({ datasetsHourly }) {
@@ -570,7 +579,6 @@ export default new Vuex.Store({
           sunset: state.datasetsHourly[key]["sunset"],
         };
       }
-      console.log(obj);
       return obj;
     },
     forecastTenDeepHeader: (state) => {
@@ -723,23 +731,20 @@ export default new Vuex.Store({
       state.datasetsHourly = filteredDatasets;
     },
     setTenDays(state, { forecast_24 }) {
-      console.log(forecast_24);
-      const filteredDatasets = Object.keys(forecast_24)
-        .filter((key) => key !== "3" && key !== "start_date")
-        .reduce((obj, key) => {
-          const addObj = Object.keys(forecast_24[key]).reduce((total, p) => {
-            total[p] =
-              typeof forecast_24[key][p] === "object"
-                ? {
-                    ...forecast_24[key][p],
-                    prec_sum: +(Math.random() * 10).toFixed(1),
-                  }
-                : forecast_24[key][p];
-            return total;
-          }, {});
-          obj[key] = addObj;
-          return obj;
+      const filteredDatasets = Object.keys(forecast_24).reduce((obj, key) => {
+        const addObj = Object.keys(forecast_24[key]).reduce((total, p) => {
+          total[p] =
+            typeof forecast_24[key][p] === "object"
+              ? {
+                  ...forecast_24[key][p],
+                  prec_sum: +(Math.random() * 10).toFixed(1),
+                }
+              : forecast_24[key][p];
+          return total;
         }, {});
+        obj[key] = addObj;
+        return obj;
+      }, {});
       state.datasetsTenDays = filteredDatasets;
     },
   },

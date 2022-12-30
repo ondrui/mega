@@ -36,10 +36,10 @@ export default {
       const value = this.points.dataset[index].temp;
       const unit = this.points.unit;
       const y =
-        this.points.descr === "min"
+        this.points.descr === "night"
           ? this.points.dataset[index].y + this.marginText + this.textSize + 2
           : this.points.dataset[index].y + this.marginText - this.textSize;
-      const thin = this.points.descr === "min" ? "thin" : "";
+      const thin = this.points.descr === "night" ? "thin" : "";
 
       return {
         value,
