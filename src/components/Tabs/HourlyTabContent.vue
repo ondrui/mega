@@ -3,13 +3,13 @@
     <div ref="hourly-tab-container" class="hourly-tab-container">
       <div class="scroll-button-container">
         <button
-          :class="['btn', { invisible: side === 'left' }]"
+          :class="['btn', { hidden: side === 'left' }]"
           @click="scroll('left')"
         >
           <BaseIcon width="7" name="chevron-scroll-left" pick="common" />
         </button>
         <button
-          :class="['btn', { invisible: side === 'right' }]"
+          :class="['btn', { hidden: side === 'right' }]"
           @click="scroll('right')"
         >
           <BaseIcon width="7" name="chevron-scroll-right" pick="common" />
@@ -111,10 +111,19 @@ export default {
   data() {
     return {
       side: "left",
+      observer: null,
     };
   },
   mounted() {
-    this.arrowScrollVisible();
+    this.observer = new IntersectionObserver(this.observerCallback, {
+      root: this.$refs["content-wrapper"],
+      threshold: 1.0,
+    });
+    const coolElement = this.$refs["item"];
+    coolElement.forEach((elem) => this.observer.observe(elem));
+  },
+  beforeDestroy() {
+    this.observer.disconnect();
   },
   computed: {
     hourlyChartsData() {
@@ -144,25 +153,15 @@ export default {
         ? "item"
         : null;
     },
-    arrowScrollVisible() {
+    observerCallback([entry]) {
       const firstItem = this.$refs.item[0];
-      const callback = ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.9) {
-          entry.target === firstItem
-            ? (this.side = "left")
-            : (this.side = "right");
-        } else {
-          this.side = "";
-        }
-      };
-      const options = {
-        root: this.$refs["content-wrapper"],
-        threshold: 1.0,
-      };
-      const observer = new IntersectionObserver(callback, options);
-
-      const coolElement = this.$refs["item"];
-      coolElement.forEach((elem) => observer.observe(elem));
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.9) {
+        entry.target === firstItem
+          ? (this.side = "left")
+          : (this.side = "right");
+      } else {
+        this.side = "";
+      }
     },
     scroll(direction) {
       this.$refs["content-wrapper"].scrollBy({
@@ -358,6 +357,7 @@ export default {
   display: flex;
   justify-content: space-between;
   & .btn {
+    visibility: visible;
     pointer-events: auto;
     background-color: rgba(29, 125, 188, 0.08);
     border: none;
@@ -366,14 +366,18 @@ export default {
     width: 36px;
     height: 36px;
     touch-action: manipulation;
+    transition: all 0.5s;
 
-    &.invisible {
+    &.hidden {
+      visibility: hidden;
       opacity: 0;
       cursor: auto;
+      // transition: opacity 0.3s, visibility 0.3s;
+      transition: all 0.5s;
     }
   }
 }
-// .invisible {
+// .hidden {
 //   opacity: 0;
 //   cursor: none;
 // }
