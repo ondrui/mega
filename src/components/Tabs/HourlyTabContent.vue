@@ -1,11 +1,17 @@
 <template>
   <div>
-    <div class="hourly-tab-container">
+    <div ref="hourly-tab-container" class="hourly-tab-container">
       <div class="scroll-button-container">
-        <button class="left-btn btn" @click="scrollLeft">
+        <button
+          :class="['btn', { invisible: side === 'left' }]"
+          @click="scroll('left')"
+        >
           <BaseIcon width="7" name="chevron-scroll-left" pick="common" />
         </button>
-        <button class="right-btn btn" @click="scrollRight">
+        <button
+          :class="['btn', { invisible: side === 'right' }]"
+          @click="scroll('right')"
+        >
           <BaseIcon width="7" name="chevron-scroll-right" pick="common" />
         </button>
       </div>
@@ -34,11 +40,11 @@
           </div>
           <div
             class="date-container"
-            v-for="(date, index) in hourlyPropTitle"
-            :key="`d-${index}`"
+            v-for="(date, indexParent) in hourlyPropTitle"
+            :key="`d-${indexParent}`"
           >
             <div class="date-header">
-              <div class="date-text" ref="date-text">
+              <div class="date-text">
                 <span
                   ><b>{{ date.date[0] }}</b></span
                 >
@@ -50,6 +56,7 @@
                 class="hourly-item"
                 v-for="(value, index) in date.values"
                 :key="`h-${index}`"
+                :ref="addRef(indexParent, index, hourlyPropTitle, date.values)"
               >
                 <div class="time">{{ value.hour }}</div>
                 <div class="hourly-icon">
@@ -101,6 +108,14 @@ export default {
     ChartHourlyTemp,
     ChartHourlyPrecip,
   },
+  data() {
+    return {
+      side: "left",
+    };
+  },
+  mounted() {
+    this.arrowScrollVisible();
+  },
   computed: {
     hourlyChartsData() {
       return this.$store.getters.hourlyChartsData;
@@ -117,24 +132,41 @@ export default {
           this.hourlyChartsData.length) *
         3
       );
-      // this.scrollWidth =
-      //   (this.$refs["scroll-content"].clientWidth /
-      //     this.hourlyChartsData.length) *
-      //   3;
     },
   },
   methods: {
     languageExpressions,
     windDirection,
-    scrollRight() {
-      this.$refs["content-wrapper"].scrollBy({
-        left: this.scrollSize,
-        behavior: "smooth",
-      });
+    addRef(indexParent, index, arrParent, arr) {
+      return (+indexParent === 0 && index === 0) ||
+        (+indexParent === Object.keys(arrParent).length - 1 &&
+          index === arr.length - 1)
+        ? "item"
+        : null;
     },
-    scrollLeft() {
+    arrowScrollVisible() {
+      const firstItem = this.$refs.item[0];
+      const callback = ([entry]) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.9) {
+          entry.target === firstItem
+            ? (this.side = "left")
+            : (this.side = "right");
+        } else {
+          this.side = "";
+        }
+      };
+      const options = {
+        root: this.$refs["content-wrapper"],
+        threshold: 1.0,
+      };
+      const observer = new IntersectionObserver(callback, options);
+
+      const coolElement = this.$refs["item"];
+      coolElement.forEach((elem) => observer.observe(elem));
+    },
+    scroll(direction) {
       this.$refs["content-wrapper"].scrollBy({
-        left: -this.scrollSize,
+        left: direction === "right" ? this.scrollSize : -this.scrollSize,
         behavior: "smooth",
       });
     },
@@ -334,8 +366,17 @@ export default {
     width: 36px;
     height: 36px;
     touch-action: manipulation;
+
+    &.invisible {
+      opacity: 0;
+      cursor: auto;
+    }
   }
 }
+// .invisible {
+//   opacity: 0;
+//   cursor: none;
+// }
 
 @media only screen and (max-width: 550px) {
   .hourly-icon svg {
