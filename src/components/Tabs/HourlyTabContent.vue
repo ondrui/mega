@@ -124,6 +124,10 @@ export default {
         startX: 0,
         scrollLeft: 0,
       },
+      momentum: {
+        velX: 0,
+        momentumID: null,
+      },
     };
   },
   mounted() {
@@ -187,19 +191,38 @@ export default {
         event.pageX - this.$refs["swiper-container"].offsetLeft;
       this.dragMouseScroll.scrollLeft =
         this.$refs["swiper-container"].scrollLeft;
+      this.cancelMomentumTracking();
     },
     mouseLeave() {
       this.dragMouseScroll.isDown = false;
     },
     mouseUp() {
       this.dragMouseScroll.isDown = false;
+      this.beginMomentumTracking();
     },
     mouseMove(event) {
       if (!this.dragMouseScroll.isDown) return;
       const x = event.pageX - this.$refs["swiper-container"].offsetLeft;
       const walk = x - this.dragMouseScroll.startX;
+      let prevScrollLeft = this.$refs["swiper-container"].scrollLeft;
       this.$refs["swiper-container"].scrollLeft =
         this.dragMouseScroll.scrollLeft - walk;
+      this.momentum.velX =
+        this.$refs["swiper-container"].scrollLeft - prevScrollLeft;
+    },
+    beginMomentumTracking() {
+      this.cancelMomentumTracking();
+      this.momentummomentumID = requestAnimationFrame(this.momentumLoop);
+    },
+    cancelMomentumTracking() {
+      cancelAnimationFrame(this.momentum.momentumID);
+    },
+    momentumLoop() {
+      this.$refs["swiper-container"].scrollLeft += this.momentum.velX * 2;
+      this.momentum.velX *= 0.95;
+      if (Math.abs(this.momentum.velX) > 0.5) {
+        this.momentum.momentumID = requestAnimationFrame(this.momentumLoop);
+      }
     },
   },
 };
