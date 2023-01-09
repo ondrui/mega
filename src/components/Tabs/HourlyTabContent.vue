@@ -30,8 +30,15 @@
       <div class="hourly-row-caption humidity">
         {{ languageExpressions(getLocales, "climateIndicators", "humidity") }}
       </div>
-      <div class="content-wrapper" ref="content-wrapper">
-        <div class="wrapper" ref="scroll-content">
+      <div class="swiper-container" ref="swiper-container">
+        <div
+          :class="['swiper-wrapper', { grabbing: dragMouseScroll.isDown }]"
+          @mousedown.prevent="mouseDown"
+          @mouseleave="mouseLeave"
+          @mouseup="mouseUp"
+          @mousemove.prevent="mouseMove"
+          ref="swiper-wrapper"
+        >
           <div class="hourly-charts-temp">
             <ChartHourlyTemp :numData="hourlyChartsData" />
           </div>
@@ -112,12 +119,17 @@ export default {
     return {
       side: "left",
       observer: null,
+      dragMouseScroll: {
+        isDown: false,
+        startX: 0,
+        scrollLeft: 0,
+      },
     };
   },
   mounted() {
     this.observer = new IntersectionObserver(this.observerCallback, {
-      root: this.$refs["content-wrapper"],
-      threshold: 1.0,
+      root: this.$refs["swiper-container"],
+      threshold: 0.99,
     });
     const coolElement = this.$refs["item"];
     coolElement.forEach((elem) => this.observer.observe(elem));
@@ -137,7 +149,7 @@ export default {
     },
     scrollSize() {
       return (
-        (this.$refs["scroll-content"].clientWidth /
+        (this.$refs["swiper-wrapper"].clientWidth /
           this.hourlyChartsData.length) *
         3
       );
@@ -164,10 +176,30 @@ export default {
       }
     },
     scroll(direction) {
-      this.$refs["content-wrapper"].scrollBy({
+      this.$refs["swiper-container"].scrollBy({
         left: direction === "right" ? this.scrollSize : -this.scrollSize,
         behavior: "smooth",
       });
+    },
+    mouseDown(event) {
+      this.dragMouseScroll.isDown = true;
+      this.dragMouseScroll.startX =
+        event.pageX - this.$refs["swiper-container"].offsetLeft;
+      this.dragMouseScroll.scrollLeft =
+        this.$refs["swiper-container"].scrollLeft;
+    },
+    mouseLeave() {
+      this.dragMouseScroll.isDown = false;
+    },
+    mouseUp() {
+      this.dragMouseScroll.isDown = false;
+    },
+    mouseMove(event) {
+      if (!this.dragMouseScroll.isDown) return;
+      const x = event.pageX - this.$refs["swiper-container"].offsetLeft;
+      const walk = (x - this.dragMouseScroll.startX) * 3; //scroll-fast
+      this.$refs["swiper-container"].scrollLeft =
+        this.dragMouseScroll.scrollLeft - walk;
     },
   },
 };
@@ -180,16 +212,20 @@ export default {
   border: 1px solid #d8e9f3;
   // margin: 0 -1px;
 }
-.content-wrapper {
+.swiper-container {
   display: flex;
   max-width: 100%;
   overflow-y: hidden;
   overflow-x: auto;
   position: relative;
 }
-.wrapper {
+.swiper-wrapper {
   display: flex;
   position: relative;
+
+  &.grabbing {
+    cursor: grabbing;
+  }
 }
 .date-container {
   display: flex;
@@ -284,17 +320,17 @@ export default {
   left: 6px;
 
   &.prec-sum {
-    top: 325px;
+    top: 330px;
   }
 
   &.wind {
-    top: 385px;
+    top: 390px;
   }
   &.pressure {
-    top: 438px;
+    top: 443px;
   }
   &.humidity {
-    top: 474px;
+    top: 479px;
   }
 }
 .hourly-charts-temp {
@@ -352,11 +388,11 @@ export default {
   position: absolute;
   top: calc(50% - 18px);
   left: 18px;
-  z-index: 20;
   width: calc(100% - 36px);
   display: flex;
   justify-content: space-between;
   & .btn {
+    z-index: 20;
     visibility: visible;
     pointer-events: auto;
     background-color: rgba(29, 125, 188, 0.08);
