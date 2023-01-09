@@ -197,7 +197,7 @@ export default {
     mouseMove(event) {
       if (!this.dragMouseScroll.isDown) return;
       const x = event.pageX - this.$refs["swiper-container"].offsetLeft;
-      const walk = (x - this.dragMouseScroll.startX) * 3; //scroll-fast
+      const walk = x - this.dragMouseScroll.startX;
       this.$refs["swiper-container"].scrollLeft =
         this.dragMouseScroll.scrollLeft - walk;
     },
@@ -222,6 +222,7 @@ export default {
 .swiper-wrapper {
   display: flex;
   position: relative;
+  cursor: grab;
 
   &.grabbing {
     cursor: grabbing;
@@ -392,6 +393,9 @@ export default {
   display: flex;
   justify-content: space-between;
   & .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 20;
     visibility: visible;
     pointer-events: auto;
@@ -403,6 +407,14 @@ export default {
     height: 36px;
     touch-action: manipulation;
     transition: all 0.5s;
+
+    &:hover {
+      background-color: rgba(29, 125, 188, 0.16);
+    }
+
+    &:active {
+      background-color: rgba(29, 125, 188, 0.24);
+    }
 
     &.hidden {
       visibility: hidden;
