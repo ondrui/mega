@@ -101,6 +101,7 @@ export default {
     flex-direction: column;
     border: 1px solid #d8e9f3;
     margin-right: -1px;
+    cursor: pointer;
     // min-width: 40px;
     & > div {
       // flex: 1;
@@ -171,7 +172,7 @@ export default {
   top: 136px;
   width: 100%;
   height: 170px;
-  z-index: 10;
+  // z-index: 10;
 }
 .ten-days-charts-precip {
   position: absolute;
@@ -180,7 +181,7 @@ export default {
   align-items: flex-end;
   width: 100%;
   height: 60px;
-  z-index: 10;
+  // z-index: 10;
   opacity: 0.6;
 }
 .ten-days-wind-descr {
