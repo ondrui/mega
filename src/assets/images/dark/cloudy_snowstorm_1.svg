@@ -1,0 +1,27 @@
+<svg width="40" viewBox="0 0 240 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_105_7798)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M175.836 186.645L64.0441 186.915C63.0948 186.979 62.1321 187.017 61.1693 187.017C38.4421 187.017 20 169.02 20 146.844C20 124.656 40.7474 106.915 63.4746 106.915C67.3393 79.9965 90.419 60 117.621 60C145.366 60 168.73 80.7785 171.944 108.325C194.522 108.325 216.625 124.707 216.625 146.742C216.625 168.738 198.373 186.594 175.836 186.645Z" class="svg-color-8-fill"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M182.405 186.669L77.6543 186.921C76.7649 186.981 75.8627 187.017 74.9606 187.017C53.6648 187.017 36.3843 170.154 36.3843 149.375C36.3843 128.584 55.8249 111.96 77.1206 111.96C80.7419 86.737 102.368 68 127.857 68C153.854 68 175.747 87.4698 178.758 113.281C199.914 113.281 220.625 128.632 220.625 149.278C220.625 169.889 203.523 186.621 182.405 186.669Z" class="svg-color-9-fill"/>
+<path d="M67 139.104H111" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M100 158.604L78 120" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M100 120.396L78 159" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M149.328 134.244H201.672" class="svg-color-14-stroke" stroke-width="9.51724"/>
+<path d="M188.586 157.442L162.414 111.517" class="svg-color-14-stroke" stroke-width="9.51724"/>
+<path d="M188.586 111.988L162.414 157.914" class="svg-color-14-stroke" stroke-width="9.51724"/>
+<path d="M168 234.105H212" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M201 253.605L179 215.001" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M201 215.397L179 254.001" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M100 274.104H144" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M133 293.604L111 255" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M133 255.396L111 294" class="svg-color-14-stroke" stroke-width="8"/>
+<path d="M28.509 232.076H75.7094" class="svg-color-14-stroke" stroke-width="8.58189"/>
+<path d="M63.9094 252.994L40.3092 211.582" class="svg-color-14-stroke" stroke-width="8.58189"/>
+<path d="M63.9094 212.007L40.3092 253.419" class="svg-color-14-stroke" stroke-width="8.58189"/>
+<path d="M177 179.435C177.041 211.285 152.457 237.042 122.06 237C97.7427 236.966 78.0318 216.314 78 190.834C77.9744 170.477 93.7259 153.973 113.154 154C128.714 154.022 141.337 167.247 141.357 183.551C141.374 196.602 131.312 207.146 118.855 207.128C108.906 207.114 100.818 198.64 100.805 188.216" class="svg-color-15-stroke" stroke-width="6" stroke-linecap="round"/>
+</g>
+<defs>
+<clipPath id="clip0_105_7798">
+<rect width="240" height="300" class="svg-color-12-fill"/>
+</clipPath>
+</defs>
+</svg>

@@ -96,13 +96,35 @@ export default {
   background-color: #ffffff;
   max-width: 100%;
   grid-template-columns: repeat(10, minmax(0, 1fr));
+
+  .ten-days-weekend {
+    background-color: #f7fafd;
+
+    & .ten-days-weekday > div:first-child {
+      color: #ff1616;
+    }
+  }
   & .ten-days-day {
     // display: flex;
     flex-direction: column;
     border: 1px solid #d8e9f3;
     margin-right: -1px;
     cursor: pointer;
+    transition: box-shadow 0.5s ease-in-out;
     // min-width: 40px;
+
+    &:hover {
+      box-shadow: 0 0 0 3px #d2e7ff;
+      border-radius: 1px;
+
+      // z-index: 2;
+      // border: 3px solid #d2e7ff;
+
+      & .ten-days-chevron-down svg {
+        transform: scale(2);
+      }
+    }
+
     & > div {
       // flex: 1;
       border-bottom: 1px solid #d8e9f3;
@@ -120,13 +142,6 @@ export default {
 }
 .ten-days-precip-item {
   height: 60px;
-}
-.ten-days-weekend {
-  background-color: #f7fafd;
-
-  & .ten-days-weekday > div:first-child {
-    color: #ff1616;
-  }
 }
 .ten-days-weekday {
   display: flex;
@@ -173,6 +188,7 @@ export default {
   width: 100%;
   height: 170px;
   // z-index: 10;
+  cursor: pointer;
 }
 .ten-days-charts-precip {
   position: absolute;
@@ -183,6 +199,7 @@ export default {
   height: 60px;
   // z-index: 10;
   opacity: 0.6;
+  cursor: pointer;
 }
 .ten-days-wind-descr {
   display: flex;
@@ -222,6 +239,10 @@ export default {
   justify-content: center;
   align-items: center;
   height: 22px;
+
+  & svg {
+    transition: transform 0.5s ease-in-out;
+  }
 }
 
 @media only screen and (max-width: 550px) {

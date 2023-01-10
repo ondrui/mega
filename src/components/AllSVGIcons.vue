@@ -56,6 +56,7 @@ export default {
         "partly-cloudy_snow_1-dark",
         "semitransparent-dark",
         "snowstorm-dark",
+        "cloudy_snowstorm_1-dark",
         "clear-light",
         "cloudy-light",
         "cloudy_rain_0-light",
@@ -84,6 +85,7 @@ export default {
         "partly-cloudy_snow_1-light",
         "semitransparent-light",
         "snowstorm-light",
+        "cloudy_snowstorm_1-light",
       ],
     };
   },
