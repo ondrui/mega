@@ -17,7 +17,7 @@
           <div>{{ day.date }}</div>
         </div>
         <div class="ten-days-icon">
-          <BaseIcon width="40" :name="day.condition" pick="light" />
+          <BaseIcon width="46" :name="day.condition" pick="light" />
         </div>
         <div class="ten-days-temp-item"></div>
         <div class="ten-days-precip-item">
@@ -113,12 +113,24 @@ export default {
     transition: box-shadow 0.5s ease-in-out;
     // min-width: 40px;
 
-    &:hover {
+    &::before {
+      position: absolute;
+      content: "";
+      top: 1px;
+      transition: box-shadow 0.5s ease-in-out;
+      width: calc(100% / 10 - 1px);
+      height: calc(100% - 2px);
+      z-index: 10;
+    }
+
+    &:hover::before {
       box-shadow: 0 0 0 3px #d2e7ff;
       border-radius: 1px;
+    }
 
-      // z-index: 2;
-      // border: 3px solid #d2e7ff;
+    &:hover {
+      // box-shadow: 0 0 0 3px #d2e7ff;
+      // border-radius: 1px;
 
       & .ten-days-chevron-down svg {
         transform: scale(2);
