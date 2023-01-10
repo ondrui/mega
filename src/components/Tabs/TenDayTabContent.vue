@@ -129,9 +129,6 @@ export default {
     }
 
     &:hover {
-      // box-shadow: 0 0 0 3px #d2e7ff;
-      // border-radius: 1px;
-
       & .ten-days-chevron-down svg {
         transform: scale(2);
       }
