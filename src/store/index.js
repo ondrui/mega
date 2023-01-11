@@ -10,6 +10,7 @@ export default new Vuex.Store({
     locales: "ru",
     datasetsHourly: null,
     datasetsTenDays: null,
+    datasetsThreeHour: null,
   },
   getters: {
     loading(state) {
@@ -764,7 +765,8 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    setHourly(state, { forecast_1 }) {
+    setData(state, { forecast_1, forecast_24, forecast_3 }) {
+      //hourly datasets
       const filteredDatasets = Object.keys(forecast_1)
         .filter((key) => key !== "3" && key !== "start_date")
         .reduce((obj, key) => {
@@ -782,23 +784,45 @@ export default new Vuex.Store({
           return obj;
         }, {});
       state.datasetsHourly = filteredDatasets;
-    },
-    setTenDays(state, { forecast_24 }) {
-      const filteredDatasets = Object.keys(forecast_24).reduce((obj, key) => {
-        const addObj = Object.keys(forecast_24[key]).reduce((total, p) => {
-          total[p] =
-            typeof forecast_24[key][p] === "object"
-              ? {
-                  ...forecast_24[key][p],
-                  prec_sum: +(Math.random() * 10).toFixed(1),
-                }
-              : forecast_24[key][p];
-          return total;
+
+      //Three Hour Datasets
+      const filteredThreeHourDatasets = Object.keys(forecast_3)
+        .filter((key) => key !== "start_date")
+        .reduce((obj, key) => {
+          const addObj = Object.keys(forecast_3[key]).reduce((total, p) => {
+            total[p] =
+              typeof forecast_3[key][p] === "object"
+                ? {
+                    ...forecast_3[key][p],
+                    prec_sum: +(Math.random() * 10).toFixed(1),
+                  }
+                : forecast_3[key][p];
+            return total;
+          }, {});
+          obj[key] = addObj;
+          return obj;
         }, {});
-        obj[key] = addObj;
-        return obj;
-      }, {});
-      state.datasetsTenDays = filteredDatasets;
+      state.datasetsThreeHour = filteredThreeHourDatasets;
+
+      //ten days datasets
+      const filteredTenDatasets = Object.keys(forecast_24).reduce(
+        (obj, key) => {
+          const addObj = Object.keys(forecast_24[key]).reduce((total, p) => {
+            total[p] =
+              typeof forecast_24[key][p] === "object"
+                ? {
+                    ...forecast_24[key][p],
+                    prec_sum: +(Math.random() * 10).toFixed(1),
+                  }
+                : forecast_24[key][p];
+            return total;
+          }, {});
+          obj[key] = addObj;
+          return obj;
+        },
+        {}
+      );
+      state.datasetsTenDays = filteredTenDatasets;
     },
   },
   actions: {},

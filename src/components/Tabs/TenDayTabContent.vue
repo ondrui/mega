@@ -117,7 +117,7 @@ export default {
       position: absolute;
       content: "";
       top: 1px;
-      transition: box-shadow 0.5s ease-in-out;
+      transition: box-shadow 0.3s ease-in-out;
       width: calc(100% / 10 - 1px);
       height: calc(100% - 2px);
       z-index: 10;
@@ -250,7 +250,7 @@ export default {
   height: 22px;
 
   & svg {
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.3s ease-in-out;
   }
 }
 

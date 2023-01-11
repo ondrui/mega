@@ -19,16 +19,11 @@ export default {
      */
     async getData() {
       try {
-        const res = await Promise.all([
-          fetch("/forecastHourly72.json"),
-          fetch("/forecastTenDays.json"),
-        ]);
-        const [a, b] = res.map((e) => e.json());
-        const hourly = await a;
-        const tenDays = await b;
+        const res = await fetch("/forecast.json");
+
+        const total = await res.json();
         setTimeout(() => {
-          this.$store.commit("setHourly", hourly);
-          this.$store.commit("setTenDays", tenDays);
+          this.$store.commit("setData", total);
         }, 1000);
       } catch (error) {
         this.answer = "Error! Could not reach the API. " + error;

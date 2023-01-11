@@ -218,10 +218,12 @@ export default {
       cancelAnimationFrame(this.momentum.momentumID);
     },
     momentumLoop() {
-      this.$refs["swiper-container"].scrollLeft += this.momentum.velX * 2;
-      this.momentum.velX *= 0.95;
-      if (Math.abs(this.momentum.velX) > 0.5) {
-        this.momentum.momentumID = requestAnimationFrame(this.momentumLoop);
+      if (this.$refs["swiper-container"]) {
+        this.$refs["swiper-container"].scrollLeft += this.momentum.velX * 2;
+        this.momentum.velX *= 0.95;
+        if (Math.abs(this.momentum.velX) > 0.5) {
+          this.momentum.momentumID = requestAnimationFrame(this.momentumLoop);
+        }
       }
     },
   },
