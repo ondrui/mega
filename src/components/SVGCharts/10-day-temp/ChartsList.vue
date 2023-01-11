@@ -65,7 +65,7 @@ export default {
      * необходимые для отрисовки графиков и меток температурных.
      */
     tenDay() {
-      return this.$store.getters.tenDayTemp;
+      return this.$store.getters.tenDaysTabTempCharts;
     },
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;

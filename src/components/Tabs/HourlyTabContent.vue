@@ -40,14 +40,14 @@
           ref="swiper-wrapper"
         >
           <div class="hourly-charts-temp">
-            <ChartHourlyTemp :numData="hourlyChartsData" />
+            <ChartHourlyTemp :numData="hourlyTabChartsData" />
           </div>
           <div class="hourly-charts-precip">
-            <ChartHourlyPrecip :numData="hourlyChartsData" />
+            <ChartHourlyPrecip :numData="hourlyTabChartsData" />
           </div>
           <div
             class="date-container"
-            v-for="(date, indexParent) in hourlyPropTitle"
+            v-for="(date, indexParent) in hourlyTabTable"
             :key="`d-${indexParent}`"
           >
             <div class="date-header">
@@ -63,7 +63,7 @@
                 class="hourly-item"
                 v-for="(value, index) in date.values"
                 :key="`h-${index}`"
-                :ref="addRef(indexParent, index, hourlyPropTitle, date.values)"
+                :ref="addRef(indexParent, index, hourlyTabTable, date.values)"
               >
                 <div class="time">{{ value.hour }}</div>
                 <div class="hourly-icon">
@@ -142,11 +142,11 @@ export default {
     this.observer.disconnect();
   },
   computed: {
-    hourlyChartsData() {
-      return this.$store.getters.hourlyChartsData;
+    hourlyTabChartsData() {
+      return this.$store.getters.hourlyTabChartsData;
     },
-    hourlyPropTitle() {
-      return this.$store.getters.hourlyPropTitle;
+    hourlyTabTable() {
+      return this.$store.getters.hourlyTabTable;
     },
     getLocales() {
       return this.$store.getters.getLocales;
@@ -154,7 +154,7 @@ export default {
     scrollSize() {
       return (
         (this.$refs["swiper-wrapper"].clientWidth /
-          this.hourlyChartsData.length) *
+          this.hourlyTabChartsData.length) *
         3
       );
     },

@@ -5,11 +5,11 @@
         <ChartsList />
       </div>
       <div class="ten-days-charts-precip">
-        <ChartPrecip :data="tenBasic" />
+        <ChartPrecip :data="tenDaysTabTable" />
       </div>
       <div
         :class="['ten-days-day', { 'ten-days-weekend': day.weekend === true }]"
-        v-for="(day, index) in tenBasic"
+        v-for="(day, index) in tenDaysTabTable"
         :key="`d-${index}`"
       >
         <div class="ten-days-weekday">
@@ -74,8 +74,8 @@ export default {
     ChartPrecip,
   },
   computed: {
-    tenBasic() {
-      return this.$store.getters.tenBasic;
+    tenDaysTabTable() {
+      return this.$store.getters.tenDaysTabTable;
     },
     getLocales() {
       return this.$store.getters.getLocales;
