@@ -14,6 +14,7 @@ const dataLocales = {
       HourlyTabContent: "почасовой прогноз",
       TenDayTabContent: "прогноз погоды на 10 дней",
     },
+    detailsSegmentTitle: "погода в Луховицах - подробный прогноз на 10 дней",
     climateIndicators: {
       temp: "температура",
       pressure: "давление",

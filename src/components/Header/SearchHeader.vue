@@ -22,7 +22,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .search-header {
   position: relative;
   margin-bottom: 26px;

@@ -47,7 +47,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tabs-container {
   padding: 0 8px;
 }

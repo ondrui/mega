@@ -159,7 +159,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .svg-temp {
   fill: none;
   width: 100%;

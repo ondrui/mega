@@ -52,7 +52,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .header-date-info {
   font-weight: 400;
   font-size: 12px;

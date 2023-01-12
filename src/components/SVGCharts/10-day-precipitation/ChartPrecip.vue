@@ -125,7 +125,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .svg-precip {
   fill: none;
   height: 45px;

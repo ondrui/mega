@@ -339,8 +339,9 @@ export default new Vuex.Store({
                 "climateIndicators",
                 "precProb"
               ),
-              value: e.day.prec_prob,
-              unit: languageExpressions(getLocales, "units", "percent")[0],
+              value: `${e.day.prec_prob}${
+                languageExpressions(getLocales, "units", "percent")[0]
+              }`,
             },
             wind: {
               title: languageExpressions(
@@ -348,12 +349,13 @@ export default new Vuex.Store({
                 "climateIndicators",
                 "wind"
               ),
-              value: e.day.wind_speed,
-              unit: languageExpressions(getLocales, "units", "speed")[0],
-              wind_dir: [
-                e.day.wind_dir,
-                languageExpressions(getLocales, "windDir", e.day.wind_dir)[1],
-              ],
+              value: `${languageExpressions(
+                getLocales,
+                "windDir",
+                e.day.wind_dir
+              )[1].toUpperCase()} ${e.day.wind_speed} ${
+                languageExpressions(getLocales, "units", "speed")[0]
+              }`,
             },
             pressure: {
               title: languageExpressions(
@@ -361,8 +363,9 @@ export default new Vuex.Store({
                 "climateIndicators",
                 "pressure"
               ),
-              value: e.day.pressure,
-              unit: languageExpressions(getLocales, "units", "pressure")[0],
+              value: `${e.day.pressure} ${
+                languageExpressions(getLocales, "units", "pressure")[0]
+              }`,
             },
             humidity: {
               title: languageExpressions(
@@ -370,8 +373,9 @@ export default new Vuex.Store({
                 "climateIndicators",
                 "humidity"
               ),
-              value: e.day.humidity,
-              unit: languageExpressions(getLocales, "units", "percent")[0],
+              value: `${e.day.humidity}${
+                languageExpressions(getLocales, "units", "percent")[0]
+              }`,
             },
             temp: {
               min: `${e.night.temp_min}${
@@ -380,6 +384,15 @@ export default new Vuex.Store({
               max: `${e.day.temp_max}${
                 languageExpressions(getLocales, "units", "temp")[0]
               }C`,
+            },
+            uvi: {
+              title: languageExpressions(
+                getLocales,
+                "climateIndicators",
+                "uvi"
+              ),
+              value: e.day.uvi,
+              unit: "",
             },
             dayLength: {
               daytime: {

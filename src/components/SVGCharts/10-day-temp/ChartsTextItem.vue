@@ -52,7 +52,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .text-meter {
   font-weight: 500;
   font-size: 16px;

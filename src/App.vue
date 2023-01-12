@@ -34,9 +34,6 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  height: 100vh;
-}
 * {
   margin: 0;
   padding: 0;
@@ -71,7 +68,6 @@ a {
 }
 #app {
   background-color: #f5f5f5;
-  height: 100vh;
   scroll-behavior: smooth;
 }
 </style>
