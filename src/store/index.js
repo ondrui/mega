@@ -19,47 +19,6 @@ export default new Vuex.Store({
     loading(state) {
       return state.datasetsHourly;
     },
-    // currentWhat: () => {
-    //   return {
-    //     currDateDescr: "сейчас в 15:38 по прогнозу ",
-    //     icon: "partly-cloudy_rain_0",
-    //     descr: "переменная облачность небольшой дождь",
-    //     temp: {
-    //       value: "-3",
-    //       unit: "°",
-    //     },
-    //     realFeel: {
-    //       value: "-4",
-    //       title: "ощущается",
-    //     },
-    //     pressure: {
-    //       icon: "pressure",
-    //       title: "давление",
-    //       value: "755",
-    //       unit: " мм.рт.ст.",
-    //     },
-    //     wind: {
-    //       icon: "wind-direction",
-    //       title: "ветер",
-    //       value: "4",
-    //       unit: " м/c",
-    //       wind_dir: ["ne", "св"],
-    //     },
-    //     windGust: {
-    //       icon: "wind-gust",
-    //       title: "порывы ветра",
-    //       value: "14",
-    //       unit: " м/с",
-    //       wind_dir: ["ne", "св"],
-    //     },
-    //     humidity: {
-    //       icon: "humidity",
-    //       title: "влажность",
-    //       value: "65",
-    //       unit: "%",
-    //     },
-    //   };
-    // },
     current(state, { getLocales }) {
       let obj = {};
       if (!state.datasetsHourly) {
@@ -440,7 +399,8 @@ export default new Vuex.Store({
       return arr;
     },
     /**
-     * В
+     * Возвращает данные для отображения графика и таблицы подробного
+     * прогноза на 10 дней с разбивкой на 3-х часовые интервалы.
      * @param datasetsThreeHour Текущее состояние store.state.datasetsThreeHour.
      * @param getLocales Языковая метка.
      */
@@ -449,10 +409,16 @@ export default new Vuex.Store({
       const sortData = (el) => {
         return parseInt(el.date.split("T")[1].slice(0, 2));
       };
+
+      const filteredData = Object.keys(datasetsThreeHour)
+        .filter((key) => key !== "0")
+        .reduce((obj, key) => {
+          obj[key] = datasetsThreeHour[key];
+          return obj;
+        }, {});
       const obj = {};
-      // const arr = [];
-      for (const key in datasetsThreeHour) {
-        const arr = Object.values(datasetsThreeHour[key])
+      for (const key in filteredData) {
+        const arr = Object.values(filteredData[key])
           .filter((i) => typeof i === "object")
           .sort((a, b) => sortData(a) - sortData(b));
         const showArr = arr.map(
@@ -467,41 +433,60 @@ export default new Vuex.Store({
             temp_min,
             wind_dir,
             wind_speed,
-            feels_like,
           }) => {
+            const temperature = light === "dark" ? temp_min : temp_max;
             return {
               hour: date.split("T")[1].slice(0, 5),
               condition,
               light,
-              humidity: `${humidity}${
-                languageExpressions(getLocales, "units", "percent")[0]
-              }`,
-              prec_sum: `${prec_sum} ${
-                languageExpressions(getLocales, "units", "precSum")[0]
-              }`,
-              pressure,
-              temp_max: `${temp_max}${
-                languageExpressions(getLocales, "units", "temp")[0]
-              }`,
-              temp_min: `${temp_min}${
-                languageExpressions(getLocales, "units", "temp")[0]
-              }`,
-              feels_like: `${feels_like}${
-                languageExpressions(getLocales, "units", "temp")[0]
-              }`,
-              wind_dir: [
-                wind_dir,
-                `${languageExpressions(getLocales, "windDir", wind_dir)[1]}`,
-              ],
-              wind_speed: `${wind_speed} ${
-                languageExpressions(getLocales, "units", "speed")[0]
-              }`,
+              humidity: {
+                title: languageExpressions(
+                  getLocales,
+                  "climateIndicators",
+                  "humidity"
+                ),
+                unit: languageExpressions(getLocales, "units", "percent")[0],
+                value: humidity,
+              },
+              prec_sum: {
+                title: languageExpressions(
+                  getLocales,
+                  "climateIndicators",
+                  "precSum"
+                ),
+                value: prec_sum,
+                unit: languageExpressions(getLocales, "units", "precSum")[0],
+              },
+              temp: {
+                value: temperature,
+                unit: languageExpressions(getLocales, "units", "temp")[0],
+              },
+              pressure: {
+                title: languageExpressions(
+                  getLocales,
+                  "climateIndicators",
+                  "pressure"
+                ),
+                value: pressure,
+                unit: languageExpressions(getLocales, "units", "pressure")[0],
+              },
+              wind: {
+                title: languageExpressions(
+                  getLocales,
+                  "climateIndicators",
+                  "windDirSpeed"
+                ),
+                value: wind_speed,
+                unit: languageExpressions(getLocales, "units", "speed")[0],
+                wind_dir: [
+                  wind_dir,
+                  languageExpressions(getLocales, "windDir", wind_dir)[1],
+                ],
+              },
             };
           }
         );
-        obj[key] = {
-          values: showArr,
-        };
+        obj[key] = showArr;
       }
       console.log("tenDaysDetailsChart", obj);
       return obj;
