@@ -19,7 +19,6 @@ export default {
 .descr {
   display: flex;
   flex-direction: column;
-  padding-left: 6px;
   justify-content: center;
   row-gap: 2px;
   white-space: nowrap;

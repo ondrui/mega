@@ -14,7 +14,7 @@ const dataLocales = {
       HourlyTabContent: "почасовой прогноз",
       TenDayTabContent: "прогноз погоды на 10 дней",
     },
-    detailsSegmentTitle: "погода в Луховицах - подробный прогноз на 10 дней",
+    detailsSegmentTitle: "погода в Москве - подробный прогноз на 10 дней",
     climateIndicators: {
       temp: "температура",
       pressure: "давление",
@@ -25,7 +25,7 @@ const dataLocales = {
       windGust_2: "до",
       humidity: "влажность",
       precSum: "кол-во осадков",
-      precProb: "вер. осадков:",
+      precProb: "вер. осадков",
       uvi: "УФИ",
       daytime: "долгота дня",
     },
