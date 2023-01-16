@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="['card-content', { weekend: value.weekend === true }]">
-      <div class="card-content-date">
+      <div class="card-content__date">
         <div class="date-text-short">
           <div>{{ value.weekday[0] }}</div>
           <div>{{ value.date[0] }}</div>
@@ -13,24 +13,24 @@
           <span>&nbsp; {{ value.date[1] }}</span>
         </div>
       </div>
-      <div class="card-content-condition">
+      <div class="card-content__condition">
         <div>
           <BaseIcon :name="value.condition" pick="light" width="40" />
         </div>
-        <div class="card-content-text">
-          <div class="card-content-title">
+        <div class="card-content__text">
+          <div>
             {{ value.condition_s }}
           </div>
-          <div class="card-content-precip">
+          <div>
             <span>{{ value.precProb.title }}:</span>
             {{ value.precProb.value }}
           </div>
         </div>
       </div>
-      <div class="card-content-temp">
+      <div class="card-content__temp">
         <span>{{ value.temp.min }}/</span>{{ value.temp.max }}
       </div>
-      <div class="card-content-info">
+      <div class="card-content__info">
         <CardDetailDayItem
           v-for="(item, index) in items"
           :key="`cn-${index}`"
@@ -90,23 +90,25 @@ export default {
 .card-content {
   display: grid;
   grid-template-columns: 0.2fr 1fr 0.4fr 1fr 0.3fr;
-  column-gap: 10px;
+  // grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  column-gap: 15px;
   align-items: center;
   border: 1px solid #d6e2f0;
   margin-top: 12px;
   padding: 0 9px 0 20px;
   height: 72px;
-
-  &.weekend .date-text-short > div:first-child {
-    color: #ff1616;
-  }
 }
-.card-content-condition {
+.weekend .date-text-short > div:first-child {
+  color: #ff1616;
+}
+.weekend .date-text-long > span:first-child {
+  color: #ff1616;
+}
+.card-content__condition {
   display: flex;
   column-gap: 12px;
 }
-
-.card-content-temp {
+.card-content__temp {
   justify-self: end;
   font-weight: 400;
   font-size: 24px;
@@ -116,7 +118,6 @@ export default {
     font-weight: 300;
   }
 }
-
 .date-text-long {
   display: none;
 
@@ -124,15 +125,14 @@ export default {
     text-transform: capitalize;
   }
 }
-
-.card-content-text {
+.card-content__text {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-self: center;
   row-gap: 4px;
 
-  & .card-content-title {
+  & > div:first-child {
     min-width: 125px;
     font-weight: 400;
     font-size: 10px;
@@ -140,11 +140,11 @@ export default {
     color: #000000;
   }
 
-  & .card-content-title::first-letter {
+  & > div:first-child::first-letter {
     text-transform: capitalize;
   }
 
-  & .card-content-precip {
+  & > div:last-child {
     font-weight: 400;
     font-size: 10px;
     line-height: 12px;
@@ -159,15 +159,16 @@ export default {
     }
   }
 
-  & .card-content-precip::first-letter {
+  & > div:last-child::first-letter {
     text-transform: capitalize;
   }
 }
 
-.card-content-info {
+.card-content__info {
   display: flex;
   justify-content: space-between;
   column-gap: 8px;
+  // padding: 0 10px;
 }
 
 .day-length-block {
@@ -197,7 +198,7 @@ export default {
   }
 }
 
-.card-content-date {
+.card-content__date {
   justify-self: start;
   display: flex;
   flex-direction: column;
@@ -207,43 +208,67 @@ export default {
   font-size: 12px;
   line-height: 16px;
 }
-.card-content-date > div {
+.card-content__date > div {
   text-align: center;
 }
-.card-content-date > div:first-child {
+.card-content__date > div:first-child {
   text-transform: uppercase;
   font-size: 16px;
   line-height: 21px;
 }
 
 @media only screen and (max-width: 450px) {
-  .card-content-date {
+  .card-content__date {
+    display: block;
     grid-area: a;
+    justify-self: start;
+
+    & > div {
+      text-align: start;
+    }
   }
   .day-length-block {
     grid-area: b;
+    justify-self: end;
   }
-  .card-content-condition {
+  .card-content__condition {
     grid-area: c;
+
+    & svg {
+      width: 50px;
+    }
   }
-  .card-content-temp {
+  .card-content__temp {
     grid-area: d;
   }
-  .card-content-info {
+  .card-content__info {
     grid-area: e;
+    padding-top: 15px;
+    border-top: 1px solid #d6e2f0;
   }
   .card-content {
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    // grid-template-rows: repeat(3, 1fr);
     grid-template-areas:
       "a b"
       "c d"
       "e e";
     height: auto;
+    padding: 11px 15px 19px 15px;
 
     & .date-text-long {
       display: block;
+      font-size: 16px;
+      line-height: 21px;
+      white-space: nowrap;
+
+      & > span:first-child {
+        font-weight: 500;
+      }
+
+      & > span:last-child {
+        font-weight: 300;
+      }
     }
 
     & .date-text-short {
