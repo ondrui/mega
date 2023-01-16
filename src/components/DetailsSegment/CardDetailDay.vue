@@ -216,7 +216,7 @@ export default {
   line-height: 21px;
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 450px) {
   .card-content-date {
     grid-area: a;
   }
