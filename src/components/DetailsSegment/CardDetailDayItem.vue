@@ -46,4 +46,16 @@ export default {
     }
   }
 }
+@media only screen and (max-width: 450px) {
+  .descr {
+    & .title {
+      font-size: 12px;
+      line-height: 14px;
+    }
+    & .value {
+      font-size: 14px;
+      line-height: 16px;
+    }
+  }
+}
 </style>

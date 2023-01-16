@@ -163,14 +163,12 @@ export default {
     text-transform: capitalize;
   }
 }
-
 .card-content__info {
   display: flex;
   justify-content: space-between;
   column-gap: 8px;
   // padding: 0 10px;
 }
-
 .day-length-block {
   display: flex;
   flex-direction: column;
@@ -197,7 +195,6 @@ export default {
     }
   }
 }
-
 .card-content__date {
   justify-self: start;
   display: flex;
@@ -230,9 +227,13 @@ export default {
   .day-length-block {
     grid-area: b;
     justify-self: end;
+    font-size: 14px;
+    line-height: 16px;
   }
   .card-content__condition {
     grid-area: c;
+    padding-bottom: 19px;
+    padding-top: 5px;
 
     & svg {
       width: 50px;
@@ -240,6 +241,8 @@ export default {
   }
   .card-content__temp {
     grid-area: d;
+    font-size: 32px;
+    line-height: 38px;
   }
   .card-content__info {
     grid-area: e;
@@ -247,7 +250,8 @@ export default {
     border-top: 1px solid #d6e2f0;
   }
   .card-content {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 2fr 1fr;
+    column-gap: 5px;
     // grid-template-rows: repeat(3, 1fr);
     grid-template-areas:
       "a b"
@@ -255,24 +259,47 @@ export default {
       "e e";
     height: auto;
     padding: 11px 15px 19px 15px;
+  }
+  .date-text-long {
+    display: block;
+    font-size: 16px;
+    line-height: 21px;
+    white-space: nowrap;
 
-    & .date-text-long {
-      display: block;
-      font-size: 16px;
-      line-height: 21px;
+    & > span:first-child {
+      font-weight: 500;
+    }
+
+    & > span:last-child {
+      font-weight: 300;
+    }
+  }
+  .date-text-short {
+    display: none;
+  }
+  .card-content__text {
+    & > div:first-child {
+      // min-width: 125px;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 17px;
+    }
+
+    & > div:last-child {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
       white-space: nowrap;
 
-      & > span:first-child {
-        font-weight: 500;
-      }
-
-      & > span:last-child {
+      & > span {
         font-weight: 300;
+        font-size: 14px;
+        line-height: 16px;
       }
     }
 
-    & .date-text-short {
-      display: none;
+    & > div:last-child::first-letter {
+      text-transform: capitalize;
     }
   }
 }

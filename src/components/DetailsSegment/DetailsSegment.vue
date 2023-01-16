@@ -62,4 +62,10 @@ export default {
 .hidden {
   display: none;
 }
+
+@media only screen and (max-width: 450px) {
+  .segment-container {
+    padding: 30px 4px 23px 4px;
+  }
+}
 </style>
