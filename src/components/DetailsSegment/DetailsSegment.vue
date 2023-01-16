@@ -9,7 +9,10 @@
       :key="`s-${index}`"
     >
       <CardDetailDay :value="item" />
-      <ContentDetailDay :class="{ hidden: isHidden }" />
+      <ContentDetailDay
+        :class="{ hidden: isHidden }"
+        :data="tenDaysDetailsChart[`${index + 1}`]"
+      />
     </div>
   </div>
 </template>
@@ -35,7 +38,7 @@ export default {
       return this.$store.getters.tenDaysDetailsChart;
     },
     isHidden() {
-      return true;
+      return false;
     },
   },
   methods: {

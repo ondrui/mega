@@ -424,7 +424,7 @@ export default new Vuex.Store({
       };
 
       const filteredData = Object.keys(datasetsThreeHour)
-        .filter((key) => key !== "0")
+        .filter((key, index, arr) => key !== "0" && key !== `${arr.length - 1}`)
         .reduce((obj, key) => {
           obj[key] = datasetsThreeHour[key];
           return obj;
@@ -449,6 +449,7 @@ export default new Vuex.Store({
           }) => {
             const temperature = light === "dark" ? temp_min : temp_max;
             return {
+              date,
               hour: date.split("T")[1].slice(0, 5),
               condition,
               light,

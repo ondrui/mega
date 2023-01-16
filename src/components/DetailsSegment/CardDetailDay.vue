@@ -229,10 +229,15 @@ export default {
     justify-self: end;
     font-size: 14px;
     line-height: 16px;
+
+    & span {
+      font-size: 14px;
+      line-height: 16px;
+    }
   }
   .card-content__condition {
     grid-area: c;
-    padding-bottom: 19px;
+    padding-bottom: 10px;
     padding-top: 5px;
 
     & svg {

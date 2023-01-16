@@ -450,10 +450,6 @@ export default {
     }
   }
 }
-// .hidden {
-//   opacity: 0;
-//   cursor: none;
-// }
 
 @media only screen and (max-width: 550px) {
   .hourly-icon svg {
