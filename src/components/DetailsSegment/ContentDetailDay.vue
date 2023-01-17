@@ -1,66 +1,68 @@
 <template>
-  <div class="hourly-tab-container">
-    <!-- <div class="hourly-row-caption prec-sum">
+  <div class="forecast-details-container">
+    <!-- <div class="details-row-caption prec-sum">
       {{ languageExpressions(getLocales, "climateIndicators", "precSum") }}
     </div> -->
-    <div class="hourly-row-caption wind">
+    <div class="details-row-caption wind">
       {{ languageExpressions(getLocales, "climateIndicators", "windDirSpeed") }}
     </div>
-    <div class="hourly-row-caption pressure">
+    <div class="details-row-caption pressure">
       {{ languageExpressions(getLocales, "climateIndicators", "pressure") }},
       {{ languageExpressions(getLocales, "units", "pressure")[0] }}
     </div>
-    <div class="hourly-row-caption humidity">
+    <div class="details-row-caption humidity">
       {{ languageExpressions(getLocales, "climateIndicators", "humidity") }}
     </div>
-    <!-- <div class="hourly-charts-temp hidden">
-      <ChartHourlyTemp :numData="hourlyTabChartsData" />
+    <div class="details-charts-temp">
+      <ChartDetailsTemp :numData="data" />
     </div>
-    <div class="hourly-charts-precip hidden">
+    <!-- <div class="details-charts-precip hidden">
       <ChartHourlyPrecip :numData="hourlyTabChartsData" />
     </div> -->
-    <div class="hourly-data-container">
-      <div
-        class="hourly-item"
-        v-for="(value, index) in data"
-        :key="`th-${index}`"
-      >
-        <div class="time">{{ value.hour }}</div>
-        <div class="hourly-icon">
-          <BaseIcon width="40" :name="value.condition" :pick="value.light" />
-        </div>
-        <div class="hourly-temp-item"></div>
-        <!-- <div class="hourly-precip-item"></div> -->
-        <div class="hourly-wind-descr">
+    <div
+      class="details-item"
+      v-for="(value, index) in data"
+      :key="`th-${index}`"
+    >
+      <div class="time">{{ value.hour }}</div>
+      <div class="details-icon">
+        <BaseIcon width="40" :name="value.condition" :pick="value.light" />
+      </div>
+      <div class="details-temp-item"></div>
+      <!-- <div class="details-precip-item"></div> -->
+      <div class="details-wind-descr">
+        <div>
           <div>
-            <div>
-              <BaseIcon
-                width="8"
-                name="wind-direction-blue"
-                pick="common"
-                :transform="windDirection(getLocales, value.wind)"
-              />
-            </div>
-            <span>{{ value.wind.wind_dir[1] }}</span>
+            <BaseIcon
+              width="8"
+              name="wind-direction-blue"
+              pick="common"
+              :transform="windDirection(getLocales, value.wind)"
+            />
           </div>
-          <div>{{ value.wind.value }}{{ value.wind.unit }}</div>
+          <span>{{ value.wind.wind_dir[1] }}</span>
         </div>
-        <div class="hourly-pressure">
-          {{ value.pressure.value }}
-        </div>
-        <div class="hourly-day-humidity">
-          {{ value.humidity.value }}{{ value.humidity.unit }}
-        </div>
+        <div>{{ value.wind.value }}{{ value.wind.unit }}</div>
+      </div>
+      <div class="details-pressure">
+        {{ value.pressure.value }}
+      </div>
+      <div class="details-day-humidity">
+        {{ value.humidity.value }}{{ value.humidity.unit }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import ChartDetailsTemp from "@/components/SVGCharts/10-day-details/ChartDetailsTemp.vue";
 import { languageExpressions } from "@/constants/locales";
 import { windDirection } from "@/constants/functions";
 
 export default {
+  components: {
+    ChartDetailsTemp,
+  },
   props: ["data"],
   computed: {
     getLocales() {
@@ -75,21 +77,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.hourly-tab-container {
+.forecast-details-container {
   position: relative;
+  display: grid;
   background-color: #ffffff;
+  max-width: 100%;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   padding-top: 2px;
-}
-.hourly-data-container {
-  display: flex;
-}
-.hourly-item {
-  flex: 1;
   border: 1px solid #d8e9f3;
-  margin-right: -1px;
+  border-top: none;
+  border-bottom: none;
+}
+.details-item {
+  border-top: 1px solid #d8e9f3;
+  border-bottom: 1px solid #d8e9f3;
+  border-right: 1px solid #d8e9f3;
 
   &:last-child {
-    margin-right: 0;
+    border-right: none;
   }
 
   & > div {
@@ -111,22 +116,22 @@ export default {
   font-size: 12px;
   line-height: 16px;
   color: #333333;
-  padding: 7px 0;
+  height: 33px;
 }
-.hourly-temp-item {
-  height: 180px;
+.details-temp-item {
+  height: 156px;
 }
-.hourly-precip-item {
+.details-precip-item {
   height: 60px;
 }
-.hourly-icon {
+.details-icon {
   display: flex;
   flex-direction: column;
   height: 80px;
   align-items: center;
   padding-top: 5px;
 }
-.hourly-row-caption {
+.details-row-caption {
   position: absolute;
   z-index: 11;
   background: #f5f5f5;
@@ -144,23 +149,23 @@ export default {
   }
 
   &.wind {
-    top: 294px;
+    top: 265px;
   }
   &.pressure {
-    top: 443px;
+    top: 318px;
   }
   &.humidity {
-    top: 479px;
+    top: 354px;
   }
 }
-.hourly-charts-temp {
+.details-charts-temp {
   position: absolute;
-  top: 136px;
+  top: 115px;
   width: 100%;
-  height: 170px;
+  height: 156px;
   z-index: 10;
 }
-.hourly-charts-precip {
+.details-charts-precip {
   position: absolute;
   top: 324px;
   display: flex;
@@ -170,7 +175,7 @@ export default {
   z-index: 10;
   opacity: 0.6;
 }
-.hourly-wind-descr {
+.details-wind-descr {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -190,8 +195,8 @@ export default {
     column-gap: 3px;
   }
 }
-.hourly-pressure,
-.hourly-day-humidity {
+.details-pressure,
+.details-day-humidity {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -207,7 +212,7 @@ export default {
 }
 
 @media only screen and (max-width: 550px) {
-  .hourly-icon svg {
+  .details-icon svg {
     width: 30px;
   }
 }

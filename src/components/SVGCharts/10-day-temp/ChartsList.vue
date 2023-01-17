@@ -43,8 +43,8 @@ export default {
   mounted() {
     /**
      * После монтирования компоненты вызываем функцию обработчик, которая
-     * отвечает за вычисление и установку следующих значений:
-     * SVGWidth, textNumBlockMeterWidth, textBlockMeterWidth.
+     * отвечает за вычисление и установку следующих значений поля data:
+     * width и height.
      */
     this.resizeBrowserHandler();
     /**

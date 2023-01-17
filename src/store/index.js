@@ -314,7 +314,6 @@ export default new Vuex.Store({
      * @param getLocales Языковая метка.
      */
     tenDaysDetailsCard: ({ datasetsTenDays }, { getLocales }) => {
-      console.log("datasetsTenDays", datasetsTenDays);
       const arr = Object.values(datasetsTenDays)
         .filter((f, i) => i !== 0)
         .map((e) => {
@@ -408,7 +407,6 @@ export default new Vuex.Store({
             },
           };
         });
-      console.log("tenDaysDetailsCard", arr);
       return arr;
     },
     /**
@@ -418,7 +416,6 @@ export default new Vuex.Store({
      * @param getLocales Языковая метка.
      */
     tenDaysDetailsChart: ({ datasetsThreeHour }, { getLocales }) => {
-      console.log("datasetsThreeHour", datasetsThreeHour);
       const sortData = (el) => {
         return parseInt(el.date.split("T")[1].slice(0, 2));
       };
@@ -502,7 +499,6 @@ export default new Vuex.Store({
         );
         obj[key] = showArr;
       }
-      console.log("tenDaysDetailsChart", obj);
       return obj;
       // return {
       //   time: "03:00",
