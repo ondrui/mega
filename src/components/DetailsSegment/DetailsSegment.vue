@@ -4,13 +4,15 @@
       {{ languageExpressions(getLocales, "detailsSegmentTitle") }}
     </h1>
     <div
+      ref="item"
       class="wrapper-list"
       v-for="(item, index) in tenDaysDetailsCard"
       :key="`s-${index}`"
+      tabindex="0"
     >
-      <CardDetailDay :value="item" />
+      <CardDetailDay :value="item" :index="index" />
       <ContentDetailDay
-        :class="{ hidden: isHidden }"
+        :class="{ hidden: !item.isOpen }"
         :data="tenDaysDetailsChart[`${index + 1}`]"
       />
     </div>
@@ -27,6 +29,11 @@ export default {
     CardDetailDay,
     ContentDetailDay,
   },
+  watch: {
+    tenDaysDetailsCard() {
+      this.focus();
+    },
+  },
   computed: {
     getLocales() {
       return this.$store.getters.getLocales;
@@ -37,12 +44,18 @@ export default {
     tenDaysDetailsChart() {
       return this.$store.getters.tenDaysDetailsChart;
     },
-    isHidden() {
-      return false;
-    },
   },
   methods: {
     languageExpressions,
+    focus() {
+      const index = this.tenDaysDetailsCard.findIndex((i) => i.isOpen === true);
+      // if (index !== -1) this.$refs.item[index].focus();
+      if (index !== -1)
+        this.$refs.item[index].scrollIntoView({
+          block: "center",
+          behavior: "smooth",
+        });
+    },
   },
 };
 </script>

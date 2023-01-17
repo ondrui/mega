@@ -65,7 +65,15 @@ export default {
      */
     window.removeEventListener("resize", this.resizeBrowserHandler);
   },
+  watch: {
+    tenDaysDetailsCard() {
+      this.resizeBrowserHandler();
+    },
+  },
   computed: {
+    tenDaysDetailsCard() {
+      return this.$store.getters.tenDaysDetailsCard;
+    },
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;
     },
@@ -117,7 +125,7 @@ export default {
             textYMax:
               this.calcY(temp.value, max, min) -
               (this.circleRadius + this.marginText + 2),
-            temp: temp.value,
+            temp: temp.value > 0 ? `+${temp.value}` : temp.value,
             unit: temp.unit,
           };
           total.push(obj);

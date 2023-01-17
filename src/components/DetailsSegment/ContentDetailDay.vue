@@ -212,8 +212,12 @@ export default {
 }
 
 @media only screen and (max-width: 550px) {
-  .details-icon svg {
-    width: 30px;
+  .forecast-details-container {
+    padding-top: 0;
+    border-top: none;
+  }
+  .details-item {
+    border-top: none;
   }
 }
 </style>

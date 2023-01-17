@@ -221,11 +221,11 @@ export default new Vuex.Store({
       for (const key in datasetsHourly) {
         const arr = Object.values(datasetsHourly[key])
           .filter((i) => typeof i === "object")
-          .map(({ temp_max, prec_sum, date, feels_like }) => {
+          .map(({ temp_max, temp_min, prec_sum, date, feels_like, light }) => {
             return {
               date,
               temp_max: {
-                value: temp_max,
+                value: light === "dark" ? temp_min : temp_max,
                 unit: "°",
               },
               prec_sum: {
@@ -329,6 +329,7 @@ export default new Vuex.Store({
           return {
             weekday,
             date,
+            isOpen: e.isOpen,
             weekend: weekday[0] === "сб" || weekday[0] === "вс",
             condition: e.day.condition,
             condition_s: e.day.condition_s,
@@ -568,7 +569,7 @@ export default new Vuex.Store({
 
       //ten days datasets
       const filteredTenDatasets = Object.keys(forecast_24).reduce(
-        (obj, key) => {
+        (obj, key, index) => {
           const addObj = Object.keys(forecast_24[key]).reduce((total, p) => {
             total[p] =
               typeof forecast_24[key][p] === "object"
@@ -579,12 +580,19 @@ export default new Vuex.Store({
                 : forecast_24[key][p];
             return total;
           }, {});
+          addObj.isOpen = index === 1 ? true : false;
           obj[key] = addObj;
           return obj;
         },
         {}
       );
       state.datasetsTenDays = filteredTenDatasets;
+    },
+    toggleDetails(state, index) {
+      Object.keys(state.datasetsTenDays).map(
+        (e) => (state.datasetsTenDays[e].isOpen = false)
+      );
+      state.datasetsTenDays[index].isOpen = true;
     },
   },
   actions: {},

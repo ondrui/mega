@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div :class="['card-content', { weekend: value.weekend === true }]">
+    <div
+      @click="toggle(index)"
+      :class="['card-content', { weekend: value.weekend === true }]"
+    >
       <div class="card-content__date">
         <div class="date-text-short">
           <div>{{ value.weekday[0] }}</div>
@@ -56,32 +59,22 @@
 </template>
 
 <script>
-import { languageExpressions } from "@/constants/locales";
 import CardDetailDayItem from "./CardDetailDayItem.vue";
 
 export default {
   components: {
     CardDetailDayItem,
   },
-  props: ["value"],
+  props: ["value", "index"],
   data() {
     return {
       items: ["pressure", "humidity", "wind", "uvi"],
     };
   },
-  computed: {
-    getLocales() {
-      return this.$store.getters.getLocales;
-    },
-    forecastForItemHeader() {
-      return this.$store.getters.forecastForItemHeader;
-    },
-    current() {
-      return this.$store.getters.current;
-    },
-  },
   methods: {
-    languageExpressions,
+    toggle(index) {
+      this.$store.commit("toggleDetails", index + 1);
+    },
   },
 };
 </script>
@@ -97,6 +90,7 @@ export default {
   margin-top: 12px;
   padding: 0 9px 0 20px;
   height: 72px;
+  cursor: pointer;
 }
 .weekend .date-text-short > div:first-child {
   color: #ff1616;

@@ -8,6 +8,7 @@
         <ChartPrecip :data="tenDaysTabTable" />
       </div>
       <div
+        @click="toggle(index)"
         :class="['ten-days-day', { 'ten-days-weekend': day.weekend === true }]"
         v-for="(day, index) in tenDaysTabTable"
         :key="`d-${index}`"
@@ -84,6 +85,9 @@ export default {
   methods: {
     languageExpressions,
     windDirection,
+    toggle(index) {
+      this.$store.commit("toggleDetails", index);
+    },
   },
 };
 </script>
