@@ -1,31 +1,29 @@
 <template>
-  <div>
-    <svg
-      :view-box.camel="viewbox"
-      ref="svg-temp-details"
-      class="svg-temp-details"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g>
-        <path class="color-path" stroke-width="1" :d="svgPath"></path>
-        <circle
-          v-for="(p, index) in dataPoints"
-          :key="`c-${index}`"
-          :cx="p.x"
-          :cy="p.y"
-          :r="circleRadius"
-          stroke="#0BC2FF"
-          stroke-width="1"
-          fill="#ffffff"
-        />
-      </g>
-      <g v-for="(p, index) in dataPoints" :key="`c-${index}`">
-        <text class="temp" text-anchor="middle" :x="p.x" :y="p.textYMax">
-          {{ `${p.temp}${p.unit}` }}
-        </text>
-      </g>
-    </svg>
-  </div>
+  <svg
+    :view-box.camel="viewbox"
+    ref="svg-temp-details"
+    class="svg-temp-details"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g>
+      <path class="color-path" stroke-width="1" :d="svgPath"></path>
+      <circle
+        v-for="(p, index) in dataPoints"
+        :key="`c-${index}`"
+        :cx="p.x"
+        :cy="p.y"
+        :r="circleRadius"
+        stroke="#0BC2FF"
+        stroke-width="1"
+        fill="#ffffff"
+      />
+    </g>
+    <g v-for="(p, index) in dataPoints" :key="`c-${index}`">
+      <text class="temp" text-anchor="middle" :x="p.x" :y="p.textYMax">
+        {{ `${p.temp}${p.unit}` }}
+      </text>
+    </g>
+  </svg>
 </template>
 
 <script>
@@ -41,7 +39,7 @@ export default {
       width: 300,
       height: 156,
       textSize: 16,
-      marginFromCell: 8,
+      marginFromCell: 2,
       marginText: 5,
       circleRadius: 3,
     };
@@ -144,18 +142,11 @@ export default {
      *  @param max - Максимальное количество осадков за выбранный период.
      */
     calcY(temp, max, min) {
+      console.log(temp, max, min);
       const y =
-        temp === max
-          ? Math.round(
-              ((this.height - 2 * this.totalYMargin) * (max - temp)) /
-                (max - min) +
-                this.totalYMargin
-            )
-          : Math.round(
-              ((this.height - 2 * this.totalYMargin) * (max - temp)) /
-                (max - min) +
-                this.textSize
-            );
+        Math.round(
+          ((this.height - 2 * this.totalYMargin) * (max - temp)) / (max - min)
+        ) + this.totalYMargin;
       return y;
     },
     /**
@@ -231,7 +222,7 @@ export default {
 .svg-temp-details {
   fill: none;
   width: 100%;
-  height: 188px;
+  height: 100%;
 }
 .text-meter {
   font-weight: 500;

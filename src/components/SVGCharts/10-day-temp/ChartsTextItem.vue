@@ -33,7 +33,11 @@ export default {
   },
   methods: {
     textMeter(index) {
-      const value = this.points.dataset[index].temp;
+      const value = `${
+        this.points.dataset[index].temp > 0
+          ? `+${this.points.dataset[index].temp}`
+          : this.points.dataset[index].temp
+      }`;
       const unit = this.points.unit;
       const y =
         this.points.descr === "night"

@@ -328,7 +328,7 @@ export default {
 .hourly-icon {
   display: flex;
   flex-direction: column;
-  height: 80px;
+  height: 60px;
   align-items: center;
   padding-top: 5px;
 }
@@ -346,29 +346,29 @@ export default {
   left: 6px;
 
   &.prec-sum {
-    top: 330px;
+    top: 310px;
   }
 
   &.wind {
-    top: 390px;
+    top: 370px;
   }
   &.pressure {
-    top: 443px;
+    top: 423px;
   }
   &.humidity {
-    top: 479px;
+    top: 459px;
   }
 }
 .hourly-charts-temp {
   position: absolute;
-  top: 136px;
+  top: 116px;
   width: 100%;
   height: 170px;
   z-index: 10;
 }
 .hourly-charts-precip {
   position: absolute;
-  top: 324px;
+  top: 309px;
   display: flex;
   align-items: flex-end;
   width: 100%;
@@ -390,6 +390,7 @@ export default {
 
   & span {
     text-transform: uppercase;
+    padding-left: 1px;
   }
 
   & > div:first-child {

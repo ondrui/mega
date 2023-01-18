@@ -30,10 +30,12 @@ export default new Vuex.Store({
         timeText: `сейчас в ${time} по прогнозу`,
         icon: data.condition,
         descr: data.condition_s,
-        temp: `${data.temp_max}${
+        temp: `${data.temp_max > 0 ? `+${data.temp_max}` : data.temp_max}${
           languageExpressions(getLocales, "units", "temp")[0]
         }`,
-        realFeel: `ощущается ${data.feels_like}`,
+        realFeel: `ощущается ${
+          data.feels_like > 0 ? `+${data.feels_like}` : data.feels_like
+        }`,
       };
     },
     forecastForItemHeader(state, { getLocales }) {
@@ -378,12 +380,12 @@ export default new Vuex.Store({
               }`,
             },
             temp: {
-              min: `${e.night.temp_min}${
-                languageExpressions(getLocales, "units", "temp")[0]
-              }`,
-              max: `${e.day.temp_max}${
-                languageExpressions(getLocales, "units", "temp")[0]
-              }C`,
+              min: `${
+                e.night.temp_min > 0 ? `+${e.night.temp_min}` : e.night.temp_min
+              }${languageExpressions(getLocales, "units", "temp")[0]}`,
+              max: `${
+                e.day.temp_max > 0 ? `+${e.day.temp_max}` : e.day.temp_max
+              }${languageExpressions(getLocales, "units", "temp")[0]}C`,
             },
             uvi: {
               title: languageExpressions(

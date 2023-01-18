@@ -119,8 +119,12 @@ export default {
               textYFeels:
                 this.calcY(temp_max.value, max, min) +
                 (this.circleRadius + this.textSizeMin + 2),
-              temp_max: temp_max.value,
-              feels_like: feels_like.value,
+              temp_max:
+                temp_max.value > 0 ? `+${temp_max.value}` : temp_max.value,
+              feels_like:
+                feels_like.value > 0
+                  ? `+${feels_like.value}`
+                  : feels_like.value,
               unit: temp_max.unit,
             };
             total.push(obj);

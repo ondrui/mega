@@ -42,7 +42,7 @@
           </div>
           <span>{{ value.wind.wind_dir[1] }}</span>
         </div>
-        <div>{{ value.wind.value }}{{ value.wind.unit }}</div>
+        <div>{{ value.wind.value }} {{ value.wind.unit }}</div>
       </div>
       <div class="details-pressure">
         {{ value.pressure.value }}
@@ -127,7 +127,7 @@ export default {
 .details-icon {
   display: flex;
   flex-direction: column;
-  height: 80px;
+  height: 60px;
   align-items: center;
   padding-top: 5px;
 }
@@ -149,18 +149,18 @@ export default {
   }
 
   &.wind {
-    top: 265px;
+    top: 245px;
   }
   &.pressure {
-    top: 318px;
+    top: 298px;
   }
   &.humidity {
-    top: 354px;
+    top: 334px;
   }
 }
 .details-charts-temp {
   position: absolute;
-  top: 115px;
+  top: 96px;
   width: 100%;
   height: 156px;
   z-index: 10;
@@ -187,6 +187,7 @@ export default {
   color: #333333;
 
   & span {
+    padding-left: 1px;
     text-transform: uppercase;
   }
 
@@ -218,6 +219,9 @@ export default {
   }
   .details-item {
     border-top: none;
+  }
+  .details-icon {
+    height: 63px;
   }
 }
 </style>

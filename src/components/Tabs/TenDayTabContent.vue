@@ -177,7 +177,7 @@ export default {
 .ten-days-icon {
   display: flex;
   flex-direction: column;
-  height: 70px;
+  height: 60px;
   align-items: center;
   padding-top: 5px;
 }
@@ -197,7 +197,7 @@ export default {
 }
 .ten-days-charts-temp {
   position: absolute;
-  top: 136px;
+  top: 123px;
   width: 100%;
   height: 170px;
   // z-index: 10;
@@ -205,7 +205,7 @@ export default {
 }
 .ten-days-charts-precip {
   position: absolute;
-  top: 306px;
+  top: 296px;
   display: flex;
   align-items: flex-end;
   width: 100%;
@@ -228,6 +228,7 @@ export default {
 
   & span {
     text-transform: uppercase;
+    padding-left: 1px;
   }
 
   & > div:first-child {
