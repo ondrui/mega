@@ -86,7 +86,11 @@ export default {
     languageExpressions,
     windDirection,
     toggle(index) {
-      this.$store.commit("toggleDetails", index);
+      if (index === 0) {
+        this.$emit("go");
+      } else {
+        this.$store.commit("toggleDetails", index);
+      }
     },
   },
 };
@@ -264,7 +268,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 450px) {
   .ten-days-icon svg {
     width: 30px;
   }

@@ -212,7 +212,7 @@ export default {
   display: none;
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 450px) {
   .forecast-details-container {
     padding-top: 0;
     border-top: none;

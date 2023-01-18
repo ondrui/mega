@@ -87,6 +87,8 @@ export default {
         (acc, point, i, a) =>
           i === 0
             ? `M ${point.x},${point.y}`
+            : i !== a.length - 1 && point.y === a[i - 1].y
+            ? `${acc} L ${point.x} ${point.y}`
             : // : `${acc} ${this.catmullRom2bezier(a, i - 1)}`,
               `${acc} ${this.bezierCommand(point, i, a)}`,
         ""
@@ -218,7 +220,7 @@ export default {
       const n = next ?? current;
       const o = this.line(p, n);
       const flattening = 1;
-      const smoothing = 0.2;
+      const smoothing = 0.3;
       const map = (value, inMin, inMax, outMin, outMax) => {
         return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
       };

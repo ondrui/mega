@@ -11,7 +11,11 @@
       </button>
     </div>
 
-    <component :is="currentTab" class="tab" />
+    <component
+      @go="showContent('HourlyTabContent')"
+      :is="currentTab"
+      class="tab"
+    />
   </div>
 </template>
 
