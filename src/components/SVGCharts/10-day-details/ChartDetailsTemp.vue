@@ -142,7 +142,6 @@ export default {
      *  @param max - Максимальное количество осадков за выбранный период.
      */
     calcY(temp, max, min) {
-      console.log(temp, max, min);
       const y =
         Math.round(
           ((this.height - 2 * this.totalYMargin) * (max - temp)) / (max - min)

@@ -87,7 +87,8 @@ export default {
         (acc, point, i, a) =>
           i === 0
             ? `M ${point.x},${point.y}`
-            : `${acc} ${this.catmullRom2bezier(a, i - 1)}`,
+            : // : `${acc} ${this.catmullRom2bezier(a, i - 1)}`,
+              `${acc} ${this.bezierCommand(point, i, a)}`,
         ""
       );
       return `${d}`;
@@ -97,8 +98,8 @@ export default {
      * отображения графиков и меток температурных.
      * @example
      *[
-     *  { x: 27.35, y: 85, temp_max: 11, feels_like: 12 },
-     *  { x: 27.35, y: 85, temp_max: 14, feels_like: 17 },
+     *  { x: 27.35, y: 85, temp_max: 11, feels_like: 12, textYFeels: 166, textYMax: 149, unit: '°' },
+     *  { x: 28, y: 88, temp_max: 14, feels_like: 17, textYFeels: 180, textYMax: 199, unit: '°' },
      *];
      */
     dataPoints() {
@@ -133,7 +134,6 @@ export default {
         },
         []
       );
-
       return dataset;
     },
   },
@@ -198,6 +198,44 @@ export default {
       });
       return `C ${bp[0].x},${bp[0].y} ${bp[1].x},${bp[1].y} ${bp[2].x},${bp[2].y}`;
     },
+
+    /**
+     * Smooth a Svg path with cubic bezier curves
+     * https://francoisromain.medium.com/
+     * smooth-a-svg-path-with-cubic-bezier-curves-e37b49d46c74
+     */
+
+    line(pointA, pointB) {
+      const lengthX = pointB.x - pointA.x;
+      const lengthY = pointB.y - pointA.y;
+      return {
+        length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
+        angle: Math.atan2(lengthY, lengthX),
+      };
+    },
+    controlPoint(current, previous, next, reverse) {
+      const p = previous ?? current;
+      const n = next ?? current;
+      const o = this.line(p, n);
+      const flattening = 1;
+      const smoothing = 0.2;
+      const map = (value, inMin, inMax, outMin, outMax) => {
+        return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+      };
+      // work in progress…
+      const flat = map(Math.cos(o.angle) * flattening, 0, 1, 1, 0);
+      const angle = o.angle * flat + (reverse ? Math.PI : 0);
+      const length = o.length * smoothing;
+      const x = current.x + Math.cos(angle) * length;
+      const y = current.y + Math.sin(angle) * length;
+      return [x, y];
+    },
+    bezierCommand(point, i, a) {
+      const cps = this.controlPoint(a[i - 1], a[i - 2], point);
+      const cpe = this.controlPoint(point, a[i - 1], a[i + 1], true);
+      return `C ${cps[0]},${cps[1]} ${cpe[0]},${cpe[1]} ${point.x},${point.y}`;
+    },
+
     /**
      * Находим размеры SVG элемента и записываем их в объект data.
      */
