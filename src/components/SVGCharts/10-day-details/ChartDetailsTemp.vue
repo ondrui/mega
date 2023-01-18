@@ -43,7 +43,7 @@ export default {
       textSize: 16,
       marginFromCell: 8,
       marginText: 5,
-      circleRadius: 5.5,
+      circleRadius: 3,
     };
   },
   mounted() {

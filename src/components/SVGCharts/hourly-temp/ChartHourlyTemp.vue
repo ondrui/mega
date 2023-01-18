@@ -50,7 +50,7 @@ export default {
       height: 180,
       textSizeMax: 16,
       textSizeMin: 14,
-      circleRadius: 5.5,
+      circleRadius: 3,
       marginFromCell: 8,
       marginText: 5,
     };
