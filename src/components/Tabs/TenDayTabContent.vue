@@ -96,10 +96,12 @@ export default {
 .ten-days-container {
   position: relative;
   display: grid;
-  // height: 480px;
   background-color: #ffffff;
   max-width: 100%;
   grid-template-columns: repeat(10, minmax(0, 1fr));
+  border: 1px solid #d8e9f3;
+  border-top: none;
+  border-bottom: none;
 
   .ten-days-weekend {
     background-color: #f7fafd;
@@ -109,13 +111,16 @@ export default {
     }
   }
   & .ten-days-day {
-    // display: flex;
-    flex-direction: column;
-    border: 1px solid #d8e9f3;
-    margin-right: -1px;
+    // border: 1px solid #d8e9f3;
     cursor: pointer;
     transition: box-shadow 0.5s ease-in-out;
-    // min-width: 40px;
+    border-top: 1px solid #d8e9f3;
+    border-bottom: 1px solid #d8e9f3;
+    border-right: 1px solid #d8e9f3;
+
+    &:last-child {
+      border-right: none;
+    }
 
     &::before {
       position: absolute;

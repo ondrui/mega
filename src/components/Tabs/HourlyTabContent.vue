@@ -235,7 +235,6 @@ export default {
   position: relative;
   background-color: #ffffff;
   border: 1px solid #d8e9f3;
-  // margin: 0 -1px;
 }
 .swiper-container {
   display: flex;
@@ -266,11 +265,8 @@ export default {
   padding-left: 13px;
 }
 .date-header {
-  // height: 33px;
   white-space: nowrap;
   padding: 9px 10px 13px 0;
-  border-right: 1px solid #d8e9f3;
-  margin-right: -1px;
   font-weight: 300;
   font-size: 12px;
   line-height: 16px;
@@ -287,11 +283,15 @@ export default {
   display: flex;
 
   & .hourly-item {
-    border: 1px solid #d8e9f3;
-    margin-right: -1px;
+    border-top: 1px solid #d8e9f3;
+    border-bottom: 1px solid #d8e9f3;
+    border-right: 1px solid #d8e9f3;
+
+    &:last-child {
+      border-right: none;
+    }
     width: 56px;
     & > div {
-      // flex: 1;
       border-bottom: 1px solid #d8e9f3;
       position: relative;
 
