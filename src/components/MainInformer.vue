@@ -5,8 +5,8 @@
       <HeaderInformer />
       <TabsInformer />
       <DetailsSegment />
-      <!-- <br /> -->
-      <AllSVGIcons class="hidden" />
+      <br />
+      <AllSVGIcons />
     </div>
   </div>
 </template>

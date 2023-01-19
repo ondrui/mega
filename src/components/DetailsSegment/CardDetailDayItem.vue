@@ -46,7 +46,7 @@ export default {
     }
   }
 }
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 600px) {
   .descr {
     & .title {
       font-size: 12px;

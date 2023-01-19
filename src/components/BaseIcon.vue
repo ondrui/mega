@@ -4,7 +4,11 @@
 
 <script>
 const icons = {};
-const requireComponents = require.context("../assets/images", true, /.svg$/);
+const requireComponents = require.context(
+  "../assets/images?inline",
+  true,
+  /.svg$/
+);
 requireComponents.keys().forEach((fileName) => {
   const iconName =
     fileName.split("/").at(-1).slice(0, -4) + "-" + fileName.split("/").at(-2);

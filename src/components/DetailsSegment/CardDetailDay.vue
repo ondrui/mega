@@ -39,31 +39,21 @@
           :key="`cn-${index}`"
           :value="value[item]"
         />
+        <DayLengthBlock class="length-block" :value="value" />
       </div>
-      <div class="day-length-block">
-        <div>
-          <BaseIcon name="sun-2" pick="common" width="11" />
-          <BaseIcon name="arrow-up" pick="common" width="5" />
-          {{ value.dayLength.sunrise }}
-          <BaseIcon name="arrow-down" pick="common" width="5" />
-          {{ value.dayLength.sunset }}
-        </div>
-        <div>
-          <span>{{ value.dayLength.daytime.title }}:</span>&nbsp;{{
-            value.dayLength.daytime.value
-          }}
-        </div>
-      </div>
+      <DayLengthBlock class="length-block-mob" :value="value" />
     </div>
   </div>
 </template>
 
 <script>
 import CardDetailDayItem from "./CardDetailDayItem.vue";
+import DayLengthBlock from "./DayLengthBlock.vue";
 
 export default {
   components: {
     CardDetailDayItem,
+    DayLengthBlock,
   },
   props: ["value", "index"],
   data() {
@@ -80,14 +70,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.length-block-mob {
+  display: none;
+}
 .card-content {
   display: grid;
-  grid-template-columns: 0.2fr 1fr 0.4fr 1fr 0.3fr;
-  // grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  grid-template-columns: 0.2fr 0.6fr 0.4fr 1.2fr;
+  // grid-template-columns: repeat(4, auto);
   column-gap: 15px;
   align-items: center;
   border: 1px solid #d6e2f0;
-  margin-top: 12px;
   padding: 0 9px 0 20px;
   height: 72px;
   cursor: pointer;
@@ -161,33 +153,9 @@ export default {
   display: flex;
   justify-content: space-between;
   column-gap: 8px;
-  // padding: 0 10px;
-}
-.day-length-block {
-  display: flex;
-  flex-direction: column;
-  row-gap: 2px;
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 14px;
-  white-space: nowrap;
-  color: #333333;
-
-  & > div:first-child {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  & span {
-    display: inline-block;
-    font-size: 10px;
-    line-height: 12px;
-    color: #9c9c9c;
-
-    &::first-letter {
-      text-transform: capitalize;
-    }
-  }
+  align-self: stretch;
+  align-items: center;
+  overflow-x: auto;
 }
 .card-content__date {
   justify-self: start;
@@ -208,7 +176,7 @@ export default {
   line-height: 21px;
 }
 
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 600px) {
   .card-content__date {
     display: block;
     grid-area: a;
@@ -218,16 +186,15 @@ export default {
       text-align: start;
     }
   }
-  .day-length-block {
+  .length-block {
+    display: none;
+  }
+  .length-block-mob {
+    display: block;
     grid-area: b;
     justify-self: end;
     font-size: 14px;
     line-height: 16px;
-
-    & span {
-      font-size: 14px;
-      line-height: 16px;
-    }
   }
   .card-content__condition {
     grid-area: c;

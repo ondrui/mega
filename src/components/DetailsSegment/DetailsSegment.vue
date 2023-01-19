@@ -5,12 +5,12 @@
     </h1>
     <div
       ref="item"
-      class="wrapper-list"
+      :class="['wrapper-list', { open: item.isOpen }]"
       v-for="(item, index) in tenDaysDetailsCard"
       :key="`s-${index}`"
       tabindex="0"
     >
-      <CardDetailDay :value="item" :index="index" />
+      <CardDetailDay class="card" :value="item" :index="index" />
       <ContentDetailDay
         :class="{ hidden: !item.isOpen }"
         :data="tenDaysDetailsChart[`${index + 1}`]"
@@ -75,11 +75,29 @@ export default {
     text-transform: capitalize;
   }
 }
+.wrapper-list {
+  position: relative;
+  margin-top: 12px;
+}
+
+.card::after {
+  content: url("@/assets/images/common/chevron-more-down.svg");
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  left: 50%;
+}
 .hidden {
   display: none;
 }
 
-@media only screen and (max-width: 450px) {
+.open {
+  // border: 2px solid #d2e7ff;
+  box-shadow: 0 0 0 2px #d2e7ff;
+  border-radius: 1px;
+}
+
+@media only screen and (max-width: 600px) {
   .segment-container {
     padding: 30px 4px 23px 4px;
   }

@@ -13,14 +13,22 @@ module.exports = {
       rules: [
         {
           test: /\.svg$/,
-          use: [
+          oneOf: [
             {
-              loader: "vue-svg-loader",
-              options: {
-                svgo: {
-                  plugins: [{ removeUselessStrokeAndFill: false }],
+              resourceQuery: /inline/,
+              use: [
+                {
+                  loader: "vue-svg-loader",
+                  options: {
+                    svgo: {
+                      plugins: [{ removeUselessStrokeAndFill: false }],
+                    },
+                  },
                 },
-              },
+              ],
+            },
+            {
+              loader: "vue-loader",
             },
           ],
         },

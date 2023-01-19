@@ -81,7 +81,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 600px) {
   .breadcrumbs-header {
     margin-bottom: 16px;
   }
