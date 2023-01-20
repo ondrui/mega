@@ -30,7 +30,7 @@ export default new Vuex.Store({
         timeText: `сейчас в ${time} по прогнозу`,
         icon: data.condition,
         descr: data.condition_s,
-        temp: `${data.temp_max > 0 ? `+${data.temp_max}` : data.temp_max}${
+        temp: `${data.temp > 0 ? `+${data.temp}` : data.temp}${
           languageExpressions(getLocales, "units", "temp")[0]
         }`,
         realFeel: `ощущается ${
@@ -223,11 +223,11 @@ export default new Vuex.Store({
       for (const key in datasetsHourly) {
         const arr = Object.values(datasetsHourly[key])
           .filter((i) => typeof i === "object")
-          .map(({ temp_max, temp_min, prec_sum, date, feels_like, light }) => {
+          .map(({ temp, prec_sum, date, feels_like }) => {
             return {
               date,
-              temp_max: {
-                value: light === "dark" ? temp_min : temp_max,
+              temp: {
+                value: temp,
                 unit: "°",
               },
               prec_sum: {
@@ -264,8 +264,7 @@ export default new Vuex.Store({
             humidity,
             prec_sum,
             pressure,
-            temp_max,
-            temp_min,
+            temp,
             wind_dir,
             wind_speed,
             feels_like,
@@ -282,10 +281,7 @@ export default new Vuex.Store({
                 languageExpressions(getLocales, "units", "precSum")[0]
               }`,
               pressure,
-              temp_max: `${temp_max}${
-                languageExpressions(getLocales, "units", "temp")[0]
-              }`,
-              temp_min: `${temp_min}${
+              temp: `${temp}${
                 languageExpressions(getLocales, "units", "temp")[0]
               }`,
               feels_like: `${feels_like}${
@@ -442,12 +438,10 @@ export default new Vuex.Store({
             humidity,
             prec_sum,
             pressure,
-            temp_max,
-            temp_min,
+            temp,
             wind_dir,
             wind_speed,
           }) => {
-            const temperature = light === "dark" ? temp_min : temp_max;
             return {
               date,
               hour: date.split("T")[1].slice(0, 5),
@@ -472,7 +466,7 @@ export default new Vuex.Store({
                 unit: languageExpressions(getLocales, "units", "precSum")[0],
               },
               temp: {
-                value: temperature,
+                value: temp,
                 unit: languageExpressions(getLocales, "units", "temp")[0],
               },
               pressure: {

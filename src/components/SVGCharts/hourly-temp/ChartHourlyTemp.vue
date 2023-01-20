@@ -21,7 +21,7 @@
       </g>
       <g v-for="(p, index) in dataPoints" :key="`c-${index}`">
         <text class="temp-max" text-anchor="middle" :x="p.x" :y="p.textYMax">
-          {{ `${p.temp_max}${p.unit}` }}
+          {{ `${p.temp}${p.unit}` }}
         </text>
         <text
           class="temp-feels"
@@ -100,35 +100,34 @@ export default {
      * отображения графиков и меток температурных.
      * @example
      *[
-     *  { x: 27.35, y: 85, temp_max: 11, feels_like: 12, textYFeels: 166, textYMax: 149, unit: '°' },
-     *  { x: 28, y: 88, temp_max: 14, feels_like: 17, textYFeels: 180, textYMax: 199, unit: '°' },
+     *  { x: 27.35, y: 85, temp: 11, feels_like: 12, textYFeels: 166, textYMax: 149, unit: '°' },
+     *  { x: 28, y: 88, temp: 14, feels_like: 17, textYFeels: 180, textYMax: 199, unit: '°' },
      *];
      */
     dataPoints() {
-      let max = Math.max(...this.numData.map((e) => e.temp_max.value));
-      let min = Math.min(...this.numData.map((e) => e.temp_max.value));
+      let max = Math.max(...this.numData.map((e) => e.temp.value));
+      let min = Math.min(...this.numData.map((e) => e.temp.value));
       let x = this.width / (this.numData.length * 2);
 
       const dataset = this.numData.reduce(
-        (total, { temp_max, feels_like }, index) => {
-          if (temp_max.value !== undefined && temp_max.value !== null) {
+        (total, { temp, feels_like }, index) => {
+          if (temp.value !== undefined && temp.value !== null) {
             let x1 = index === 0 ? x : 2 * x * index + x;
             const obj = {
               x: x1,
-              y: this.calcY(temp_max.value, max, min),
+              y: this.calcY(temp.value, max, min),
               textYMax:
-                this.calcY(temp_max.value, max, min) -
+                this.calcY(temp.value, max, min) -
                 (this.circleRadius + this.marginText + 2),
               textYFeels:
-                this.calcY(temp_max.value, max, min) +
+                this.calcY(temp.value, max, min) +
                 (this.circleRadius + this.textSizeMin + 2),
-              temp_max:
-                temp_max.value > 0 ? `+${temp_max.value}` : temp_max.value,
+              temp: temp.value > 0 ? `+${temp.value}` : temp.value,
               feels_like:
                 feels_like.value > 0
                   ? `+${feels_like.value}`
                   : feels_like.value,
-              unit: temp_max.unit,
+              unit: temp.unit,
             };
             total.push(obj);
           }

@@ -1,8 +1,5 @@
 <template>
   <div class="forecast-details-container">
-    <!-- <div class="details-row-caption prec-sum">
-      {{ languageExpressions(getLocales, "climateIndicators", "precSum") }}
-    </div> -->
     <div class="details-row-caption wind">
       {{ languageExpressions(getLocales, "climateIndicators", "windDirSpeed") }}
     </div>
@@ -16,9 +13,6 @@
     <div class="details-charts-temp">
       <ChartDetailsTemp :numData="data" />
     </div>
-    <!-- <div class="details-charts-precip hidden">
-      <ChartHourlyPrecip :numData="hourlyTabChartsData" />
-    </div> -->
     <div
       class="details-item"
       v-for="(value, index) in data"
@@ -29,7 +23,6 @@
         <BaseIcon width="40" :name="value.condition" :pick="value.light" />
       </div>
       <div class="details-temp-item"></div>
-      <!-- <div class="details-precip-item"></div> -->
       <div class="details-wind-descr">
         <div>
           <div>
