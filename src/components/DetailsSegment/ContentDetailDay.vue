@@ -1,15 +1,15 @@
 <template>
   <div class="forecast-details-container">
-    <div class="details-row-caption wind">
+    <RowCaption class="wind">
       {{ languageExpressions(getLocales, "climateIndicators", "windDirSpeed") }}
-    </div>
-    <div class="details-row-caption pressure">
+    </RowCaption>
+    <RowCaption class="pressure">
       {{ languageExpressions(getLocales, "climateIndicators", "pressure") }},
       {{ languageExpressions(getLocales, "units", "pressure")[0] }}
-    </div>
-    <div class="details-row-caption humidity">
+    </RowCaption>
+    <RowCaption class="humidity">
       {{ languageExpressions(getLocales, "climateIndicators", "humidity") }}
-    </div>
+    </RowCaption>
     <div class="details-charts-temp">
       <ChartDetailsTemp :numData="data" />
     </div>
@@ -49,12 +49,14 @@
 
 <script>
 import ChartDetailsTemp from "@/components/SVGCharts/10-day-details/ChartDetailsTemp.vue";
+import RowCaption from "@/components/RowCaption.vue";
 import { languageExpressions } from "@/constants/locales";
 import { windDirection } from "@/constants/functions";
 
 export default {
   components: {
     ChartDetailsTemp,
+    RowCaption,
   },
   props: ["data"],
   computed: {
@@ -124,32 +126,14 @@ export default {
   align-items: center;
   padding-top: 5px;
 }
-.details-row-caption {
-  position: absolute;
-  z-index: 11;
-  background: #f5f5f5;
-  border-radius: 4px;
-  font-weight: 300;
-  font-size: 10px;
-  line-height: 14px;
-  padding: 0 4px;
-  color: #333333;
-  white-space: nowrap;
-  left: 6px;
-
-  &.prec-sum {
-    top: 330px;
-  }
-
-  &.wind {
-    top: 245px;
-  }
-  &.pressure {
-    top: 298px;
-  }
-  &.humidity {
-    top: 334px;
-  }
+.wind {
+  top: 245px;
+}
+.pressure {
+  top: 298px;
+}
+.humidity {
+  top: 334px;
 }
 .details-charts-temp {
   position: absolute;

@@ -1,11 +1,20 @@
 <template>
   <div>
     <div class="ten-days-container">
+      <RowCaption class="wind">
+        {{
+          languageExpressions(getLocales, "climateIndicators", "windDirSpeed")
+        }}
+      </RowCaption>
+      <RowCaption class="pressure">
+        {{ languageExpressions(getLocales, "climateIndicators", "pressure") }},
+        {{ languageExpressions(getLocales, "units", "pressure")[0] }}
+      </RowCaption>
+      <RowCaption class="humidity">
+        {{ languageExpressions(getLocales, "climateIndicators", "humidity") }}
+      </RowCaption>
       <div class="ten-days-charts-temp">
         <ChartsList />
-      </div>
-      <div class="ten-days-charts-precip">
-        <ChartPrecip :data="tenDaysTabTable" />
       </div>
       <div
         @click="toggle(index)"
@@ -21,16 +30,8 @@
           <BaseIcon width="46" :name="day.condition" pick="light" />
         </div>
         <div class="ten-days-temp-item"></div>
-        <div class="ten-days-precip-item">
-          <div class="ten-days-row-caption" v-if="index === 0">
-            {{ day.precSum.title }}
-          </div>
-        </div>
         <div class="ten-days-wind-descr">
           <div>
-            <div class="ten-days-row-caption" v-if="index === 0">
-              {{ day.wind.title }}
-            </div>
             <div>
               <BaseIcon
                 width="8"
@@ -44,15 +45,9 @@
           <div>{{ day.wind.value }} {{ day.wind.unit }}</div>
         </div>
         <div class="ten-days-pressure">
-          <div class="ten-days-row-caption" v-if="index === 0">
-            {{ day.pressure.title }}, {{ day.pressure.unit }}
-          </div>
           {{ day.pressure.value }}
         </div>
         <div class="ten-day-humidity">
-          <div class="ten-days-row-caption" v-if="index === 0">
-            {{ day.humidity.title }}
-          </div>
           {{ day.humidity.value }}{{ day.humidity.unit }}
         </div>
         <div class="ten-days-chevron-down">
@@ -65,14 +60,14 @@
 
 <script>
 import ChartsList from "../SVGCharts/10-day-temp/ChartsList.vue";
-import ChartPrecip from "../SVGCharts/10-day-precipitation/ChartPrecip.vue";
+import RowCaption from "@/components/RowCaption.vue";
 import { languageExpressions } from "@/constants/locales";
 import { windDirection } from "@/constants/functions";
 
 export default {
   components: {
     ChartsList,
-    ChartPrecip,
+    RowCaption,
   },
   computed: {
     tenDaysTabTable() {
@@ -162,9 +157,6 @@ export default {
 .ten-days-temp-item {
   height: 170px;
 }
-.ten-days-precip-item {
-  height: 60px;
-}
 .ten-days-weekday {
   display: flex;
   flex-direction: column;
@@ -190,19 +182,14 @@ export default {
   align-items: center;
   padding-top: 5px;
 }
-.ten-days-row-caption {
-  position: absolute;
-  z-index: 11;
-  background: #f5f5f5;
-  border-radius: 4px;
-  font-weight: 300;
-  font-size: 10px;
-  line-height: 14px;
-  padding: 0 4px;
-  color: #333333;
-  white-space: nowrap;
-  top: 0px;
-  left: 6px;
+.wind {
+  top: 289px;
+}
+.pressure {
+  top: 341px;
+}
+.humidity {
+  top: 378px;
 }
 .ten-days-charts-temp {
   position: absolute;
@@ -210,17 +197,6 @@ export default {
   width: 100%;
   height: 170px;
   // z-index: 10;
-  cursor: pointer;
-}
-.ten-days-charts-precip {
-  position: absolute;
-  top: 296px;
-  display: flex;
-  align-items: flex-end;
-  width: 100%;
-  height: 60px;
-  // z-index: 10;
-  opacity: 0.6;
   cursor: pointer;
 }
 .ten-days-wind-descr {
