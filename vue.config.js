@@ -15,6 +15,10 @@ module.exports = {
           test: /\.svg$/,
           oneOf: [
             {
+              resourceQuery: /external/,
+              type: "asset/resource",
+            },
+            {
               resourceQuery: /inline/,
               use: [
                 {
@@ -26,9 +30,6 @@ module.exports = {
                   },
                 },
               ],
-            },
-            {
-              loader: "vue-loader",
             },
           ],
         },

@@ -79,13 +79,28 @@ export default {
   position: relative;
   margin-top: 12px;
 }
-
+.card {
+  transition: box-shadow 0.3s ease-in-out;
+}
+.card:hover {
+  box-shadow: 0 0 0 2px #d2e7ff;
+  border-radius: 1px;
+}
+.card:hover::after {
+  transform: scale(2);
+}
 .card::after {
-  content: url("@/assets/images/common/chevron-more-down.svg");
-  width: 12px;
-  height: 12px;
+  content: "";
+  display: inline-block;
+  background: url("@/assets/images/common/chevron-more-down.svg?external")
+    no-repeat;
+  background-size: 6px 4px;
+  transition: transform 0.3s ease-in-out;
+  width: 6px;
+  height: 4px;
   position: absolute;
   left: 50%;
+  bottom: 6px;
 }
 .hidden {
   display: none;
