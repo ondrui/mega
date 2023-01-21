@@ -99,7 +99,10 @@ export default {
   width: 6px;
   height: 4px;
   position: absolute;
-  left: 50%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  // left: 50%;
   bottom: 6px;
 }
 .hidden {
