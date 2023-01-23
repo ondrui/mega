@@ -76,18 +76,6 @@ export default {
       return `0 0 ${this.width} ${this.height}`;
     },
     /**
-     * Вычисление общего отступа графика от
-     * соседних ячеек.
-     */
-    totalYMargin() {
-      return (
-        this.textSize +
-        this.marginFromCell +
-        this.marginText +
-        this.circleRadius / 2
-      );
-    },
-    /**
      * Составляет строку с командами для атрибута d элемента path графика.
      */
     svgPath() {
@@ -139,6 +127,18 @@ export default {
   },
   methods: {
     /**
+     * Вычисление общего отступа графика от
+     * соседних ячеек.
+     */
+    totalYMargin() {
+      return (
+        this.textSize +
+        this.marginFromCell +
+        this.marginText +
+        this.circleRadius / 2
+      );
+    },
+    /**
      * Переводит принимаемый параметр в координату У элемента svg
      * с учетом текстовой метки и других маржинов.
      * @param temp - Значение температуры.
@@ -147,8 +147,8 @@ export default {
     calcY(temp, max, min) {
       const y =
         Math.round(
-          ((this.height - 2 * this.totalYMargin) * (max - temp)) / (max - min)
-        ) + this.totalYMargin;
+          ((this.height - 2 * this.totalYMargin()) * (max - temp)) / (max - min)
+        ) + this.totalYMargin();
       return y;
     },
     /**
