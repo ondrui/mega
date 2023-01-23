@@ -48,6 +48,7 @@ const dataLocales = {
       w: [90, "з"],
       nw: [135, "сз"],
     },
+    weekendDays: ["вс", "сб"],
   },
   en: {
     en: {

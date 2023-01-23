@@ -15,21 +15,18 @@
           <BaseIcon width="7" name="chevron-scroll-right" pick="common" />
         </button>
       </div>
-      <div class="hourly-row-caption prec-sum">
-        {{ languageExpressions(getLocales, "climateIndicators", "precSum") }}
-      </div>
-      <div class="hourly-row-caption wind">
+      <RowCaption class="wind">
         {{
           languageExpressions(getLocales, "climateIndicators", "windDirSpeed")
         }}
-      </div>
-      <div class="hourly-row-caption pressure">
+      </RowCaption>
+      <RowCaption class="pressure">
         {{ languageExpressions(getLocales, "climateIndicators", "pressure") }},
         {{ languageExpressions(getLocales, "units", "pressure")[0] }}
-      </div>
-      <div class="hourly-row-caption humidity">
+      </RowCaption>
+      <RowCaption class="humidity">
         {{ languageExpressions(getLocales, "climateIndicators", "humidity") }}
-      </div>
+      </RowCaption>
       <div class="swiper-container" ref="swiper-container">
         <div
           :class="['swiper-wrapper', { grabbing: dragMouseScroll.isDown }]"
@@ -41,9 +38,6 @@
         >
           <div class="hourly-charts-temp">
             <ChartHourlyTemp :numData="hourlyTabChartsData" />
-          </div>
-          <div class="hourly-charts-precip">
-            <ChartHourlyPrecip :numData="hourlyTabChartsData" />
           </div>
           <div
             class="date-container"
@@ -74,7 +68,6 @@
                   />
                 </div>
                 <div class="hourly-temp-item"></div>
-                <div class="hourly-precip-item"></div>
                 <div class="hourly-wind-descr">
                   <div>
                     <div>
@@ -106,14 +99,14 @@
 
 <script>
 import ChartHourlyTemp from "../SVGCharts/hourly-temp/ChartHourlyTemp.vue";
-import ChartHourlyPrecip from "../SVGCharts/hourly-temp/ChartHourlyPrecip.vue";
+import RowCaption from "@/components/RowCaption.vue";
 import { languageExpressions } from "@/constants/locales";
 import { windDirection } from "@/constants/functions";
 
 export default {
   components: {
     ChartHourlyTemp,
-    ChartHourlyPrecip,
+    RowCaption,
   },
   data() {
     return {
@@ -262,11 +255,11 @@ export default {
   left: 0;
   top: 0;
   display: inline;
-  padding-left: 13px;
+  padding: 0 13px;
 }
 .date-header {
   white-space: nowrap;
-  padding: 9px 10px 13px 0;
+  padding: 9px 0;
   font-weight: 300;
   font-size: 12px;
   line-height: 16px;
@@ -310,6 +303,7 @@ export default {
   border-left: none;
 }
 .time {
+  height: 33px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -317,47 +311,25 @@ export default {
   font-size: 12px;
   line-height: 16px;
   color: #333333;
-  padding: 7px 0;
 }
 .hourly-temp-item {
   height: 180px;
 }
-.hourly-precip-item {
-  height: 60px;
-}
 .hourly-icon {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   height: 60px;
   align-items: center;
-  padding-top: 5px;
 }
-.hourly-row-caption {
-  position: absolute;
-  z-index: 11;
-  background: #f5f5f5;
-  border-radius: 4px;
-  font-weight: 300;
-  font-size: 10px;
-  line-height: 14px;
-  padding: 0 4px;
-  color: #333333;
-  white-space: nowrap;
-  left: 6px;
-
-  &.prec-sum {
-    top: 310px;
-  }
-
-  &.wind {
-    top: 370px;
-  }
-  &.pressure {
-    top: 423px;
-  }
-  &.humidity {
-    top: 459px;
-  }
+.wind {
+  top: 300px;
+}
+.pressure {
+  top: 354px;
+}
+.humidity {
+  top: 389px;
 }
 .hourly-charts-temp {
   position: absolute;
@@ -366,22 +338,12 @@ export default {
   height: 170px;
   z-index: 10;
 }
-.hourly-charts-precip {
-  position: absolute;
-  top: 309px;
-  display: flex;
-  align-items: flex-end;
-  width: 100%;
-  height: 60px;
-  z-index: 10;
-  opacity: 0.6;
-}
 .hourly-wind-descr {
+  height: 53px;
   display: flex;
   flex-direction: column;
-  height: 53px;
   align-items: center;
-  padding-top: 16px;
+  justify-content: center;
   font-weight: 300;
   font-size: 12px;
   line-height: 14px;
@@ -400,11 +362,11 @@ export default {
 }
 .hourly-pressure,
 .hourly-day-humidity {
+  height: 36px;
   display: flex;
   flex-direction: column;
-  height: 36px;
   align-items: center;
-  padding-top: 14px;
+  justify-content: center;
   font-weight: 300;
   font-size: 12px;
   line-height: 14px;

@@ -120,11 +120,11 @@ export default {
   height: 60px;
 }
 .details-icon {
+  height: 60px;
   display: flex;
   flex-direction: column;
-  height: 60px;
+  justify-content: center;
   align-items: center;
-  padding-top: 5px;
 }
 .wind {
   top: 245px;

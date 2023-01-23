@@ -13,12 +13,28 @@ export default new Vuex.Store({
     datasetsThreeHour: null,
   },
   getters: {
+    /**
+     * Возвращает языковую метку.
+     * @example
+     * "ru"
+     * @param state Текущее состояние store.
+     */
     getLocales(state) {
       return state.locales;
     },
+    /**
+     * Лоадер
+     * @param state Текущее состояние store.
+     */
     loading(state) {
       return state.datasetsHourly;
     },
+    /**
+     * Возвращает данные для отображения в шапке виджета.
+     * Левая часть.
+     * @param state Текущее состояние store.
+     * @param getLocales Языковая метка.
+     */
     current(state, { getLocales }) {
       let obj = {};
       if (!state.datasetsHourly) {
@@ -27,17 +43,27 @@ export default new Vuex.Store({
       const data = state.datasetsHourly[0][1];
       const time = setTimeFormat(new Date(), "H:i", getLocales);
       return {
-        timeText: `сейчас в ${time} по прогнозу`,
+        timeText: `${languageExpressions(
+          getLocales,
+          "header",
+          "now"
+        )} ${time} ${languageExpressions(getLocales, "header", "forecast")}`,
         icon: data.condition,
         descr: data.condition_s,
         temp: `${data.temp > 0 ? `+${data.temp}` : data.temp}${
           languageExpressions(getLocales, "units", "temp")[0]
         }`,
-        realFeel: `ощущается ${
+        realFeel: `${languageExpressions(getLocales, "header", "feelsLike")} ${
           data.feels_like > 0 ? `+${data.feels_like}` : data.feels_like
         }`,
       };
     },
+    /**
+     * Возвращает данные для отображения в шапке виджета.
+     * Правая часть.
+     * @param state Текущее состояние store.
+     * @param getLocales Языковая метка.
+     */
     forecastForItemHeader(state, { getLocales }) {
       let obj = {};
       if (!state.datasetsHourly) {
@@ -109,24 +135,18 @@ export default new Vuex.Store({
           const weekday = setTimeFormat(e.start_date, "D", getLocales);
           return {
             weekday: weekday,
-            weekend: weekday === "сб" || weekday === "вс",
+            weekend:
+              weekday ===
+                `${languageExpressions(getLocales, "weekendDays")[0]}` ||
+              weekday ===
+                `${languageExpressions(getLocales, "weekendDays")[1]}`,
             date: setTimeFormat(e.start_date, "d.m", getLocales),
             condition: e.day.condition,
-            precSum: {
-              title: languageExpressions(
-                getLocales,
-                "climateIndicators",
-                "precSum"
-              ),
+            prec_sum: {
               value: e.day.prec_sum,
               unit: languageExpressions(getLocales, "units", "precSum")[0],
             },
             wind: {
-              title: languageExpressions(
-                getLocales,
-                "climateIndicators",
-                "wind"
-              ),
               value: e.day.wind_speed,
               unit: languageExpressions(getLocales, "units", "speed")[0],
               wind_dir: [
@@ -135,20 +155,10 @@ export default new Vuex.Store({
               ],
             },
             pressure: {
-              title: languageExpressions(
-                getLocales,
-                "climateIndicators",
-                "pressure"
-              ),
               value: e.day.pressure,
               unit: languageExpressions(getLocales, "units", "pressure")[0],
             },
             humidity: {
-              title: languageExpressions(
-                getLocales,
-                "climateIndicators",
-                "humidity"
-              ),
               value: e.day.humidity,
               unit: languageExpressions(getLocales, "units", "percent")[0],
             },
@@ -176,7 +186,7 @@ export default new Vuex.Store({
      *  max: 2
      * }]
      */
-    tenDaysTabTempCharts: ({ datasetsTenDays }) => {
+    tenDaysTabTempCharts: ({ datasetsTenDays }, { getLocales }) => {
       const arr = Object.values(datasetsTenDays);
       const dayTemp = arr
         .map((e) =>
@@ -206,16 +216,25 @@ export default new Vuex.Store({
          * Для ночи отбрасываем донные за текучие сутки.
          */
         .filter((f, i) => i !== 0);
-
+      /**
+       * Вычисляем минимальную и максимальную температуру для ограничения
+       * границ графика.
+       */
       const min = Math.min(...nightTemp, ...dayTemp);
       const max = Math.max(...dayTemp, ...nightTemp);
-      const unit = "°";
+      const unit = languageExpressions(getLocales, "units", "temp")[0];
       return [
         { unit, value: dayTemp, descr: "day", min, max },
         { unit, value: nightTemp, descr: "night", min, max },
       ];
     },
-    hourlyTabChartsData({ datasetsHourly }) {
+    /**
+     * Возвращает данные для отображения графика подробного
+     * почасового прогноза с разбивкой на часовые интервалы.
+     * @param datasetsHourly Текущее состояние store.state.datasetsHourly.
+     * @param getLocales Языковая метка.
+     */
+    hourlyTabChartsData({ datasetsHourly }, { getLocales }) {
       const sortData = (el) => {
         return parseInt(el.date.split("T")[1].slice(0, 2));
       };
@@ -228,15 +247,15 @@ export default new Vuex.Store({
               date,
               temp: {
                 value: temp,
-                unit: "°",
+                unit: languageExpressions(getLocales, "units", "temp")[0],
               },
               prec_sum: {
                 value: prec_sum,
-                unit: "мм",
+                unit: languageExpressions(getLocales, "units", "precSum")[0],
               },
               feels_like: {
                 value: feels_like,
-                unit: "°",
+                unit: languageExpressions(getLocales, "units", "temp")[0],
               },
             };
           })
@@ -245,13 +264,19 @@ export default new Vuex.Store({
       }
       return dataArr;
     },
-    hourlyTabTable(state, { getLocales }) {
+    /**
+     * Возвращает данные для отображения таблицы подробного
+     * почасового прогноза с разбивкой на часовые интервалы.
+     * @param datasetsHourly Текущее состояние store.state.datasetsHourly.
+     * @param getLocales Языковая метка.
+     */
+    hourlyTabTable({ datasetsHourly }, { getLocales }) {
       const sortData = (el) => {
         return parseInt(el.date.split("T")[1].slice(0, 2));
       };
       const obj = {};
-      for (const key in state.datasetsHourly) {
-        const arr = Object.values(state.datasetsHourly[key])
+      for (const key in datasetsHourly) {
+        const arr = Object.values(datasetsHourly[key])
           .filter((i) => typeof i === "object")
           .sort((a, b) => sortData(a) - sortData(b));
         const weekday = setTimeFormat(arr[0].date, "l", getLocales);
@@ -300,8 +325,8 @@ export default new Vuex.Store({
         obj[key] = {
           values: showArr,
           date: [weekday, day],
-          sunrise: state.datasetsHourly[key]["sunrise"],
-          sunset: state.datasetsHourly[key]["sunset"],
+          sunrise: datasetsHourly[key]["sunrise"],
+          sunset: datasetsHourly[key]["sunset"],
         };
       }
       return obj;
@@ -448,20 +473,10 @@ export default new Vuex.Store({
               condition,
               light,
               humidity: {
-                title: languageExpressions(
-                  getLocales,
-                  "climateIndicators",
-                  "humidity"
-                ),
                 unit: languageExpressions(getLocales, "units", "percent")[0],
                 value: humidity,
               },
               prec_sum: {
-                title: languageExpressions(
-                  getLocales,
-                  "climateIndicators",
-                  "precSum"
-                ),
                 value: prec_sum,
                 unit: languageExpressions(getLocales, "units", "precSum")[0],
               },
@@ -470,20 +485,10 @@ export default new Vuex.Store({
                 unit: languageExpressions(getLocales, "units", "temp")[0],
               },
               pressure: {
-                title: languageExpressions(
-                  getLocales,
-                  "climateIndicators",
-                  "pressure"
-                ),
                 value: pressure,
                 unit: languageExpressions(getLocales, "units", "pressure")[0],
               },
               wind: {
-                title: languageExpressions(
-                  getLocales,
-                  "climateIndicators",
-                  "windDirSpeed"
-                ),
                 value: wind_speed,
                 unit: languageExpressions(getLocales, "units", "speed")[0],
                 wind_dir: [
@@ -497,30 +502,6 @@ export default new Vuex.Store({
         obj[key] = showArr;
       }
       return obj;
-      // return {
-      //   time: "03:00",
-      //   condition: "cloudy_snow_0",
-      //   temp: {
-      //     value: "13",
-      //     unit: "°",
-      //   },
-      //   wind: {
-      //     title: "направление и скорость ветра",
-      //     value: "4",
-      //     unit: "м/c",
-      //     wind_dir: "e",
-      //   },
-      //   pressure: {
-      //     title: "давление",
-      //     value: "755",
-      //     unit: "мм.рт.ст.",
-      //   },
-      //   humidity: {
-      //     title: "влажность",
-      //     value: "65",
-      //     unit: "%",
-      //   },
-      // };
     },
   },
   mutations: {

@@ -198,6 +198,7 @@ export default {
       });
       return `C ${bp[0].x},${bp[0].y} ${bp[1].x},${bp[1].y} ${bp[2].x},${bp[2].y}`;
     },
+
     /**
      * Smooth a Svg path with cubic bezier curves
      * https://francoisromain.medium.com/
@@ -262,6 +263,7 @@ export default {
   fill: none;
   width: 100%;
   height: 100%;
+  display: inline-block;
 }
 .text-meter {
   font-weight: 500;

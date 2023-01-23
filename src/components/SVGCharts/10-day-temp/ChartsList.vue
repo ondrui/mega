@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <svg
-      ref="svg-temp"
-      class="svg-temp"
-      :view-box.camel="viewbox"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <ChartsItem
-        v-for="(points, index) in dataPoints"
-        :key="`ch-${index}`"
-        :points="points"
-      />
-      <ChartsTextItem
-        v-for="(value, index) in dataPoints"
-        :key="`tx-${index}`"
-        :points="value"
-        :textSize="textSize"
-        :marginText="marginText"
-      />
-    </svg>
-  </div>
+  <svg
+    ref="svg-temp"
+    class="svg-temp"
+    :view-box.camel="viewbox"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <ChartsItem
+      v-for="(points, index) in dataPoints"
+      :key="`ch-${index}`"
+      :points="points"
+    />
+    <ChartsTextItem
+      v-for="(value, index) in dataPoints"
+      :key="`tx-${index}`"
+      :points="value"
+      :textSize="textSize"
+      :marginText="marginText"
+    />
+  </svg>
 </template>
 
 <script>
@@ -69,6 +67,18 @@ export default {
     },
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;
+    },
+    /**
+     * Вычисление общего отступа графика от
+     * соседних ячеек.
+     */
+    totalYMargin() {
+      return (
+        this.textSize +
+        this.marginFromCell +
+        this.marginText +
+        this.circleRadius / 2
+      );
     },
     /**
      * Возвращает массив объектов, которые содержат координаты для
@@ -163,7 +173,8 @@ export default {
 .svg-temp {
   fill: none;
   width: 100%;
-  height: 170px;
+  height: 100%;
+  display: inline-block;
   // box-shadow: 0 0 0 1px teal;
 }
 .text-meter {

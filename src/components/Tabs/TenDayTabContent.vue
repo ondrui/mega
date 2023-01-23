@@ -158,11 +158,11 @@ export default {
   height: 170px;
 }
 .ten-days-weekday {
+  height: 64px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 15px 0 13px 0;
   font-weight: 300;
   font-size: 12px;
   line-height: 16px;
@@ -176,35 +176,35 @@ export default {
   line-height: 21px;
 }
 .ten-days-icon {
+  height: 65px;
   display: flex;
   flex-direction: column;
-  height: 60px;
+  justify-content: center;
   align-items: center;
-  padding-top: 5px;
 }
 .wind {
-  top: 289px;
+  top: 292px;
 }
 .pressure {
-  top: 341px;
+  top: 345px;
 }
 .humidity {
-  top: 378px;
+  top: 382px;
 }
 .ten-days-charts-temp {
+  height: 170px;
   position: absolute;
   top: 123px;
   width: 100%;
-  height: 170px;
   // z-index: 10;
   cursor: pointer;
 }
 .ten-days-wind-descr {
+  height: 53px;
   display: flex;
   flex-direction: column;
-  height: 53px;
+  justify-content: center;
   align-items: center;
-  padding-top: 16px;
   font-weight: 300;
   font-size: 12px;
   line-height: 14px;
@@ -223,11 +223,11 @@ export default {
 }
 .ten-days-pressure,
 .ten-day-humidity {
+  height: 36px;
   display: flex;
   flex-direction: column;
-  height: 36px;
+  justify-content: center;
   align-items: center;
-  padding-top: 14px;
   font-weight: 300;
   font-size: 12px;
   line-height: 14px;

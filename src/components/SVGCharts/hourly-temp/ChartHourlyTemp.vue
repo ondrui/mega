@@ -261,6 +261,7 @@ export default {
 
 <style lang="scss" scoped>
 .svg-temp-hourly {
+  display: inline-block;
   fill: none;
   width: 100%;
   height: 188px;

@@ -64,10 +64,10 @@ export default {
      */
     barDataset() {
       let w = this.width / this.data.length;
-      let max = Math.max(...this.data.map((e) => e.precSum.value));
+      let max = Math.max(...this.data.map((e) => e.prec_sum.value));
       max = max > 6 ? max : 6;
       const dataset = this.data.reduce(
-        (total, { precSum: { value, unit } }, index, arr) => {
+        (total, { prec_sum: { value, unit } }, index, arr) => {
           if (value !== 0) {
             const x = index === 0 ? w / 2 : w * index + w / 2;
             const y = this.height - this.heightRect(value, max);
