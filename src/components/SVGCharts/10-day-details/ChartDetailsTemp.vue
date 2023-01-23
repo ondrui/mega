@@ -22,6 +22,9 @@
       <text class="temp" text-anchor="middle" :x="p.x" :y="p.textYMax">
         {{ `${p.temp}${p.unit}` }}
       </text>
+      <text class="temp-feels" text-anchor="middle" :x="p.x" :y="p.textYFeels">
+        {{ `${p.feels_like}${p.unit}` }}
+      </text>
     </g>
   </svg>
 </template>
@@ -39,7 +42,7 @@ export default {
       width: 300,
       height: 156,
       textSize: 16,
-      marginFromCell: 2,
+      marginFromCell: 9,
       marginText: 5,
       circleRadius: 3,
     };
@@ -105,23 +108,32 @@ export default {
       let min = Math.min(...this.numData.map((e) => e.temp.value));
       let x = this.width / (this.numData.length * 2);
 
-      const dataset = this.numData.reduce((total, { temp }, index) => {
-        if (temp.value !== undefined && temp.value !== null) {
-          let x1 = index === 0 ? x : 2 * x * index + x;
-          const obj = {
-            x: x1,
-            y: this.calcY(temp.value, max, min),
-            textYMax:
-              this.calcY(temp.value, max, min) -
-              (this.circleRadius + this.marginText + 2),
-            temp: temp.value > 0 ? `+${temp.value}` : temp.value,
-            unit: temp.unit,
-          };
-          total.push(obj);
-        }
-        return total;
-      }, []);
-
+      const dataset = this.numData.reduce(
+        (total, { temp, feels_like }, index) => {
+          if (temp.value !== undefined && temp.value !== null) {
+            let x1 = index === 0 ? x : 2 * x * index + x;
+            const obj = {
+              x: x1,
+              y: this.calcY(temp.value, max, min),
+              textYMax:
+                this.calcY(temp.value, max, min) -
+                (this.circleRadius + this.marginText + 2),
+              textYFeels:
+                this.calcY(temp.value, max, min) +
+                (this.circleRadius + this.textSize + 2),
+              temp: temp.value > 0 ? `+${temp.value}` : temp.value,
+              feels_like:
+                feels_like.value > 0
+                  ? `+${feels_like.value}`
+                  : feels_like.value,
+              unit: temp.unit,
+            };
+            total.push(obj);
+          }
+          return total;
+        },
+        []
+      );
       return dataset;
     },
   },
@@ -279,5 +291,11 @@ export default {
   font-size: 16px;
   line-height: 19px;
   fill: #333333;
+}
+.temp-feels {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  fill: #9c9c9c;
 }
 </style>

@@ -1,39 +1,32 @@
 <template>
-  <div>
-    <svg
-      :view-box.camel="viewbox"
-      ref="svg-temp-hourly"
-      class="svg-temp-hourly"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g>
-        <path class="color-path" stroke-width="1" :d="svgPath"></path>
-        <circle
-          v-for="(p, index) in dataPoints"
-          :key="`c-${index}`"
-          :cx="p.x"
-          :cy="p.y"
-          :r="circleRadius"
-          stroke="#0BC2FF"
-          stroke-width="1"
-          fill="#ffffff"
-        />
-      </g>
-      <g v-for="(p, index) in dataPoints" :key="`c-${index}`">
-        <text class="temp-max" text-anchor="middle" :x="p.x" :y="p.textYMax">
-          {{ `${p.temp}${p.unit}` }}
-        </text>
-        <text
-          class="temp-feels"
-          text-anchor="middle"
-          :x="p.x"
-          :y="p.textYFeels"
-        >
-          {{ `${p.feels_like}${p.unit}` }}
-        </text>
-      </g>
-    </svg>
-  </div>
+  <svg
+    :view-box.camel="viewbox"
+    ref="svg-temp-hourly"
+    class="svg-temp-hourly"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g>
+      <path class="color-path" stroke-width="1" :d="svgPath"></path>
+      <circle
+        v-for="(p, index) in dataPoints"
+        :key="`c-${index}`"
+        :cx="p.x"
+        :cy="p.y"
+        :r="circleRadius"
+        stroke="#0BC2FF"
+        stroke-width="1"
+        fill="#ffffff"
+      />
+    </g>
+    <g v-for="(p, index) in dataPoints" :key="`c-${index}`">
+      <text class="temp-max" text-anchor="middle" :x="p.x" :y="p.textYMax">
+        {{ `${p.temp}${p.unit}` }}
+      </text>
+      <text class="temp-feels" text-anchor="middle" :x="p.x" :y="p.textYFeels">
+        {{ `${p.feels_like}${p.unit}` }}
+      </text>
+    </g>
+  </svg>
 </template>
 
 <script>

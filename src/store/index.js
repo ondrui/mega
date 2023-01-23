@@ -8,6 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     locales: "ru",
+    datasetsFact: null,
     datasetsHourly: null,
     datasetsTenDays: null,
     datasetsThreeHour: null,
@@ -262,6 +263,7 @@ export default new Vuex.Store({
           .sort((a, b) => sortData(a) - sortData(b));
         dataArr = dataArr.concat(arr);
       }
+      console.log("original", dataArr);
       return dataArr;
     },
     /**
@@ -464,6 +466,7 @@ export default new Vuex.Store({
             prec_sum,
             pressure,
             temp,
+            feels_like,
             wind_dir,
             wind_speed,
           }) => {
@@ -482,6 +485,10 @@ export default new Vuex.Store({
               },
               temp: {
                 value: temp,
+                unit: languageExpressions(getLocales, "units", "temp")[0],
+              },
+              feels_like: {
+                value: feels_like,
                 unit: languageExpressions(getLocales, "units", "temp")[0],
               },
               pressure: {
@@ -503,9 +510,78 @@ export default new Vuex.Store({
       }
       return obj;
     },
+    /**
+     * Возвращает скорректированные данные для отображения дельта графика подробного
+     * почасового прогноза с разбивкой на часовые интервалы.
+     * @param datasetsHourly Текущее состояние store.state.datasetsHourly.
+     * @param getLocales Языковая метка.
+     */
+    calcAdjustingForecast: (
+      { datasetsFact, datasetsHourly },
+      { getLocales }
+    ) => {
+      const periodAdjusted = 5;
+      const obsTimeFact = {
+        time: datasetsFact.obs_time,
+        temp: datasetsFact.temp,
+      };
+      const firstForecastTime = {
+        time: datasetsHourly[0][1].date,
+        temp: datasetsHourly[0][1].temp,
+      };
+      console.log(periodAdjusted, obsTimeFact, firstForecastTime);
+      const diffTime =
+        (new Date(firstForecastTime.time) - new Date(obsTimeFact.time)) /
+        (1000 * 60 * 60);
+      const deltaTemp = Math.abs(firstForecastTime.temp - obsTimeFact.temp);
+      console.log("deltaTemp", deltaTemp);
+      console.log(periodAdjusted - diffTime);
+      const sortData = (el) => {
+        return parseInt(el.date.split("T")[1].slice(0, 2));
+      };
+      let dataArr = [];
+      for (const key in datasetsHourly) {
+        const arr = Object.values(datasetsHourly[key])
+          .filter((i) => typeof i === "object")
+          .map(({ temp, prec_sum, date, feels_like }, index) => {
+            let calcTemp;
+            if (index < periodAdjusted - diffTime && key === "0") {
+              calcTemp =
+                temp +
+                (deltaTemp * (periodAdjusted - diffTime - index)) /
+                  periodAdjusted;
+            } else {
+              calcTemp = temp;
+            }
+            console.log("calcTemp", calcTemp);
+            console.log("temp", temp);
+            return {
+              date,
+              temp: {
+                value: Math.round(calcTemp),
+                unit: languageExpressions(getLocales, "units", "temp")[0],
+              },
+              prec_sum: {
+                value: prec_sum,
+                unit: languageExpressions(getLocales, "units", "precSum")[0],
+              },
+              feels_like: {
+                value: feels_like,
+                unit: languageExpressions(getLocales, "units", "temp")[0],
+              },
+            };
+          })
+          .sort((a, b) => sortData(a) - sortData(b));
+        dataArr = dataArr.concat(arr);
+      }
+      console.log("adjusting", dataArr);
+      return dataArr;
+    },
   },
   mutations: {
-    setData(state, { forecast_1, forecast_24, forecast_3 }) {
+    setData(state, { forecast_1, forecast_24, forecast_3, fact }) {
+      //fact datasets
+      state.datasetsFact = fact;
       //hourly datasets
       const filteredDatasets = Object.keys(forecast_1)
         .filter((key) => key !== "3" && key !== "start_date")

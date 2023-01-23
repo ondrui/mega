@@ -38,6 +38,7 @@
         >
           <div class="hourly-charts-temp">
             <ChartHourlyTemp :numData="hourlyTabChartsData" />
+            <ChartHourlyTemp :numData="calcAdjustingForecast" />
           </div>
           <div
             class="date-container"
@@ -135,6 +136,9 @@ export default {
     this.observer.disconnect();
   },
   computed: {
+    calcAdjustingForecast() {
+      return this.$store.getters.calcAdjustingForecast;
+    },
     hourlyTabChartsData() {
       return this.$store.getters.hourlyTabChartsData;
     },
