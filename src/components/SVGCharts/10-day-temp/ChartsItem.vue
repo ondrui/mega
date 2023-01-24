@@ -28,9 +28,6 @@ export default {
   },
   data() {
     return {
-      textSize: 16,
-      marginFromCell: 8,
-      marginText: 5,
       circleRadius: 3,
     };
   },

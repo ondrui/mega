@@ -1,24 +1,17 @@
 <template>
-  <svg
-    :view-box.camel="viewbox"
-    ref="svg-temp-hourly"
-    class="svg-temp-hourly"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g>
-      <path class="color-path" stroke-width="1" :d="svgPath"></path>
+  <g>
+    <g :class="[points.descr, 'color-path']" stroke-width="1">
+      <path :d="svgPath"></path>
       <circle
-        v-for="(p, index) in dataPoints"
+        v-for="(p, index) in points.dataset"
         :key="`c-${index}`"
         :cx="p.x"
         :cy="p.y"
         :r="circleRadius"
-        stroke="#0BC2FF"
-        stroke-width="1"
         fill="#ffffff"
       />
     </g>
-    <g v-for="(p, index) in dataPoints" :key="`c-${index}`">
+    <g v-for="(p, index) in points.dataset" :key="`c-${index}`">
       <text class="temp-max" text-anchor="middle" :x="p.x" :y="p.textYMax">
         {{ `${p.temp}${p.unit}` }}
       </text>
@@ -26,57 +19,23 @@
         {{ `${p.feels_like}${p.unit}` }}
       </text>
     </g>
-  </svg>
+  </g>
 </template>
 
 <script>
 export default {
-  props: {
-    numData: {
-      type: Array,
-      required: true,
-    },
-  },
+  props: ["points"],
   data() {
     return {
-      width: 300,
-      height: 180,
-      textSizeMax: 16,
-      textSizeMin: 14,
       circleRadius: 3,
-      marginFromCell: 8,
-      marginText: 5,
     };
   },
-  mounted() {
-    this.size();
-  },
-  watch: {
-    numData() {
-      this.size();
-    },
-  },
   computed: {
-    viewbox() {
-      return `0 0 ${this.width} ${this.height}`;
-    },
-    /**
-     * Вычисление общего отступа графика от
-     * соседних ячеек.
-     */
-    totalYMargin() {
-      return (
-        this.textSizeMax +
-        this.marginFromCell +
-        this.marginText +
-        this.circleRadius / 2
-      );
-    },
     /**
      * Составляет строку с командами для атрибута d элемента path графика.
      */
     svgPath() {
-      const d = this.dataPoints.reduce(
+      const d = this.points.dataset.reduce(
         (acc, point, i, a) =>
           i === 0
             ? `M ${point.x},${point.y}`
@@ -88,63 +47,8 @@ export default {
       );
       return `${d}`;
     },
-    /**
-     * Возвращает массив объектов, которые содержат координаты для
-     * отображения графиков и меток температурных.
-     * @example
-     *[
-     *  { x: 27.35, y: 85, temp: 11, feels_like: 12, textYFeels: 166, textYMax: 149, unit: '°' },
-     *  { x: 28, y: 88, temp: 14, feels_like: 17, textYFeels: 180, textYMax: 199, unit: '°' },
-     *];
-     */
-    dataPoints() {
-      let max = Math.max(...this.numData.map((e) => e.temp.value));
-      let min = Math.min(...this.numData.map((e) => e.temp.value));
-      let x = this.width / (this.numData.length * 2);
-
-      const dataset = this.numData.reduce(
-        (total, { temp, feels_like }, index) => {
-          if (temp.value !== undefined && temp.value !== null) {
-            let x1 = index === 0 ? x : 2 * x * index + x;
-            const obj = {
-              x: x1,
-              y: this.calcY(temp.value, max, min),
-              textYMax:
-                this.calcY(temp.value, max, min) -
-                (this.circleRadius + this.marginText + 2),
-              textYFeels:
-                this.calcY(temp.value, max, min) +
-                (this.circleRadius + this.textSizeMin + 2),
-              temp: temp.value > 0 ? `+${temp.value}` : temp.value,
-              feels_like:
-                feels_like.value > 0
-                  ? `+${feels_like.value}`
-                  : feels_like.value,
-              unit: temp.unit,
-            };
-            total.push(obj);
-          }
-          return total;
-        },
-        []
-      );
-      return dataset;
-    },
   },
   methods: {
-    /**
-     * Переводит принимаемый параметр в координату У элемента svg
-     * с учетом текстовой метки и других маржинов.
-     * @param temp - Значение температуры.
-     *  @param max - Максимальное количество осадков за выбранный период.
-     */
-    calcY(temp, max, min) {
-      const y = Math.round(
-        ((this.height - 2 * this.totalYMargin) * (max - temp)) / (max - min) +
-          this.totalYMargin
-      );
-      return y;
-    },
     /**
      * Конвертирует принимаемые точки в контрольные точки кривой Безье.
      * @param points - Массив объектов с координатами точек через которые нужно
@@ -229,36 +133,11 @@ export default {
       const cpe = this.controlPoint(point, a[i - 1], a[i + 1], true);
       return `C ${cps[0]},${cps[1]} ${cpe[0]},${cpe[1]} ${point.x},${point.y}`;
     },
-
-    /**
-     * Находим размеры SVG элемента и записываем их в объект data.
-     */
-    size() {
-      /**
-       * Определяет и устанавливает требуемые для отрисовки графика параметры.
-       * @param element - строка содержит ключ ссылку $refs на элемент в шаблоне
-       * компонента.
-       */
-      const getWidth = (element) => {
-        return Math.round(this.$refs[element].getBoundingClientRect().width);
-      };
-      const getHeight = (element) => {
-        return Math.round(this.$refs[element].getBoundingClientRect().height);
-      };
-      this.width = getWidth("svg-temp-hourly");
-      this.height = getHeight("svg-temp-hourly");
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.svg-temp-hourly {
-  display: inline-block;
-  fill: none;
-  width: 100%;
-  height: 188px;
-}
 .text-meter {
   font-weight: 500;
   font-size: 16px;
@@ -279,5 +158,17 @@ export default {
   font-size: 14px;
   line-height: 16px;
   fill: #9c9c9c;
+}
+.adjusted {
+  stroke-dasharray: 8 4;
+  stroke: #035175;
+}
+.adjusted-12 {
+  // stroke-dasharray: 8 4;
+  stroke: #b63705;
+}
+.exp-12 {
+  // stroke-dasharray: 8 4;
+  stroke: #418105;
 }
 </style>

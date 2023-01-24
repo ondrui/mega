@@ -83,6 +83,7 @@ export default {
   padding: 0 9px 0 20px;
   height: 72px;
   cursor: pointer;
+  background-color: #f0f7fc;
 }
 .weekend .date-text-short > div:first-child {
   color: #ff1616;

@@ -185,9 +185,6 @@ export default {
   line-height: 14px;
   color: #333333;
 }
-.hidden {
-  display: none;
-}
 
 @media only screen and (max-width: 600px) {
   .forecast-details-container {

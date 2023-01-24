@@ -11,10 +11,12 @@
       tabindex="0"
     >
       <CardDetailDay class="card" :value="item" :index="index" />
-      <ContentDetailDay
-        :class="{ hidden: !item.isOpen }"
-        :data="tenDaysDetailsChart[`${index + 1}`]"
-      />
+      <Transition>
+        <ContentDetailDay
+          v-if="item.isOpen"
+          :data="tenDaysDetailsChart[`${index + 1}`]"
+        />
+      </Transition>
     </div>
   </div>
 </template>
@@ -55,6 +57,9 @@ export default {
           block: "center",
           behavior: "smooth",
         });
+    },
+    visibleChart(bool) {
+      return bool ? "visible" : "hidden";
     },
   },
 };
@@ -105,10 +110,49 @@ export default {
   // left: 50%;
   bottom: 6px;
 }
-.hidden {
-  display: none;
+/* we will explain what these classes do next! */
+.v-enter-active,
+.v-leave-active {
+  opacity: 1;
+  max-height: 500px;
+  transition: all 0.7s ease;
 }
 
+.v-enter-from,
+.v-leave-to {
+  max-height: 0px;
+  opacity: 0;
+}
+
+// .hidden {
+//   // display: none;
+//   visibility: hidden;
+//   opacity: 0;
+//   // transition: max-height 5s cubic-bezier(0, 1, 0, 1);
+//   transition: all 0.6s cubic-bezier(0.42, 0.2, 0.08, 1);
+//   max-height: 0px;
+// }
+
+// .hidden.visible {
+//   visibility: visible;
+//   opacity: 1;
+//   // animation: fadeIn 1s;
+//   max-height: 500px;
+//   // transition: all 0.6s cubic-bezier(0.42, 0.2, 0.08, 1);
+// }
+// @keyframes fadeIn {
+//   from {
+//     visibility: hidden;
+//     opacity: 0;
+//     max-height: 0;
+//   }
+
+//   to {
+//     opacity: 1;
+//     max-height: 500px;
+//     visibility: visible;
+//   }
+// }
 .open {
   // border: 2px solid #d2e7ff;
   box-shadow: 0 0 0 2px #d2e7ff;

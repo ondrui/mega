@@ -37,8 +37,7 @@
           ref="swiper-wrapper"
         >
           <div class="hourly-charts-temp">
-            <ChartHourlyTemp :numData="hourlyTabChartsData" />
-            <ChartHourlyTemp :numData="calcAdjustingForecast" />
+            <ChartHourlyTempList :datasets="datasetsForHourlyCharts" />
           </div>
           <div
             class="date-container"
@@ -99,14 +98,14 @@
 </template>
 
 <script>
-import ChartHourlyTemp from "../SVGCharts/hourly-temp/ChartHourlyTemp.vue";
+import ChartHourlyTempList from "../SVGCharts/hourly/ChartHourlyTempList.vue";
 import RowCaption from "@/components/RowCaption.vue";
 import { languageExpressions } from "@/constants/locales";
 import { windDirection } from "@/constants/functions";
 
 export default {
   components: {
-    ChartHourlyTemp,
+    ChartHourlyTempList,
     RowCaption,
   },
   data() {
@@ -136,6 +135,9 @@ export default {
     this.observer.disconnect();
   },
   computed: {
+    datasetsForHourlyCharts() {
+      return this.$store.getters.datasetsForHourlyCharts;
+    },
     calcAdjustingForecast() {
       return this.$store.getters.calcAdjustingForecast;
     },
@@ -416,6 +418,11 @@ export default {
       transition: all 0.5s;
     }
   }
+}
+
+.adjust {
+  position: absolute;
+  left: 0;
 }
 
 @media only screen and (max-width: 450px) {
