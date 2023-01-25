@@ -113,15 +113,19 @@ export default {
 /* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {
-  opacity: 1;
-  max-height: 500px;
   transition: all 0.7s ease;
 }
 
-.v-enter-from,
+.v-enter-to,
+.v-leave {
+  max-height: 500px;
+}
+
+.v-enter,
 .v-leave-to {
-  max-height: 0px;
+  position: relative;
   opacity: 0;
+  max-height: 0;
 }
 
 // .hidden {
