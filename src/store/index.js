@@ -12,6 +12,32 @@ export default new Vuex.Store({
     datasetsHourly: null,
     datasetsTenDays: null,
     datasetsThreeHour: null,
+    dataFromAPI: null,
+    chartSettings: [
+      {
+        title: "linear_0",
+        periodAdjusted: 0,
+        func: (periodAdjusted, diffTime, index) =>
+          (periodAdjusted - diffTime - index - 1) / (periodAdjusted - 1),
+      },
+      {
+        title: "linear_6",
+        periodAdjusted: 6,
+        func: (periodAdjusted, diffTime, index) =>
+          (periodAdjusted - diffTime - index - 1) / (periodAdjusted - 1),
+      },
+      {
+        title: "linear_12",
+        periodAdjusted: 12,
+        func: (periodAdjusted, diffTime, index) =>
+          (periodAdjusted - diffTime - index - 1) / (periodAdjusted - 1),
+      },
+      {
+        title: "exp_12",
+        periodAdjusted: 12,
+        func: (periodAdjusted, diffTime, index) => 1 / Math.exp(index),
+      },
+    ],
   },
   getters: {
     /**
@@ -228,42 +254,6 @@ export default new Vuex.Store({
         { unit, value: dayTemp, descr: "day", min, max },
         { unit, value: nightTemp, descr: "night", min, max },
       ];
-    },
-    /**
-     * Возвращает данные для отображения графика подробного
-     * почасового прогноза с разбивкой на часовые интервалы.
-     * @param datasetsHourly Текущее состояние store.state.datasetsHourly.
-     * @param getLocales Языковая метка.
-     */
-    hourlyTabChartsData({ datasetsHourly }, { getLocales }) {
-      const sortData = (el) => {
-        return parseInt(el.date.split("T")[1].slice(0, 2));
-      };
-      let dataArr = [];
-      for (const key in datasetsHourly) {
-        const arr = Object.values(datasetsHourly[key])
-          .filter((i) => typeof i === "object")
-          .map(({ temp, prec_sum, date, feels_like }) => {
-            return {
-              date,
-              temp: {
-                value: temp,
-                unit: languageExpressions(getLocales, "units", "temp")[0],
-              },
-              prec_sum: {
-                value: prec_sum,
-                unit: languageExpressions(getLocales, "units", "precSum")[0],
-              },
-              feels_like: {
-                value: feels_like,
-                unit: languageExpressions(getLocales, "units", "temp")[0],
-              },
-            };
-          })
-          .sort((a, b) => sortData(a) - sortData(b));
-        dataArr = dataArr.concat(arr);
-      }
-      return dataArr;
     },
     /**
      * Возвращает данные для отображения таблицы подробного
@@ -513,203 +503,135 @@ export default new Vuex.Store({
      * Возвращает скорректированные данные для отображения дельта графика подробного
      * почасового прогноза с разбивкой на часовые интервалы.
      * @param datasetsHourly Текущее состояние store.state.datasetsHourly.
+     * @param datasetsFact Текущее состояние store.state.datasetsFact.
+     * @param elem Объект с настройками для отрисовки графика.
      * @param getLocales Языковая метка.
      */
-    calcAdjustingForecast: (
-      { datasetsFact, datasetsHourly },
-      { getLocales }
+    calcAdjustingForecast:
+      ({ datasetsFact, datasetsHourly }, { getLocales }) =>
+      (elem) => {
+        const periodAdjusted = elem.periodAdjusted;
+        const obsTimeFact = {
+          time: datasetsFact.obs_time,
+          temp: datasetsFact.temp,
+        };
+        const firstForecastTime = {
+          time: datasetsHourly[0][1].date,
+          temp: datasetsHourly[0][1].temp,
+        };
+        const diffTime =
+          (new Date(firstForecastTime.time) - new Date(obsTimeFact.time)) /
+            (1000 * 60 * 60) -
+          1;
+        const deltaTemp = Math.abs(firstForecastTime.temp - obsTimeFact.temp);
+        const indexPointMerge = periodAdjusted - diffTime;
+
+        const sortData = (el) => {
+          return parseInt(el.date.split("T")[1].slice(0, 2));
+        };
+        let dataArr = [];
+        for (const key in datasetsHourly) {
+          const arr = Object.values(datasetsHourly[key])
+            .filter((i) => typeof i === "object")
+            .map(({ temp, prec_sum, date, feels_like }) => {
+              return {
+                date,
+                temp: {
+                  value: temp,
+                  unit: languageExpressions(getLocales, "units", "temp")[0],
+                },
+                prec_sum: {
+                  value: prec_sum,
+                  unit: languageExpressions(getLocales, "units", "precSum")[0],
+                },
+                feels_like: {
+                  value:
+                    periodAdjusted !== 0 ? feels_like + deltaTemp : feels_like,
+                  unit: languageExpressions(getLocales, "units", "temp")[0],
+                },
+              };
+            })
+            .sort((a, b) => sortData(a) - sortData(b));
+          dataArr = dataArr.concat(arr);
+        }
+        const ajustingDataArr = dataArr.map((e, index) => {
+          let calcTemp;
+          if (index < indexPointMerge && periodAdjusted !== 0) {
+            calcTemp =
+              e.temp.value +
+              deltaTemp * elem.func(periodAdjusted, diffTime, index);
+          } else {
+            calcTemp = e.temp.value;
+          }
+          return {
+            ...e,
+            temp: {
+              value: Math.round(calcTemp),
+              unit: languageExpressions(getLocales, "units", "temp")[0],
+            },
+          };
+        });
+
+        return {
+          value: ajustingDataArr,
+          descr: elem.title,
+        };
+      },
+    /**
+     * Данные со стороннего API.
+     * GFS & HRRR Forecast API
+     */
+    datasetsAPI: (
+      { datasetsHourly, dataFromAPI },
+      { getLocales, datasetsForHourlyCharts }
     ) => {
-      const periodAdjusted = 5;
-      const obsTimeFact = {
-        time: datasetsFact.obs_time,
-        temp: datasetsFact.temp,
-      };
-      const firstForecastTime = {
-        time: datasetsHourly[0][1].date,
-        temp: datasetsHourly[0][1].temp,
-      };
-      const diffTime =
-        (new Date(firstForecastTime.time) - new Date(obsTimeFact.time)) /
-        (1000 * 60 * 60);
-      const deltaTemp = Math.abs(firstForecastTime.temp - obsTimeFact.temp);
-      const sortData = (el) => {
-        return parseInt(el.date.split("T")[1].slice(0, 2));
-      };
-      let dataArr = [];
-      for (const key in datasetsHourly) {
-        const arr = Object.values(datasetsHourly[key])
-          .filter((i) => typeof i === "object")
-          .map(({ temp, prec_sum, date, feels_like }, index) => {
-            let calcTemp;
-            if (index < periodAdjusted - diffTime + 1 && key === "0") {
-              calcTemp =
-                temp +
-                (deltaTemp * (periodAdjusted - diffTime - index + 1)) /
-                  periodAdjusted;
-            } else {
-              calcTemp = temp;
-            }
-            return {
-              date,
-              temp: {
-                value: Math.round(calcTemp),
-                unit: languageExpressions(getLocales, "units", "temp")[0],
-              },
-              prec_sum: {
-                value: prec_sum,
-                unit: languageExpressions(getLocales, "units", "precSum")[0],
-              },
-              feels_like: {
-                value: feels_like,
-                unit: languageExpressions(getLocales, "units", "temp")[0],
-              },
-            };
-          })
-          .sort((a, b) => sortData(a) - sortData(b));
-        dataArr = dataArr.concat(arr);
-      }
-      return dataArr;
+      const copyAPITime = [...dataFromAPI.time];
+      const copyAPITemp = [...dataFromAPI.temperature_2m];
+      const startTime = datasetsHourly[0][1].date;
+      console.log(dataFromAPI.temperature_2m, getLocales);
+      const isEqualTime = (elem) => new Date(startTime) - new Date(elem) === 0;
+      const startIndex = copyAPITime.findIndex(isEqualTime);
+      console.log(startIndex);
+      const finishedIndex = datasetsForHourlyCharts.data[0].value.length;
+      console.log(finishedIndex);
+      const spliceArrTime = copyAPITime.splice(startIndex, finishedIndex);
+      const spliceArrTemp = copyAPITemp.splice(startIndex, finishedIndex);
+      console.log(spliceArrTime);
+      const arr = spliceArrTime.map((elem, index) => {
+        return {
+          temp: {
+            value: spliceArrTemp[index],
+            unit: languageExpressions(getLocales, "units", "temp")[0],
+          },
+          prec_sum: {
+            value: 0,
+            unit: languageExpressions(getLocales, "units", "precSum")[0],
+          },
+          feels_like: {
+            value: 0,
+            unit: languageExpressions(getLocales, "units", "temp")[0],
+          },
+        };
+      });
+      return arr;
     },
-    calcAdjustingForecast_12: (
-      { datasetsFact, datasetsHourly },
-      { getLocales }
-    ) => {
-      const periodAdjusted = 12;
-      const obsTimeFact = {
-        time: datasetsFact.obs_time,
-        temp: datasetsFact.temp,
-      };
-      const firstForecastTime = {
-        time: datasetsHourly[0][1].date,
-        temp: datasetsHourly[0][1].temp,
-      };
-      const diffTime =
-        (new Date(firstForecastTime.time) - new Date(obsTimeFact.time)) /
-        (1000 * 60 * 60);
-      const deltaTemp = Math.abs(firstForecastTime.temp - obsTimeFact.temp);
-      const sortData = (el) => {
-        return parseInt(el.date.split("T")[1].slice(0, 2));
-      };
-      let dataArr = [];
-      for (const key in datasetsHourly) {
-        const arr = Object.values(datasetsHourly[key])
-          .filter((i) => typeof i === "object")
-          .map(({ temp, prec_sum, date, feels_like }, index) => {
-            let calcTemp;
-            if (index < periodAdjusted - diffTime + 1 && key === "0") {
-              calcTemp =
-                temp +
-                (deltaTemp * (periodAdjusted - diffTime - index + 1)) /
-                  periodAdjusted;
-            } else {
-              calcTemp = temp;
-            }
-            return {
-              date,
-              temp: {
-                value: Math.round(calcTemp),
-                unit: languageExpressions(getLocales, "units", "temp")[0],
-              },
-              prec_sum: {
-                value: prec_sum,
-                unit: languageExpressions(getLocales, "units", "precSum")[0],
-              },
-              feels_like: {
-                value: feels_like,
-                unit: languageExpressions(getLocales, "units", "temp")[0],
-              },
-            };
-          })
-          .sort((a, b) => sortData(a) - sortData(b));
-        dataArr = dataArr.concat(arr);
-      }
-      return dataArr;
-    },
-    calcAdjustingExpForecast_12: (
-      { datasetsFact, datasetsHourly },
-      { getLocales }
-    ) => {
-      const periodAdjusted = 12;
-      const obsTimeFact = {
-        time: datasetsFact.obs_time,
-        temp: datasetsFact.temp,
-      };
-      const firstForecastTime = {
-        time: datasetsHourly[0][1].date,
-        temp: datasetsHourly[0][1].temp,
-      };
-      const diffTime =
-        (new Date(firstForecastTime.time) - new Date(obsTimeFact.time)) /
-        (1000 * 60 * 60);
-      const deltaTemp = Math.abs(firstForecastTime.temp - obsTimeFact.temp);
-      const func =
-        (deltaTemp * (periodAdjusted - diffTime + 1)) / periodAdjusted;
-      const sortData = (el) => {
-        return parseInt(el.date.split("T")[1].slice(0, 2));
-      };
-      let dataArr = [];
-      for (const key in datasetsHourly) {
-        const arr = Object.values(datasetsHourly[key])
-          .filter((i) => typeof i === "object")
-          .map(({ temp, prec_sum, date, feels_like }, index) => {
-            let calcTemp;
-            if (index < periodAdjusted - diffTime + 1 && key === "0") {
-              calcTemp = temp + func;
-            } else {
-              calcTemp = temp;
-            }
-            return {
-              date,
-              temp: {
-                value: Math.round(calcTemp),
-                unit: languageExpressions(getLocales, "units", "temp")[0],
-              },
-              prec_sum: {
-                value: prec_sum,
-                unit: languageExpressions(getLocales, "units", "precSum")[0],
-              },
-              feels_like: {
-                value: feels_like,
-                unit: languageExpressions(getLocales, "units", "temp")[0],
-              },
-            };
-          })
-          .sort((a, b) => sortData(a) - sortData(b));
-        dataArr = dataArr.concat(arr);
-      }
-      return dataArr;
-    },
-    datasetsForHourlyCharts: (
-      state,
-      { calcAdjustingForecast, hourlyTabChartsData, calcAdjustingForecast_12 }
-    ) => {
-      const min = Math.min(
-        ...calcAdjustingForecast.map((e) => e.temp.value),
-        ...calcAdjustingForecast_12.map((e) => e.temp.value),
-        ...hourlyTabChartsData.map((e) => e.temp.value)
-      );
-      const max = Math.max(
-        ...calcAdjustingForecast.map((e) => e.temp.value),
-        ...calcAdjustingForecast_12.map((e) => e.temp.value),
-        ...hourlyTabChartsData.map((e) => e.temp.value)
-      );
+    /**
+     * Возвращает объект данных для отображения графиков подробного
+     * почасового прогноза с разбивкой на часовые интервалы.
+     * @param chartSettings Текущее состояние store.state.chartSettings.
+     * @param calcAdjustingForecast Геттер вычисления данных для графика.
+     */
+    datasetsForHourlyCharts: ({ chartSettings }, { calcAdjustingForecast }) => {
+      const data = chartSettings.map((e) => calcAdjustingForecast(e));
+      const arr = data.reduce((total, current) => {
+        return [...total, ...current.value];
+      }, []);
+      const min = Math.min(...arr.map((e) => e.temp.value));
+      const max = Math.max(...arr.map((e) => e.temp.value));
       return {
         min,
         max,
-        data: [
-          {
-            descr: "adjusted",
-            value: calcAdjustingForecast,
-          },
-          {
-            descr: "forecast",
-            value: hourlyTabChartsData,
-          },
-          {
-            descr: "adjusted-12",
-            value: calcAdjustingForecast_12,
-          },
-        ],
+        data,
       };
     },
   },
@@ -775,6 +697,9 @@ export default new Vuex.Store({
         {}
       );
       state.datasetsTenDays = filteredTenDatasets;
+    },
+    setDataAPI(state, { hourly }) {
+      state.dataFromAPI = hourly;
     },
     toggleDetails(state, index) {
       Object.keys(state.datasetsTenDays).map(

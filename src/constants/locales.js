@@ -3,7 +3,7 @@ const dataLocales = {
     breadcrumbs: {
       main: "главная",
       weather: "погода",
-      city: "Луховицы (Московская область, Россия)",
+      city: "Москва",
     },
     header: {
       now: "сейчас в",

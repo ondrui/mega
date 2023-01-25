@@ -138,12 +138,6 @@ export default {
     datasetsForHourlyCharts() {
       return this.$store.getters.datasetsForHourlyCharts;
     },
-    calcAdjustingForecast() {
-      return this.$store.getters.calcAdjustingForecast;
-    },
-    hourlyTabChartsData() {
-      return this.$store.getters.hourlyTabChartsData;
-    },
     hourlyTabTable() {
       return this.$store.getters.hourlyTabTable;
     },
@@ -153,7 +147,7 @@ export default {
     scrollSize() {
       return (
         (this.$refs["swiper-wrapper"].clientWidth /
-          this.hourlyTabChartsData.length) *
+          this.datasetsForHourlyCharts.data[0].value.length) *
         3
       );
     },

@@ -159,15 +159,15 @@ export default {
   line-height: 16px;
   fill: #9c9c9c;
 }
-.adjusted {
+.linear_6 {
   stroke-dasharray: 8 4;
   stroke: #035175;
 }
-.adjusted-12 {
+.linear_12 {
   // stroke-dasharray: 8 4;
   stroke: #b63705;
 }
-.exp-12 {
+.exp_12 {
   // stroke-dasharray: 8 4;
   stroke: #418105;
 }
