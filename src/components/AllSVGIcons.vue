@@ -23,6 +23,8 @@ export default {
         "pressure-common",
         "rect-background-common",
         "search-common",
+        "sunrise-1-common",
+        "sunset-1-common",
         "sun-1-common",
         "sun-2-common",
         "wind-direction-blue-common",

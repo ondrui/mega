@@ -546,7 +546,9 @@ export default new Vuex.Store({
                 },
                 feels_like: {
                   value:
-                    periodAdjusted !== 0 ? feels_like + deltaTemp : feels_like,
+                    periodAdjusted !== 0 && deltaTemp > 1
+                      ? feels_like + deltaTemp
+                      : feels_like,
                   unit: languageExpressions(getLocales, "units", "temp")[0],
                 },
               };
@@ -610,7 +612,7 @@ export default new Vuex.Store({
           },
           feels_like: {
             value: "",
-            unit: languageExpressions(getLocales, "units", "temp")[0],
+            unit: "",
           },
         };
       });
@@ -631,7 +633,6 @@ export default new Vuex.Store({
     ) => {
       const data = chartSettings.map((e) => calcAdjustingForecast(e));
       data.push(datasetsAPI);
-      console.log("data", data);
       const arr = data.reduce((total, current) => {
         return [...total, ...current.value];
       }, []);

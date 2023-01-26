@@ -92,6 +92,7 @@ export default {
                     ? `+${feels_like.value}`
                     : feels_like.value,
                 unit: temp.unit,
+                feels_like_unit: feels_like.unit,
               };
               total.push(obj);
             }

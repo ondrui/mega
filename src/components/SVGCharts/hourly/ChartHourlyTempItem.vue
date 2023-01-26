@@ -16,7 +16,7 @@
         {{ `${p.temp}${p.unit}` }}
       </text>
       <text class="temp-feels" text-anchor="middle" :x="p.x" :y="p.textYFeels">
-        {{ `${p.feels_like}${p.unit}` }}
+        {{ `${p.feels_like}${p.feels_like_unit}` }}
       </text>
     </g>
   </g>

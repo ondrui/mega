@@ -6,7 +6,7 @@
       <TabsInformer />
       <DetailsSegment />
       <!-- <br /> -->
-      <AllSVGIcons class="hidden" />
+      <AllSVGIcons />
     </div>
   </div>
 </template>
