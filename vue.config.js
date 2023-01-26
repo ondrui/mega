@@ -45,5 +45,6 @@ module.exports = {
   },
   devServer: {
     host: "localhost",
+    // allowedHosts: "all",
   },
 };

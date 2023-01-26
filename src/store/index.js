@@ -26,17 +26,17 @@ export default new Vuex.Store({
         func: (periodAdjusted, diffTime, index) =>
           (periodAdjusted - diffTime - index - 1) / (periodAdjusted - 1),
       },
-      {
-        title: "linear_12",
-        periodAdjusted: 12,
-        func: (periodAdjusted, diffTime, index) =>
-          (periodAdjusted - diffTime - index - 1) / (periodAdjusted - 1),
-      },
-      {
-        title: "exp_12",
-        periodAdjusted: 12,
-        func: (periodAdjusted, diffTime, index) => 1 / Math.exp(index),
-      },
+      // {
+      //   title: "linear_12",
+      //   periodAdjusted: 12,
+      //   func: (periodAdjusted, diffTime, index) =>
+      //     (periodAdjusted - diffTime - index - 1) / (periodAdjusted - 1),
+      // },
+      // {
+      //   title: "exp_12",
+      //   periodAdjusted: 12,
+      //   func: (periodAdjusted, diffTime, index) => 1 / Math.exp(index),
+      // },
     ],
   },
   getters: {
@@ -556,7 +556,11 @@ export default new Vuex.Store({
         }
         const ajustingDataArr = dataArr.map((e, index) => {
           let calcTemp;
-          if (index < indexPointMerge && periodAdjusted !== 0) {
+          if (
+            index < indexPointMerge &&
+            periodAdjusted !== 0 &&
+            deltaTemp > 1
+          ) {
             calcTemp =
               e.temp.value +
               deltaTemp * elem.func(periodAdjusted, diffTime, index);
@@ -582,25 +586,22 @@ export default new Vuex.Store({
      * GFS & HRRR Forecast API
      */
     datasetsAPI: (
-      { datasetsHourly, dataFromAPI },
-      { getLocales, datasetsForHourlyCharts }
+      { datasetsHourly, dataFromAPI, chartSettings },
+      { getLocales, calcAdjustingForecast }
     ) => {
       const copyAPITime = [...dataFromAPI.time];
       const copyAPITemp = [...dataFromAPI.temperature_2m];
       const startTime = datasetsHourly[0][1].date;
-      console.log(dataFromAPI.temperature_2m, getLocales);
       const isEqualTime = (elem) => new Date(startTime) - new Date(elem) === 0;
       const startIndex = copyAPITime.findIndex(isEqualTime);
-      console.log(startIndex);
-      const finishedIndex = datasetsForHourlyCharts.data[0].value.length;
-      console.log(finishedIndex);
+      const finishedIndex = calcAdjustingForecast(chartSettings[0]).value
+        .length;
       const spliceArrTime = copyAPITime.splice(startIndex, finishedIndex);
       const spliceArrTemp = copyAPITemp.splice(startIndex, finishedIndex);
-      console.log(spliceArrTime);
       const arr = spliceArrTime.map((elem, index) => {
         return {
           temp: {
-            value: spliceArrTemp[index],
+            value: Math.round(spliceArrTemp[index]),
             unit: languageExpressions(getLocales, "units", "temp")[0],
           },
           prec_sum: {
@@ -608,12 +609,15 @@ export default new Vuex.Store({
             unit: languageExpressions(getLocales, "units", "precSum")[0],
           },
           feels_like: {
-            value: 0,
+            value: "",
             unit: languageExpressions(getLocales, "units", "temp")[0],
           },
         };
       });
-      return arr;
+      return {
+        value: arr,
+        descr: "api",
+      };
     },
     /**
      * Возвращает объект данных для отображения графиков подробного
@@ -621,8 +625,13 @@ export default new Vuex.Store({
      * @param chartSettings Текущее состояние store.state.chartSettings.
      * @param calcAdjustingForecast Геттер вычисления данных для графика.
      */
-    datasetsForHourlyCharts: ({ chartSettings }, { calcAdjustingForecast }) => {
+    datasetsForHourlyCharts: (
+      { chartSettings },
+      { calcAdjustingForecast, datasetsAPI }
+    ) => {
       const data = chartSettings.map((e) => calcAdjustingForecast(e));
+      data.push(datasetsAPI);
+      console.log("data", data);
       const arr = data.reduce((total, current) => {
         return [...total, ...current.value];
       }, []);
