@@ -18,7 +18,7 @@
       </div>
       <div class="card-content__condition">
         <div>
-          <BaseIcon :name="value.condition" pick="light" width="40" />
+          <BaseIcon :name="value.condition" pick="light" width="46" />
         </div>
         <div class="card-content__text">
           <div>
@@ -31,15 +31,18 @@
         </div>
       </div>
       <div class="card-content__temp">
-        <span>{{ value.temp.min }}/</span>{{ value.temp.max }}
+        <span>{{ value.temp.max }}</span
+        >/{{ value.temp.min }}
       </div>
-      <div class="card-content__info">
-        <CardDetailDayItem
-          v-for="(item, index) in items"
-          :key="`cn-${index}`"
-          :value="value[item]"
-        />
-        <DayLengthBlock class="length-block" :value="value" />
+      <div class="exp-1">
+        <div class="exp">llll</div>
+        <div class="card-content__info">
+          <CardDetailDayItem
+            v-for="(item, index) in items"
+            :key="`cn-${index}`"
+            :value="value[item]"
+          />
+        </div>
       </div>
       <DayLengthBlock class="length-block-mob" :value="value" />
     </div>
@@ -58,7 +61,7 @@ export default {
   props: ["value", "index"],
   data() {
     return {
-      items: ["pressure", "humidity", "wind", "uvi"],
+      items: ["wind", "humidity", "wind_gust", "uvi", "pressure", "comf_idx"],
     };
   },
   methods: {
@@ -70,20 +73,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.exp {
+  border: 1px solid teal;
+}
+.exp-1 {
+  display: grid;
+}
 .length-block-mob {
   display: none;
 }
 .card-content {
   display: grid;
   grid-template-columns: 0.2fr 0.6fr 0.4fr 1.2fr;
-  // grid-template-columns: repeat(4, auto);
   column-gap: 15px;
   align-items: center;
   border: 1px solid #d6e2f0;
   padding: 0 9px 0 20px;
-  height: 72px;
   cursor: pointer;
   background-color: #f0f7fc;
+}
+.date-text-short > div:first-child {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 27px;
 }
 .weekend .date-text-short > div:first-child {
   color: #ff1616;
@@ -95,23 +108,6 @@ export default {
   display: flex;
   column-gap: 12px;
 }
-.card-content__temp {
-  justify-self: end;
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 28px;
-  color: #333333;
-  & > span {
-    font-weight: 300;
-  }
-}
-.date-text-long {
-  display: none;
-
-  &::first-letter {
-    text-transform: capitalize;
-  }
-}
 .card-content__text {
   display: flex;
   flex-direction: column;
@@ -122,8 +118,8 @@ export default {
   & > div:first-child {
     min-width: 125px;
     font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
+    font-size: 12px;
+    line-height: 14px;
     color: #000000;
   }
 
@@ -133,15 +129,15 @@ export default {
 
   & > div:last-child {
     font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
+    font-size: 12px;
+    line-height: 14px;
     white-space: nowrap;
     color: #000000;
 
     & > span {
       font-weight: 300;
-      font-size: 10px;
-      line-height: 12px;
+      font-size: 12px;
+      line-height: 14px;
       color: #9c9c9c;
     }
   }
@@ -150,13 +146,32 @@ export default {
     text-transform: capitalize;
   }
 }
+.card-content__temp {
+  justify-self: end;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #333333;
+  & > span {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
+.date-text-long {
+  display: none;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
+}
 .card-content__info {
-  display: flex;
-  justify-content: space-between;
-  column-gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 24px);
+  column-gap: 14px;
   align-self: stretch;
   align-items: center;
-  overflow-x: auto;
 }
 .card-content__date {
   justify-self: start;
@@ -165,19 +180,20 @@ export default {
   justify-content: center;
   align-items: center;
   font-weight: 300;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 19px;
 }
 .card-content__date > div {
   text-align: center;
 }
-.card-content__date > div:first-child {
-  text-transform: uppercase;
-  font-size: 16px;
-  line-height: 21px;
-}
 
 @media only screen and (max-width: 600px) {
+  .exp {
+    display: none;
+  }
+  .exp-1 {
+    grid-area: e;
+  }
   .card-content__date {
     display: block;
     grid-area: a;
@@ -212,7 +228,6 @@ export default {
     line-height: 38px;
   }
   .card-content__info {
-    grid-area: e;
     padding-top: 15px;
     border-top: 1px solid #d6e2f0;
   }

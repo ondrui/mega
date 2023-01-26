@@ -157,6 +157,7 @@ export default new Vuex.Store({
      */
     tenDaysTabTable: ({ datasetsTenDays }, { getLocales }) => {
       const arr = Object.values(datasetsTenDays)
+        .slice(0, -1)
         .filter((f, i, a) => i !== a.length - 1)
         .map((e) => {
           const weekday = setTimeFormat(e.start_date, "D", getLocales);
@@ -216,6 +217,7 @@ export default new Vuex.Store({
     tenDaysTabTempCharts: ({ datasetsTenDays }, { getLocales }) => {
       const arr = Object.values(datasetsTenDays);
       const dayTemp = arr
+        .slice(0, -1)
         .map((e) =>
           /**
            * Проверяем есть ли поле day в объекте с данными за сутки,
@@ -230,6 +232,7 @@ export default new Vuex.Store({
          */
         .filter((f, i, a) => i !== a.length - 1);
       const nightTemp = arr
+        .slice(0, -1)
         .map((e) =>
           /**
            * Проверяем есть ли поле night в объекте с данными за сутки,
@@ -329,8 +332,10 @@ export default new Vuex.Store({
      */
     tenDaysDetailsCard: ({ datasetsTenDays }, { getLocales }) => {
       const arr = Object.values(datasetsTenDays)
+        // .slice(0, -1)
         .filter((f, i) => i !== 0)
-        .map((e) => {
+        .map((e, index, array) => {
+          console.log(array);
           const formatWeekday = ["D", "l"];
           const weekday = formatWeekday.map((el) =>
             setTimeFormat(e.start_date, el, getLocales)
@@ -377,8 +382,26 @@ export default new Vuex.Store({
                 "climateIndicators",
                 "pressure"
               ),
-              value: `${e.day.pressure} ${
-                languageExpressions(getLocales, "units", "pressure")[0]
+              value: `${e.day.pressure}`,
+            },
+            wind_gust: {
+              title: languageExpressions(
+                getLocales,
+                "climateIndicators",
+                "windGust_1"
+              ).split(" ")[0],
+              value: `${e.day.wind_gust} ${
+                languageExpressions(getLocales, "units", "speed")[0]
+              }`,
+            },
+            comf_idx: {
+              title: languageExpressions(
+                getLocales,
+                "climateIndicators",
+                "comfort"
+              ),
+              value: `${e.day.comf_idx}0 ${
+                languageExpressions(getLocales, "units", "percent")[0]
               }`,
             },
             humidity: {
@@ -387,17 +410,19 @@ export default new Vuex.Store({
                 "climateIndicators",
                 "humidity"
               ),
-              value: `${e.day.humidity}${
+              value: `${e.day.humidity} ${
                 languageExpressions(getLocales, "units", "percent")[0]
               }`,
             },
             temp: {
               min: `${
-                e.night.temp_min > 0 ? `+${e.night.temp_min}` : e.night.temp_min
+                array[index + 1]?.night.temp_min > 0
+                  ? `+${array[index + 1]?.night.temp_min}`
+                  : array[index + 1]?.night.temp_min
               }${languageExpressions(getLocales, "units", "temp")[0]}`,
               max: `${
                 e.day.temp_max > 0 ? `+${e.day.temp_max}` : e.day.temp_max
-              }${languageExpressions(getLocales, "units", "temp")[0]}C`,
+              }${languageExpressions(getLocales, "units", "temp")[0]}`,
             },
             uvi: {
               title: languageExpressions(
@@ -406,7 +431,6 @@ export default new Vuex.Store({
                 "uvi"
               ),
               value: e.day.uvi,
-              unit: "",
             },
             dayLength: {
               daytime: {
@@ -421,7 +445,8 @@ export default new Vuex.Store({
               sunset: setTimeFormat(e.sunset, "H:i", getLocales),
             },
           };
-        });
+        })
+        .slice(0, -1);
       return arr;
     },
     /**

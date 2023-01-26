@@ -1,10 +1,10 @@
 <template>
   <div class="descr">
-    <div class="value">
-      {{ value.value }}
-    </div>
     <div class="title">
       {{ value.title }}
+    </div>
+    <div class="value">
+      {{ value.value }}
     </div>
   </div>
 </template>
@@ -18,15 +18,17 @@ export default {
 <style lang="scss" scoped>
 .descr {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  row-gap: 2px;
+  align-items: stretch;
   white-space: nowrap;
 
+  & > div {
+    border-bottom: 1px solid #d6e2f0;
+  }
   & .title {
+    flex-basis: 60%;
     font-weight: 300;
-    font-size: 10px;
-    line-height: 12px;
+    font-size: 12px;
+    line-height: 14px;
     color: #9c9c9c;
 
     &::first-letter {
@@ -35,7 +37,8 @@ export default {
   }
 
   & .value {
-    font-weight: 300;
+    flex-grow: 1;
+    font-weight: 400;
     font-size: 12px;
     line-height: 14px;
     color: #000000;

@@ -28,6 +28,7 @@ const dataLocales = {
       precProb: "вер. осадков",
       uvi: "УФИ",
       daytime: "долгота дня",
+      comfort: "комфорт",
     },
     units: {
       temp: ["°", "°С"],
