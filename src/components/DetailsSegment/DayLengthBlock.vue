@@ -31,6 +31,7 @@ export default {
   color: #333333;
 
   & > div:first-child {
+    width: 102px;
     display: flex;
     justify-content: space-between;
   }

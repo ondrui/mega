@@ -126,46 +126,23 @@ export default {
   position: relative;
   opacity: 0;
   max-height: 0;
+  overflow: hidden;
 }
-
-// .hidden {
-//   // display: none;
-//   visibility: hidden;
-//   opacity: 0;
-//   // transition: max-height 5s cubic-bezier(0, 1, 0, 1);
-//   transition: all 0.6s cubic-bezier(0.42, 0.2, 0.08, 1);
-//   max-height: 0px;
-// }
-
-// .hidden.visible {
-//   visibility: visible;
-//   opacity: 1;
-//   // animation: fadeIn 1s;
-//   max-height: 500px;
-//   // transition: all 0.6s cubic-bezier(0.42, 0.2, 0.08, 1);
-// }
-// @keyframes fadeIn {
-//   from {
-//     visibility: hidden;
-//     opacity: 0;
-//     max-height: 0;
-//   }
-
-//   to {
-//     opacity: 1;
-//     max-height: 500px;
-//     visibility: visible;
-//   }
-// }
 .open {
   // border: 2px solid #d2e7ff;
   box-shadow: 0 0 0 2px #d2e7ff;
   border-radius: 1px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 700px) {
   .segment-container {
-    padding: 30px 4px 23px 4px;
+    padding: 30px 8px 23px 8px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .card::after {
+    content: "";
+    bottom: 12px;
   }
 }
 </style>

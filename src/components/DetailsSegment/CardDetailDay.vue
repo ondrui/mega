@@ -34,14 +34,16 @@
         <span>{{ value.temp.max }}</span
         >/{{ value.temp.min }}
       </div>
-      <div class="exp-1">
-        <div class="exp">llll</div>
-        <div class="card-content__info">
-          <CardDetailDayItem
-            v-for="(item, index) in items"
-            :key="`cn-${index}`"
-            :value="value[item]"
-          />
+      <div class="card-content__info">
+        <div>
+          <div class="length-block">llll</div>
+          <div class="card-content__item-wrapper">
+            <CardDetailDayItem
+              v-for="(item, index) in items"
+              :key="`cn-${index}`"
+              :value="value[item]"
+            />
+          </div>
         </div>
       </div>
       <DayLengthBlock class="length-block-mob" :value="value" />
@@ -73,22 +75,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.exp {
+.length-block {
   border: 1px solid teal;
 }
-.exp-1 {
+.card-content__info {
   display: grid;
+  justify-items: end;
+
+  & > div {
+    width: 250px;
+  }
 }
 .length-block-mob {
   display: none;
 }
 .card-content {
   display: grid;
-  grid-template-columns: 0.2fr 0.6fr 0.4fr 1.2fr;
-  column-gap: 15px;
+  grid-template-columns: 0.2fr 0.8fr minmax(80px, 0.4fr) 1.2fr;
   align-items: center;
   border: 1px solid #d6e2f0;
-  padding: 0 9px 0 20px;
+  padding: 0 32px 0 20px;
   cursor: pointer;
   background-color: #f0f7fc;
 }
@@ -165,13 +171,11 @@ export default {
     text-transform: capitalize;
   }
 }
-.card-content__info {
+.card-content__item-wrapper {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 0.9fr;
   grid-template-rows: repeat(3, 24px);
   column-gap: 14px;
-  align-self: stretch;
-  align-items: center;
 }
 .card-content__date {
   justify-self: start;
@@ -187,12 +191,21 @@ export default {
   text-align: center;
 }
 
-@media only screen and (max-width: 600px) {
-  .exp {
-    display: none;
+@media only screen and (max-width: 700px) {
+  .card-content {
+    grid-template-columns: 0.2fr 0.8fr minmax(80px, 0.4fr) 1.2fr;
+    padding: 0 8px 0 8px;
   }
-  .exp-1 {
+}
+
+@media only screen and (max-width: 600px) {
+  .card-content__info {
     grid-area: e;
+    justify-items: center;
+
+    & > div {
+      width: 85%;
+    }
   }
   .card-content__date {
     display: block;
@@ -207,16 +220,16 @@ export default {
     display: none;
   }
   .length-block-mob {
-    display: block;
+    display: flex;
+    align-items: flex-end;
     grid-area: b;
     justify-self: end;
     font-size: 14px;
     line-height: 16px;
   }
   .card-content__condition {
+    margin-top: 10px;
     grid-area: c;
-    padding-bottom: 10px;
-    padding-top: 5px;
 
     & svg {
       width: 50px;
@@ -224,23 +237,30 @@ export default {
   }
   .card-content__temp {
     grid-area: d;
-    font-size: 32px;
-    line-height: 38px;
+    align-self: center;
+    justify-self: end;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+    & > span {
+      font-weight: 500;
+      font-size: 32px;
+      line-height: 38px;
+    }
   }
-  .card-content__info {
-    padding-top: 15px;
-    border-top: 1px solid #d6e2f0;
+  .card-content__item-wrapper {
+    column-gap: 40px;
+    margin-top: 20px;
+    // border-top: 1px solid #d6e2f0;
   }
   .card-content {
     grid-template-columns: 2fr 1fr;
-    column-gap: 5px;
-    // grid-template-rows: repeat(3, 1fr);
     grid-template-areas:
       "a b"
       "c d"
       "e e";
     height: auto;
-    padding: 11px 15px 19px 15px;
+    padding: 11px 15px 12px 15px;
   }
   .date-text-long {
     display: block;
