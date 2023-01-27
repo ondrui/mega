@@ -229,16 +229,22 @@ export default {
   }
   .card-content__condition {
     margin-top: 10px;
+    height: 80px;
     grid-area: c;
+    border-bottom: 1px solid #d6e2f0;
 
     & svg {
       width: 50px;
     }
   }
   .card-content__temp {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     grid-area: d;
-    align-self: center;
-    justify-self: end;
+    border-bottom: 1px solid #d6e2f0;
+    align-self: stretch;
+    justify-self: stretch;
     font-weight: 400;
     font-size: 24px;
     line-height: 28px;
@@ -250,7 +256,7 @@ export default {
   }
   .card-content__item-wrapper {
     column-gap: 40px;
-    margin-top: 20px;
+    margin-top: 8px;
     // border-top: 1px solid #d6e2f0;
   }
   .card-content {
@@ -280,6 +286,7 @@ export default {
     display: none;
   }
   .card-content__text {
+    align-self: flex-start;
     & > div:first-child {
       // min-width: 125px;
       font-weight: 300;

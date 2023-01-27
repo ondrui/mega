@@ -107,7 +107,7 @@ export const languageExpressions = (locales, key, name) => {
  * Значения - массив с параметрами для объекта options, который
  * настраивает формат даты и времени и передается аргументом
  * в конструктор new Intl.DateTimeFormat
- * @property d - День месяца, от 1 до 31. 2 цифры с ведущими нулями.
+ * @property d - День месяца, от 1 до 31. День месяца без нуля в начале.
  * @property D - Текстовое представление дня недели, 2 символа.
  * @property l - Полное наименование дня недели.
  * @property m - Порядковый номер месяца с ведущим нулём.
@@ -119,7 +119,7 @@ export const languageExpressions = (locales, key, name) => {
  * @property S - Секунды с ведущим нулём.
  */
 export const formatListDateTime = {
-  d: ["day", "2-digit"],
+  d: ["day", "numeric"],
   D: ["weekday", "short"],
   l: ["weekday", "long"],
   m: ["month", "2-digit"],
