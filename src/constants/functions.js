@@ -126,10 +126,13 @@ export const daytime = (sunrise, sunset, separator) => {
   const padTo2Digits = (num) => num.toString().padStart(2, "0");
 
   const convertMsToHM = () => {
-    const hours = Math.floor((diffMilliseconds / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diffMilliseconds / (1000 * 60)) % 60);
-    // const seconds = Math.floor((diffMilliseconds / 1000) % 60);
-
+    let hours = Math.floor((diffMilliseconds / (1000 * 60 * 60)) % 24);
+    let minutes = Math.floor((diffMilliseconds / (1000 * 60)) % 60);
+    const seconds = Math.floor((diffMilliseconds / 1000) % 60);
+    // 👇️ if seconds are greater than 30, round minutes up (optional)
+    minutes = seconds >= 30 ? minutes + 1 : minutes;
+    hours = minutes > 59 ? hours + 1 : hours;
+    minutes = minutes % 60;
     return separator === ":"
       ? `${hours}:${padTo2Digits(minutes)}`
       : `${hours} ${
