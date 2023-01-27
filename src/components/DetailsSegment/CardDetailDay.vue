@@ -31,8 +31,10 @@
         </div>
       </div>
       <div class="card-content__temp">
-        <span>{{ value.temp.max }}</span
-        >/{{ value.temp.min }}
+        <div>
+          <span>{{ value.temp.max }}</span
+          >/{{ value.temp.min }}
+        </div>
       </div>
       <div class="card-content__info">
         <div>
@@ -157,7 +159,7 @@ export default {
   font-size: 16px;
   line-height: 19px;
   color: #333333;
-  & > span {
+  & div > span {
     font-weight: 500;
     font-size: 24px;
     line-height: 28px;
@@ -247,7 +249,7 @@ export default {
     font-weight: 400;
     font-size: 24px;
     line-height: 28px;
-    & > span {
+    & div > span {
       font-weight: 500;
       font-size: 32px;
       line-height: 38px;
