@@ -120,22 +120,23 @@ export const windDirection = (locales, obj) => {
  * @example
  * "10:14"
  */
-export const daytime = (sunrise, sunset) => {
+export const daytime = (sunrise, sunset, separator) => {
   const diffMilliseconds = new Date(sunset) - new Date(sunrise);
   // function convert Milliseconds to Hours and Minutes
   const padTo2Digits = (num) => num.toString().padStart(2, "0");
 
   const convertMsToHM = () => {
-    let seconds = Math.floor(diffMilliseconds / 1000);
-    let minutes = Math.floor(seconds / 60);
-    let hours = Math.floor(minutes / 60);
+    const hours = Math.floor((diffMilliseconds / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diffMilliseconds / (1000 * 60)) % 60);
+    // const seconds = Math.floor((diffMilliseconds / 1000) % 60);
 
-    seconds = seconds % 60;
-    minutes = seconds >= 30 ? minutes + 1 : minutes;
-    minutes = minutes % 60;
-    hours = hours % 24;
-
-    return `${padTo2Digits(hours)}:${padTo2Digits(minutes)}`;
+    return separator === ":"
+      ? `${hours}:${padTo2Digits(minutes)}`
+      : `${hours} ${
+          languageExpressions("ru", "units", "time")[0]
+        } ${padTo2Digits(minutes)} ${
+          languageExpressions("ru", "units", "time")[1]
+        }`;
   };
 
   return convertMsToHM();

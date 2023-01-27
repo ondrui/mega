@@ -31,6 +31,7 @@ const dataLocales = {
       comfort: "комфорт",
     },
     units: {
+      time: ["ч", "мин"],
       temp: ["°", "°С"],
       pressure: ["мм.рт.ст."],
       speed: ["м/с"],

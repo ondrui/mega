@@ -335,7 +335,6 @@ export default new Vuex.Store({
         // .slice(0, -1)
         .filter((f, i) => i !== 0)
         .map((e, index, array) => {
-          console.log(array);
           const formatWeekday = ["D", "l"];
           const weekday = formatWeekday.map((el) =>
             setTimeFormat(e.start_date, el, getLocales)
@@ -439,6 +438,7 @@ export default new Vuex.Store({
                   "climateIndicators",
                   "daytime"
                 ),
+                value_mob: daytime(e.sunrise, e.sunset),
                 value: daytime(e.sunrise, e.sunset),
               },
               sunrise: setTimeFormat(e.sunrise, "H:i", getLocales),

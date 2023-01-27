@@ -36,7 +36,7 @@
       </div>
       <div class="card-content__info">
         <div>
-          <div class="length-block">llll</div>
+          <DayLengthLong class="length-block" :value="value" />
           <div class="card-content__item-wrapper">
             <CardDetailDayItem
               v-for="(item, index) in items"
@@ -46,19 +46,21 @@
           </div>
         </div>
       </div>
-      <DayLengthBlock class="length-block-mob" :value="value" />
+      <DayLengthMob class="length-block-mob" :value="value" />
     </div>
   </div>
 </template>
 
 <script>
 import CardDetailDayItem from "./CardDetailDayItem.vue";
-import DayLengthBlock from "./DayLengthBlock.vue";
+import DayLengthMob from "./DayLengthMob.vue";
+import DayLengthLong from "./DayLengthLong.vue";
 
 export default {
   components: {
     CardDetailDayItem,
-    DayLengthBlock,
+    DayLengthLong,
+    DayLengthMob,
   },
   props: ["value", "index"],
   data() {
@@ -75,9 +77,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.length-block {
-  border: 1px solid teal;
-}
 .card-content__info {
   display: grid;
   justify-items: end;
@@ -96,7 +95,7 @@ export default {
   border: 1px solid #d6e2f0;
   padding: 0 32px 0 20px;
   cursor: pointer;
-  background-color: #f0f7fc;
+  background: linear-gradient(359deg, #f9fcfe, #f0f7fc);
 }
 .date-text-short > div:first-child {
   text-transform: uppercase;

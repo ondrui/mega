@@ -9,7 +9,7 @@
     </div>
     <div>
       <span>{{ value.dayLength.daytime.title }}:</span>&nbsp;{{
-        value.dayLength.daytime.value
+        value.dayLength.daytime.value_mob
       }}
     </div>
   </div>
