@@ -171,10 +171,10 @@ export default {
 
 <style lang="scss" scoped>
 .svg-temp {
+  display: inline-block;
   fill: none;
   width: 100%;
   height: 100%;
-  display: inline-block;
   // box-shadow: 0 0 0 1px teal;
 }
 .text-meter {

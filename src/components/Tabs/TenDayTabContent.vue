@@ -13,45 +13,52 @@
       <RowCaption class="humidity">
         {{ languageExpressions(getLocales, "climateIndicators", "humidity") }}
       </RowCaption>
-      <div class="ten-days-charts-temp">
-        <ChartsList />
-      </div>
-      <div
-        @click="toggle(index)"
-        :class="['ten-days-day', { 'ten-days-weekend': day.weekend === true }]"
-        v-for="(day, index) in tenDaysTabTable"
-        :key="`d-${index}`"
-      >
-        <div class="ten-days-weekday">
-          <div>{{ day.weekday }}</div>
-          <div>{{ day.date }}</div>
-        </div>
-        <div class="ten-days-icon">
-          <BaseIcon width="46" :name="day.condition" pick="light" />
-        </div>
-        <div class="ten-days-temp-item"></div>
-        <div class="ten-days-wind-descr">
-          <div>
-            <div>
-              <BaseIcon
-                width="8"
-                name="wind-direction-blue"
-                pick="common"
-                :transform="windDirection(getLocales, day.wind)"
-              />
-            </div>
-            <span>{{ day.wind.wind_dir[1] }}</span>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="ten-days-charts-temp">
+            <ChartsList />
           </div>
-          <div>{{ day.wind.value }} {{ day.wind.unit }}</div>
-        </div>
-        <div class="ten-days-pressure">
-          {{ day.pressure.value }}
-        </div>
-        <div class="ten-day-humidity">
-          {{ day.humidity.value }}{{ day.humidity.unit }}
-        </div>
-        <div class="ten-days-chevron-down">
-          <BaseIcon width="7" name="chevron-more-down" pick="common" />
+          <div
+            @click="toggle(index)"
+            :class="[
+              'ten-days-day',
+              { 'ten-days-weekend': day.weekend === true },
+            ]"
+            v-for="(day, index) in tenDaysTabTable"
+            :key="`d-${index}`"
+          >
+            <div class="ten-days-weekday">
+              <div>{{ day.weekday }}</div>
+              <div>{{ day.date }}</div>
+            </div>
+            <div class="ten-days-icon">
+              <BaseIcon width="46" :name="day.condition" pick="light" />
+            </div>
+            <div class="ten-days-temp-item"></div>
+            <div class="ten-days-wind-descr">
+              <div>
+                <div>
+                  <BaseIcon
+                    width="8"
+                    name="wind-direction-blue"
+                    pick="common"
+                    :transform="windDirection(getLocales, day.wind)"
+                  />
+                </div>
+                <span>{{ day.wind.wind_dir[1] }}</span>
+              </div>
+              <div>{{ day.wind.value }} {{ day.wind.unit }}</div>
+            </div>
+            <div class="ten-days-pressure">
+              {{ day.pressure.value }}
+            </div>
+            <div class="ten-day-humidity">
+              {{ day.humidity.value }}{{ day.humidity.unit }}
+            </div>
+            <div class="ten-days-chevron-down">
+              <BaseIcon width="7" name="chevron-more-down" pick="common" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -68,6 +75,14 @@ export default {
   components: {
     ChartsList,
     RowCaption,
+  },
+  data() {
+    return {
+      numOfColumns: 0,
+    };
+  },
+  mounted() {
+    this.numOfColumns = this.tenDaysTabTable.length;
   },
   computed: {
     tenDaysTabTable() {
@@ -94,14 +109,21 @@ export default {
 <style lang="scss" scoped>
 .ten-days-container {
   position: relative;
-  display: grid;
   background-color: #ffffff;
-  max-width: 100%;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
   border: 1px solid #d8e9f3;
-  border-top: none;
   border-bottom: none;
-
+}
+.swiper-container {
+  display: flex;
+  max-width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.swiper-wrapper {
+  flex: 1 0;
+  position: relative;
+  display: flex;
+  background-color: #ffffff;
   .ten-days-weekend {
     background-color: #f7fafd;
 
@@ -110,29 +132,29 @@ export default {
     }
   }
   & .ten-days-day {
-    // border: 1px solid #d8e9f3;
+    flex: 1 0;
+    min-width: 56px;
     cursor: pointer;
     transition: box-shadow 0.5s ease-in-out;
-    border-top: 1px solid #d8e9f3;
     border-bottom: 1px solid #d8e9f3;
     border-right: 1px solid #d8e9f3;
 
-    &:last-child {
+    &:last-child,
+    &:first-child {
       border-right: none;
     }
 
     &::before {
       position: absolute;
       content: "";
-      top: 1px;
       transition: box-shadow 0.3s ease-in-out;
-      width: calc(100% / 10 - 1px);
-      height: calc(100% - 2px);
+      height: calc(100% - 1px);
+      width: calc(100% / v-bind(numOfColumns));
       z-index: 10;
     }
 
     &:hover::before {
-      box-shadow: 0 0 0 3px #d2e7ff;
+      box-shadow: inset 0 0 0 3px #d2e7ff;
       border-radius: 1px;
     }
 
@@ -243,7 +265,11 @@ export default {
     transition: transform 0.3s ease-in-out;
   }
 }
-
+@media only screen and (max-width: 630px) {
+  .ten-days-container {
+    border: 1px solid #d8e9f3;
+  }
+}
 @media only screen and (max-width: 450px) {
   .ten-days-icon svg {
     width: 30px;
