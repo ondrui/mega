@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     toggle(index) {
-      this.$store.commit("toggleDetails", index + 1);
+      this.$store.dispatch("index", index + 1);
     },
   },
 };
@@ -96,7 +96,6 @@ export default {
   align-items: center;
   border: 1px solid #d6e2f0;
   padding: 0 32px 0 20px;
-  cursor: pointer;
   background: linear-gradient(359deg, #f9fcfe, #f0f7fc);
 }
 .date-text-short > div:first-child {

@@ -157,7 +157,7 @@ export default new Vuex.Store({
      */
     tenDaysTabTable: ({ datasetsTenDays }, { getLocales }) => {
       const arr = Object.values(datasetsTenDays)
-        .slice(0, -1)
+        // .slice(0, -1)
         .filter((f, i, a) => i !== a.length - 1)
         .map((e) => {
           const weekday = setTimeFormat(e.start_date, "D", getLocales);
@@ -217,7 +217,7 @@ export default new Vuex.Store({
     tenDaysTabTempCharts: ({ datasetsTenDays }, { getLocales }) => {
       const arr = Object.values(datasetsTenDays);
       const dayTemp = arr
-        .slice(0, -1)
+        // .slice(0, -1)
         .map((e) =>
           /**
            * Проверяем есть ли поле day в объекте с данными за сутки,
@@ -232,7 +232,7 @@ export default new Vuex.Store({
          */
         .filter((f, i, a) => i !== a.length - 1);
       const nightTemp = arr
-        .slice(0, -1)
+        // .slice(0, -1)
         .map((e) =>
           /**
            * Проверяем есть ли поле night в объекте с данными за сутки,
@@ -736,13 +736,25 @@ export default new Vuex.Store({
     setDataAPI(state, { hourly }) {
       state.dataFromAPI = hourly;
     },
-    toggleDetails(state, index) {
+    toggleDetails(state, [index, num]) {
+      console.log("index", index, "num", num);
       Object.keys(state.datasetsTenDays).map(
         (e) => (state.datasetsTenDays[e].isOpen = false)
       );
       state.datasetsTenDays[index].isOpen = true;
+      // if (index < num) {
+      //   Object.keys(state.datasetsTenDays).map(
+      //     (e) => (state.datasetsTenDays[e].isOpen = false)
+      //   );
+      //   state.datasetsTenDays[index].isOpen = true;
+      // }
     },
   },
-  actions: {},
+  actions: {
+    index({ commit, getters }, index) {
+      const num = Object.keys(getters.tenDaysDetailsChart).length + 1;
+      commit("toggleDetails", [index, num]);
+    },
+  },
   modules: {},
 });

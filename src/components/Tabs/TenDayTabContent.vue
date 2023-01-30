@@ -15,9 +15,6 @@
       </RowCaption>
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <div class="ten-days-charts-temp">
-            <ChartsList />
-          </div>
           <div
             @click="toggle(index)"
             :class="[
@@ -59,6 +56,9 @@
               <BaseIcon width="7" name="chevron-more-down" pick="common" />
             </div>
           </div>
+          <div class="ten-days-charts-temp">
+            <ChartsList />
+          </div>
         </div>
       </div>
     </div>
@@ -76,14 +76,6 @@ export default {
     ChartsList,
     RowCaption,
   },
-  data() {
-    return {
-      numOfColumns: 0,
-    };
-  },
-  mounted() {
-    this.numOfColumns = this.tenDaysTabTable.length;
-  },
   computed: {
     tenDaysTabTable() {
       return this.$store.getters.tenDaysTabTable;
@@ -99,7 +91,7 @@ export default {
       if (index === 0) {
         this.$emit("go");
       } else {
-        this.$store.commit("toggleDetails", index);
+        this.$store.dispatch("index", index);
       }
     },
   },
@@ -132,6 +124,7 @@ export default {
     }
   }
   & .ten-days-day {
+    position: relative;
     flex: 1 0;
     min-width: 56px;
     cursor: pointer;
@@ -139,8 +132,7 @@ export default {
     border-bottom: 1px solid #d8e9f3;
     border-right: 1px solid #d8e9f3;
 
-    &:last-child,
-    &:first-child {
+    &:nth-last-child(2) {
       border-right: none;
     }
 
@@ -148,8 +140,8 @@ export default {
       position: absolute;
       content: "";
       transition: box-shadow 0.3s ease-in-out;
-      height: calc(100% - 1px);
-      width: calc(100% / v-bind(numOfColumns));
+      height: 100%;
+      width: 100%;
       z-index: 10;
     }
 
@@ -165,7 +157,6 @@ export default {
     }
 
     & > div {
-      // flex: 1;
       border-bottom: 1px solid #d8e9f3;
       position: relative;
 
@@ -269,6 +260,9 @@ export default {
   .ten-days-container {
     border: 1px solid #d8e9f3;
   }
+  // .swiper-container {
+  //   overflow-x: scroll;
+  // }
 }
 @media only screen and (max-width: 450px) {
   .ten-days-icon svg {

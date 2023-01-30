@@ -5,7 +5,7 @@
     </h1>
     <div
       ref="item"
-      :class="['wrapper-list', { open: item.isOpen }]"
+      :class="['wrapper-list', { open: item.isOpen && index < 10 }]"
       v-for="(item, index) in tenDaysDetailsCard"
       :key="`s-${index}`"
       tabindex="0"
@@ -13,7 +13,7 @@
       <CardDetailDay class="card" :value="item" :index="index" />
       <Transition>
         <ContentDetailDay
-          v-if="item.isOpen"
+          v-if="item.isOpen && index < 10"
           :data="tenDaysDetailsChart[`${index + 1}`]"
         />
       </Transition>
@@ -50,6 +50,7 @@ export default {
   methods: {
     languageExpressions,
     focus() {
+      console.log("focus");
       const index = this.tenDaysDetailsCard.findIndex((i) => i.isOpen === true);
       // if (index !== -1) this.$refs.item[index].focus();
       if (index !== -1)
@@ -84,17 +85,18 @@ export default {
   position: relative;
   margin-top: 12px;
 }
-.card {
+.wrapper-list:nth-child(-n + 11) .card {
   transition: box-shadow 0.3s ease-in-out;
+  cursor: pointer;
 }
-.card:hover {
+.wrapper-list:nth-child(-n + 11) .card:hover {
   box-shadow: 0 0 0 2px #d2e7ff;
   border-radius: 1px;
 }
 .card:hover::after {
   transform: scale(2);
 }
-.card::after {
+.wrapper-list:nth-child(-n + 11) .card::after {
   content: "";
   display: inline-block;
   background: url("@/assets/images/common/chevron-more-down.svg?external")
