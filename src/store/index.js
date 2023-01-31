@@ -522,6 +522,8 @@ export default new Vuex.Store({
         );
         obj[key] = showArr;
       }
+      const length = Object.keys(obj).length;
+      obj.length = length;
       return obj;
     },
     /**
@@ -736,8 +738,7 @@ export default new Vuex.Store({
     setDataAPI(state, { hourly }) {
       state.dataFromAPI = hourly;
     },
-    toggleDetails(state, [index, num]) {
-      console.log("index", index, "num", num);
+    toggleDetails(state, [index]) {
       Object.keys(state.datasetsTenDays).map(
         (e) => (state.datasetsTenDays[e].isOpen = false)
       );
@@ -752,7 +753,7 @@ export default new Vuex.Store({
   },
   actions: {
     index({ commit, getters }, index) {
-      const num = Object.keys(getters.tenDaysDetailsChart).length + 1;
+      const num = getters.tenDaysDetailsChart.length + 1;
       commit("toggleDetails", [index, num]);
     },
   },

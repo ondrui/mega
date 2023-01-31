@@ -5,7 +5,7 @@
     </h1>
     <div
       ref="item"
-      :class="['wrapper-list', { open: item.isOpen && index < 10 }]"
+      :class="['wrapper-list', { open: isOpen(index) }]"
       v-for="(item, index) in tenDaysDetailsCard"
       :key="`s-${index}`"
       tabindex="0"
@@ -13,7 +13,7 @@
       <CardDetailDay class="card" :value="item" :index="index" />
       <Transition>
         <ContentDetailDay
-          v-if="item.isOpen && index < 10"
+          v-if="isOpen(index)"
           :data="tenDaysDetailsChart[`${index + 1}`]"
         />
       </Transition>
@@ -50,7 +50,6 @@ export default {
   methods: {
     languageExpressions,
     focus() {
-      console.log("focus");
       const index = this.tenDaysDetailsCard.findIndex((i) => i.isOpen === true);
       // if (index !== -1) this.$refs.item[index].focus();
       if (index !== -1)
@@ -59,8 +58,11 @@ export default {
           behavior: "smooth",
         });
     },
-    visibleChart(bool) {
-      return bool ? "visible" : "hidden";
+    isOpen(index) {
+      return (
+        this.tenDaysDetailsCard[index].isOpen &&
+        index < this.tenDaysDetailsChart.length
+      );
     },
   },
 };
