@@ -321,6 +321,22 @@ export default new Vuex.Store({
           date: [weekday, day],
           sunrise: datasetsHourly[key]["sunrise"],
           sunset: datasetsHourly[key]["sunset"],
+          dayLength: {
+            value: daytime(
+              datasetsHourly[key]["sunrise"],
+              datasetsHourly[key]["sunset"]
+            ),
+            sunrise: setTimeFormat(
+              datasetsHourly[key]["sunrise"],
+              "H:i",
+              getLocales
+            ),
+            sunset: setTimeFormat(
+              datasetsHourly[key]["sunset"],
+              "H:i",
+              getLocales
+            ),
+          },
         };
       }
       return obj;

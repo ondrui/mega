@@ -44,6 +44,9 @@
             v-for="(date, indexParent) in hourlyTabTable"
             :key="`d-${indexParent}`"
           >
+            <div class="day-length-chart">
+              <DayLengthChart :datasets="date" />
+            </div>
             <div class="date-header">
               <div class="date-text">
                 <span
@@ -60,6 +63,7 @@
                 :ref="addRef(indexParent, index, hourlyTabTable, date.values)"
               >
                 <div class="time">{{ value.hour }}</div>
+                <div class="day-length"></div>
                 <div class="hourly-icon">
                   <BaseIcon
                     width="34"
@@ -99,6 +103,7 @@
 
 <script>
 import ChartHourlyTempList from "../SVGCharts/hourly/ChartHourlyTempList.vue";
+import DayLengthChart from "../SVGCharts/hourly/DayLengthChart.vue";
 import RowCaption from "@/components/RowCaption.vue";
 import { languageExpressions } from "@/constants/locales";
 import { windDirection } from "@/constants/functions";
@@ -107,6 +112,7 @@ export default {
   components: {
     ChartHourlyTempList,
     RowCaption,
+    DayLengthChart,
   },
   data() {
     return {
@@ -246,6 +252,7 @@ export default {
   }
 }
 .date-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   border-right: 2px solid #d8e9f3;
@@ -289,7 +296,8 @@ export default {
       position: relative;
 
       &:last-child,
-      &:nth-child(2) {
+      &:nth-child(2),
+      &:nth-child(3) {
         border-bottom: none;
       }
     }
@@ -312,6 +320,9 @@ export default {
   line-height: 16px;
   color: #333333;
 }
+.day-length {
+  height: 30px;
+}
 .hourly-temp-item {
   height: 180px;
 }
@@ -323,19 +334,26 @@ export default {
   align-items: center;
 }
 .wind {
-  top: 300px;
+  top: 330px;
 }
 .pressure {
-  top: 354px;
+  top: 384px;
 }
 .humidity {
-  top: 389px;
+  top: 419px;
 }
 .hourly-charts-temp {
   position: absolute;
-  top: 116px;
+  top: 146px;
   width: 100%;
   height: 170px;
+  z-index: 10;
+}
+.day-length-chart {
+  position: absolute;
+  top: 68px;
+  width: 100%;
+  height: 30px;
   z-index: 10;
 }
 .hourly-wind-descr {
