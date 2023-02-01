@@ -78,28 +78,39 @@ export default {
           ? this.calcX("sunrise") +
               (this.calcX("sunset") - this.calcX("sunrise")) / 2 -
               15
-          : this.width / 2;
+          : this.width / 2 - 35;
       };
+      const sunrise = () => {
+        const x = this.calcX("sunrise");
+        return x >= 40 ? x : 40;
+      };
+      const sunset = () => {
+        const x = this.calcX("sunset");
+        return x >= this.width - 60 ? this.width - 60 : x;
+      };
+      console.log(sunrise(), sunset());
       return {
-        sunriseIcon: this.calcX("sunrise"),
-        sunriseText: this.calcX("sunrise") - 30,
-        sunsetIcon: this.calcX("sunset"),
-        sunsetText: this.calcX("sunset") + 25,
+        sunriseIcon: sunrise(),
+        sunriseText: sunrise() - 30,
+        sunsetIcon: sunset(),
+        sunsetText: sunset() + 25,
         longText: longText(),
-        startLine: this.isShowSunrise ? this.calcX("sunrise") + 25 : 0,
-        endLine: this.isShowSunset ? this.calcX("sunset") - 5 : this.width,
+        startLine: this.isShowSunrise ? sunrise() + 25 : 0,
+        endLine: this.isShowSunset ? sunset() - 4 : this.width,
       };
     },
     isShowSunrise() {
       return (
         this.datasets.sunrise &&
-        this.datasets.dayLength.sunrise >= this.datasets.values[0].hour
+        this.datasets.dayLength.sunrise >= this.datasets.values[0].hour &&
+        this.datasets.values.at(-1).hour >= this.datasets.dayLength.sunrise
       );
     },
     isShowSunset() {
       return (
         this.datasets.sunset &&
-        this.datasets.values.at(-1).hour >= this.datasets.dayLength.sunset
+        this.datasets.values.at(-1).hour >= this.datasets.dayLength.sunset &&
+        this.datasets.dayLength.sunset >= this.datasets.values[0].hour
       );
     },
     isShowDayLength() {
@@ -111,7 +122,10 @@ export default {
       );
     },
     isShowLine() {
-      return this.datasets.polar !== "night";
+      return (
+        (this.datasets.polar !== "night" && this.isShowSunrise) ||
+        this.isShowSunset
+      );
     },
   },
   methods: {
