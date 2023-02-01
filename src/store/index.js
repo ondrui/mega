@@ -316,26 +316,27 @@ export default new Vuex.Store({
             };
           }
         );
+        const time =
+          datasetsHourly[key]["sunrise"] && datasetsHourly[key]["sunset"]
+            ? daytime(
+                datasetsHourly[key]["sunrise"],
+                datasetsHourly[key]["sunset"]
+              )
+            : undefined;
         obj[key] = {
           values: showArr,
           date: [weekday, day],
+          polar: datasetsHourly[key]["polar"] ?? undefined,
           sunrise: datasetsHourly[key]["sunrise"],
           sunset: datasetsHourly[key]["sunset"],
           dayLength: {
-            value: daytime(
-              datasetsHourly[key]["sunrise"],
-              datasetsHourly[key]["sunset"]
-            ),
-            sunrise: setTimeFormat(
-              datasetsHourly[key]["sunrise"],
-              "H:i",
-              getLocales
-            ),
-            sunset: setTimeFormat(
-              datasetsHourly[key]["sunset"],
-              "H:i",
-              getLocales
-            ),
+            value: time,
+            sunrise: datasetsHourly[key]["sunrise"]
+              ? setTimeFormat(datasetsHourly[key]["sunrise"], "H:i", getLocales)
+              : undefined,
+            sunset: datasetsHourly[key]["sunset"]
+              ? setTimeFormat(datasetsHourly[key]["sunset"], "H:i", getLocales)
+              : undefined,
           },
         };
       }
@@ -359,7 +360,8 @@ export default new Vuex.Store({
           const date = formatDate.map((el) =>
             setTimeFormat(e.start_date, el, getLocales)
           );
-
+          const time =
+            e.sunrise && e.sunset ? daytime(e.sunrise, e.sunset) : undefined;
           return {
             weekday,
             date,
@@ -454,11 +456,15 @@ export default new Vuex.Store({
                   "climateIndicators",
                   "daytime"
                 ),
-                value_mob: daytime(e.sunrise, e.sunset),
-                value: daytime(e.sunrise, e.sunset),
+                value_mob: time,
+                value: time,
               },
-              sunrise: setTimeFormat(e.sunrise, "H:i", getLocales),
-              sunset: setTimeFormat(e.sunset, "H:i", getLocales),
+              sunrise: e.sunrise
+                ? setTimeFormat(e.sunrise, "H:i", getLocales)
+                : undefined,
+              sunset: e.sunset
+                ? setTimeFormat(e.sunset, "H:i", getLocales)
+                : undefined,
             },
           };
         })

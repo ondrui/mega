@@ -6,6 +6,7 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <line
+      v-show="isShowLine"
       :x1="calcCoordinates.startLine"
       y1="15"
       :x2="calcCoordinates.endLine"
@@ -23,8 +24,11 @@
         width="20"
       />
     </g>
-    <text y="18" :x="calcCoordinates.longText">
-      {{ datasets.dayLength.value }}
+    <text v-show="isShowDayLength" y="18" :x="calcCoordinates.longText">
+      {{
+        datasets.dayLength.value ??
+        languageExpressions(getLocales, "polar", datasets?.polar)
+      }}
     </text>
     <g v-show="isShowSunset">
       <BaseIcon
@@ -42,6 +46,8 @@
 </template>
 
 <script>
+import { languageExpressions } from "@/constants/locales";
+
 export default {
   props: ["datasets"],
   data() {
@@ -60,58 +66,68 @@ export default {
     },
   },
   computed: {
+    getLocales() {
+      return this.$store.getters.getLocales;
+    },
     viewbox() {
       return `0 0 ${this.width} ${this.height}`;
     },
     calcCoordinates() {
-      const longText =
-        this.calcX("sunrise") +
-        (this.calcX("sunset") - this.calcX("sunrise")) / 2 -
-        20;
+      const longText = () => {
+        return !this.datasets.polar
+          ? this.calcX("sunrise") +
+              (this.calcX("sunset") - this.calcX("sunrise")) / 2 -
+              15
+          : this.width / 2;
+      };
       return {
         sunriseIcon: this.calcX("sunrise"),
         sunriseText: this.calcX("sunrise") - 30,
         sunsetIcon: this.calcX("sunset"),
         sunsetText: this.calcX("sunset") + 25,
-        longText,
-        startLine: this.calcX("sunrise") + 25 ?? 0,
-        endLine: this.calcX("sunset") - 5 ?? 0,
+        longText: longText(),
+        startLine: this.isShowSunrise ? this.calcX("sunrise") + 25 : 0,
+        endLine: this.isShowSunset ? this.calcX("sunset") - 5 : this.width,
       };
     },
     isShowSunrise() {
-      const diff =
-        this.datasets.dayLength.sunrise.slice(0, 2) -
-        this.datasets.values[0].hour.slice(0, 2);
-      return this.datasets.sunrise && diff > 0;
+      return (
+        this.datasets.sunrise &&
+        this.datasets.dayLength.sunrise >= this.datasets.values[0].hour
+      );
     },
     isShowSunset() {
-      const diff =
-        this.datasets.dayLength.sunset.slice(0, 2) -
-        this.datasets.values[0].hour.slice(0, 2);
-      console.log(diff);
-      return this.datasets.sunset && diff >= 0;
+      return (
+        this.datasets.sunset &&
+        this.datasets.values.at(-1).hour >= this.datasets.dayLength.sunset
+      );
+    },
+    isShowDayLength() {
+      return (
+        (this.datasets.dayLength.value &&
+          this.isShowSunset &&
+          this.isShowSunrise) ||
+        this.datasets.polar
+      );
+    },
+    isShowLine() {
+      return this.datasets.polar !== "night";
     },
   },
   methods: {
-    calcX(point = "sunrise") {
-      if (this.datasets.values[0].hour !== "00:00") {
-        // return console.log("waw");
-        const day = (23 - this.datasets.values[0].hour.slice(0, 2)) * 60 + 60;
-        const mPoint =
-          this.datasets.dayLength[point].slice(0, 2) * 60 +
-          parseInt(this.datasets.dayLength[point].slice(3)) +
-          30;
-        const x = (this.width * mPoint) / day - 9;
-        console.log(day);
-        return x;
-      }
-      // const mWidth = this.width / this.datasets.values.length / 60;
-      const day = (23 - this.datasets.values[0].hour.slice(0, 2)) * 60 + 60;
+    languageExpressions,
+    calcX(point) {
+      if (!this.datasets[point]) return 0;
+      const day = this.datasets.values.length * 60;
+      const start =
+        this.datasets.values[0].hour.slice(0, 2) * 60 +
+        parseInt(this.datasets.values[0].hour.slice(3));
       const mPoint =
         this.datasets.dayLength[point].slice(0, 2) * 60 +
         parseInt(this.datasets.dayLength[point].slice(3)) +
-        30;
-      const x = (this.width * mPoint) / day - 9;
+        30 -
+        start;
+      const x = (this.width * mPoint) / day - 10;
       return x;
     },
     /**

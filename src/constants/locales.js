@@ -51,6 +51,10 @@ const dataLocales = {
       nw: [135, "сз"],
     },
     weekendDays: ["вс", "сб"],
+    polar: {
+      day: "полярный день",
+      night: "полярная ночь",
+    },
   },
   en: {
     en: {
