@@ -79,6 +79,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+svg {
+  display: block;
+}
 .card-content__info {
   display: grid;
   justify-items: end;

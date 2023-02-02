@@ -54,6 +54,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+svg {
+  display: block;
+}
 .day-length-block {
   display: flex;
   flex-direction: column;

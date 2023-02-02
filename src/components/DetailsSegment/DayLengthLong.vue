@@ -48,6 +48,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+svg {
+  display: block;
+}
 .day-length-block {
   display: flex;
   align-items: center;
