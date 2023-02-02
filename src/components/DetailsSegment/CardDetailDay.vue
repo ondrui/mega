@@ -41,9 +41,11 @@
           <DayLengthLong class="length-block" :value="value" />
           <div class="card-content__item-wrapper">
             <CardDetailDayItem
+              :class="{ highlight: item === highlightItem }"
               v-for="(item, index) in items"
               :key="`cn-${index}`"
               :value="value[item]"
+              :item="item"
             />
           </div>
         </div>
@@ -69,6 +71,11 @@ export default {
     return {
       items: ["wind", "humidity", "wind_gust", "uvi", "pressure", "comf_idx"],
     };
+  },
+  computed: {
+    highlightItem() {
+      return this.$store.getters.highlightItem;
+    },
   },
   methods: {
     toggle(index) {
@@ -189,6 +196,12 @@ export default {
 }
 .card-content__date > div {
   text-align: center;
+}
+
+.highlight {
+  box-shadow: 0 0 0 2px #d2e7ff;
+  border-radius: 1px;
+  border-top: 1px solid rgba(#d2e7ff, 0);
 }
 
 @media only screen and (max-width: 700px) {
