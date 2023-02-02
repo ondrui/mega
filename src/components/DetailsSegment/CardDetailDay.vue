@@ -41,11 +41,9 @@
           <DayLengthLong class="length-block" :value="value" />
           <div class="card-content__item-wrapper">
             <CardDetailDayItem
-              :class="{ highlight: item === highlightItem }"
               v-for="(item, index) in items"
               :key="`cn-${index}`"
               :value="value[item]"
-              :item="item"
             />
           </div>
         </div>
@@ -71,11 +69,6 @@ export default {
     return {
       items: ["wind", "humidity", "wind_gust", "uvi", "pressure", "comf_idx"],
     };
-  },
-  computed: {
-    highlightItem() {
-      return this.$store.getters.highlightItem;
-    },
   },
   methods: {
     toggle(index) {
@@ -198,12 +191,6 @@ export default {
   text-align: center;
 }
 
-.highlight {
-  box-shadow: 0 0 0 2px #d2e7ff;
-  border-radius: 1px;
-  border-top: 1px solid rgba(#d2e7ff, 0);
-}
-
 @media only screen and (max-width: 700px) {
   .card-content {
     grid-template-columns: 0.2fr 0.8fr minmax(80px, 0.4fr) 1.2fr;
@@ -242,7 +229,7 @@ export default {
   }
   .card-content__condition {
     margin-top: 10px;
-    height: 80px;
+    padding-bottom: 20px;
     grid-area: c;
     border-bottom: 1px solid #d6e2f0;
 
@@ -299,7 +286,7 @@ export default {
     display: none;
   }
   .card-content__text {
-    align-self: flex-start;
+    align-self: center;
     & > div:first-child {
       // min-width: 125px;
       font-weight: 300;

@@ -73,22 +73,22 @@ export default {
       return `0 0 ${this.width} ${this.height}`;
     },
     calcCoordinates() {
-      const longText = () => {
-        return !this.datasets.polar
-          ? this.calcX("sunrise") +
-              (this.calcX("sunset") - this.calcX("sunrise")) / 2 -
-              15
-          : this.width / 2 - 35;
-      };
       const sunrise = () => {
         const x = this.calcX("sunrise");
         return x >= 40 ? x : 40;
       };
       const sunset = () => {
         const x = this.calcX("sunset");
-        return x >= this.width - 60 ? this.width - 60 : x;
+        const diff = x - sunrise();
+        if (x >= this.width - 60) return this.width - 60;
+        if (diff < 30) return sunrise() + 30;
+        return x;
       };
-      console.log(sunrise(), sunset());
+      const longText = () => {
+        if (this.datasets.polar) return this.width / 2 - 35;
+        if (!this.isShowSunrise) return sunset() / 2 - 25;
+        return sunrise() + (sunset() - sunrise()) / 2 - 15;
+      };
       return {
         sunriseIcon: sunrise(),
         sunriseText: sunrise() - 30,
@@ -97,6 +97,7 @@ export default {
         longText: longText(),
         startLine: this.isShowSunrise ? sunrise() + 25 : 0,
         endLine: this.isShowSunset ? sunset() - 4 : this.width,
+        diffSunriseSunset: sunset() - sunrise(),
       };
     },
     isShowSunrise() {
@@ -117,14 +118,14 @@ export default {
       return (
         (this.datasets.dayLength.value &&
           this.isShowSunset &&
-          this.isShowSunrise) ||
+          this.calcCoordinates.sunsetIcon > 75 &&
+          this.calcCoordinates.diffSunriseSunset > 90) ||
         this.datasets.polar
       );
     },
     isShowLine() {
       return (
-        (this.datasets.polar !== "night" && this.isShowSunrise) ||
-        this.isShowSunset
+        this.datasets.polar === "day" || this.isShowSunrise || this.isShowSunset
       );
     },
   },

@@ -13,7 +13,6 @@ export default new Vuex.Store({
     datasetsTenDays: null,
     datasetsThreeHour: null,
     dataFromAPI: null,
-    highlightItem: "",
     chartSettings: [
       {
         title: "linear_0",
@@ -56,9 +55,6 @@ export default new Vuex.Store({
      */
     loading(state) {
       return state.datasetsHourly;
-    },
-    highlightItem({ highlightItem }) {
-      return highlightItem;
     },
     /**
      * Возвращает данные для отображения в шапке виджета.
@@ -469,6 +465,7 @@ export default new Vuex.Store({
               sunset: e.sunset
                 ? setTimeFormat(e.sunset, "H:i", getLocales)
                 : undefined,
+              polar: e.polar ?? undefined,
             },
           };
         })
@@ -775,14 +772,6 @@ export default new Vuex.Store({
       //   );
       //   state.datasetsTenDays[index].isOpen = true;
       // }
-    },
-    setHighlightItem(state, item) {
-      console.log(item);
-      state.highlightItem = "";
-      state.highlightItem = item;
-    },
-    removeHighlightItem(state) {
-      state.highlightItem = "";
     },
   },
   actions: {

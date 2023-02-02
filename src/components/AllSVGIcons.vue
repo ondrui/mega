@@ -27,6 +27,7 @@ export default {
         "sunset-1-common",
         "sun-1-common",
         "sun-2-common",
+        "moon-1-common",
         "wind-direction-blue-common",
         "wind-direction-grey-common",
         "wind-gust-common",

@@ -1,13 +1,22 @@
 <template>
   <div class="day-length-block">
     <div>
-      <BaseIcon name="sun-2" pick="common" width="11" />
-      <BaseIcon name="arrow-up" pick="common" width="5" />
-      {{ value.dayLength.sunrise }}
-      <BaseIcon name="arrow-down" pick="common" width="5" />
-      {{ value.dayLength.sunset }}
+      <div v-show="isShowPolar">
+        <BaseIcon :name="namePolarIcon" pick="common" width="20" />
+        <div class="polar-text">
+          {{ languageExpressions(getLocales, "polar", value.dayLength?.polar) }}
+        </div>
+      </div>
+      <div v-show="isShowSunrise">
+        <BaseIcon name="sunrise-1" pick="common" width="20" />
+        {{ value.dayLength.sunrise }}
+      </div>
+      <div v-show="isShowSunset">
+        <BaseIcon name="sunset-1" pick="common" width="20" />
+        {{ value.dayLength.sunset }}
+      </div>
     </div>
-    <div>
+    <div v-show="isShowDayLength">
       <span>{{ value.dayLength.daytime.title }}:</span>&nbsp;{{
         value.dayLength.daytime.value_mob
       }}
@@ -15,8 +24,33 @@
   </div>
 </template>
 <script>
+import { languageExpressions } from "@/constants/locales";
+
 export default {
   props: ["value"],
+  computed: {
+    getLocales() {
+      return this.$store.getters.getLocales;
+    },
+    isShowSunrise() {
+      return !!this.value.dayLength.sunrise;
+    },
+    isShowDayLength() {
+      return !!this.value.dayLength.daytime.value;
+    },
+    isShowSunset() {
+      return !!this.value.dayLength.sunset;
+    },
+    isShowPolar() {
+      return !!this.value.dayLength.polar;
+    },
+    namePolarIcon() {
+      return this.value.dayLength.polar === "day" ? "sun-1" : "moon-1";
+    },
+  },
+  methods: {
+    languageExpressions,
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -31,9 +65,15 @@ export default {
   color: #333333;
 
   & > div:first-child {
-    width: 102px;
+    min-width: 102px;
     display: flex;
-    justify-content: space-between;
+    column-gap: 6px;
+
+    & > div {
+      display: flex;
+      align-items: center;
+      column-gap: 4px;
+    }
   }
 
   & span {
@@ -46,6 +86,9 @@ export default {
       text-transform: capitalize;
     }
   }
+}
+.polar-text::first-letter {
+  text-transform: capitalize;
 }
 @media only screen and (max-width: 600px) {
   .day-length-block span {
