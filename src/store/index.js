@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { languageExpressions } from "@/constants/locales";
-import { setTimeFormat, daytime } from "@/constants/functions";
+import { setTimeFormat, daytime, addPlus } from "@/constants/functions";
 
 Vue.use(Vuex);
 
@@ -109,12 +109,14 @@ export default new Vuex.Store({
         )} ${time} ${languageExpressions(getLocales, "header", "forecast")}`,
         icon: data.condition,
         descr: data.condition_s,
-        temp: `${data.temp > 0 ? `+${data.temp}` : data.temp}${
+        temp: `${addPlus(data.temp)}${
           languageExpressions(getLocales, "units", "temp")[0]
         }`,
-        realFeel: `${languageExpressions(getLocales, "header", "feelsLike")} ${
-          data.feels_like > 0 ? `+${data.feels_like}` : data.feels_like
-        }`,
+        realFeel: `${languageExpressions(
+          getLocales,
+          "header",
+          "feelsLike"
+        )} ${addPlus(data.feels_like)}`,
       };
     },
     /**
@@ -188,42 +190,40 @@ export default new Vuex.Store({
      * @param getLocales Языковая метка.
      */
     tenDaysTabTable: ({ datasetsTenDays }, { getLocales }) => {
-      const arr = Object.values(datasetsTenDays)
-        // .slice(0, -1)
-        .filter((f, i, a) => i !== a.length - 1)
-        .map((e) => {
-          const weekday = setTimeFormat(e.start_date, "D", getLocales);
-          return {
-            weekday: weekday,
-            weekend:
-              weekday ===
-                `${languageExpressions(getLocales, "weekendDays")[0]}` ||
-              weekday ===
-                `${languageExpressions(getLocales, "weekendDays")[1]}`,
-            date: setTimeFormat(e.start_date, "d.m", getLocales),
-            condition: e.day.condition,
-            prec_sum: {
-              value: e.day.prec_sum,
-              unit: languageExpressions(getLocales, "units", "precSum")[0],
-            },
-            wind: {
-              value: e.day.wind_speed,
-              unit: languageExpressions(getLocales, "units", "speed")[0],
-              wind_dir: [
-                e.day.wind_dir,
-                languageExpressions(getLocales, "windDir", e.day.wind_dir)[1],
-              ],
-            },
-            pressure: {
-              value: e.day.pressure,
-              unit: languageExpressions(getLocales, "units", "pressure")[0],
-            },
-            humidity: {
-              value: e.day.humidity,
-              unit: languageExpressions(getLocales, "units", "percent")[0],
-            },
-          };
-        });
+      const valuesArr = Object.values(datasetsTenDays);
+      const sliceEndIndex = valuesArr.length > 12 ? -1 : -2;
+      const arr = valuesArr.slice(0, sliceEndIndex).map((e) => {
+        const weekday = setTimeFormat(e.start_date, "D", getLocales);
+        return {
+          weekday: weekday,
+          weekend:
+            weekday ===
+              `${languageExpressions(getLocales, "weekendDays")[0]}` ||
+            weekday === `${languageExpressions(getLocales, "weekendDays")[1]}`,
+          date: setTimeFormat(e.start_date, "d.m", getLocales),
+          condition: e.day.condition,
+          prec_sum: {
+            value: e.day.prec_sum,
+            unit: languageExpressions(getLocales, "units", "precSum")[0],
+          },
+          wind: {
+            value: e.day.wind_speed,
+            unit: languageExpressions(getLocales, "units", "speed")[0],
+            wind_dir: [
+              e.day.wind_dir,
+              languageExpressions(getLocales, "windDir", e.day.wind_dir)[1],
+            ],
+          },
+          pressure: {
+            value: e.day.pressure,
+            unit: languageExpressions(getLocales, "units", "pressure")[0],
+          },
+          humidity: {
+            value: e.day.humidity,
+            unit: languageExpressions(getLocales, "units", "percent")[0],
+          },
+        };
+      });
       return arr;
     },
     /**
@@ -248,36 +248,30 @@ export default new Vuex.Store({
      */
     tenDaysTabTempCharts: ({ datasetsTenDays }, { getLocales }) => {
       const arr = Object.values(datasetsTenDays);
-      const dayTemp = arr
-        // .slice(0, -1)
-        .map((e) =>
-          /**
-           * Проверяем есть ли поле day в объекте с данными за сутки,
-           * а также значение температуры.
-           */
-          e.day && e.day.temp_max !== undefined && e.day.temp_max !== null
-            ? e.day.temp_max
-            : null
-        )
+      const sliceEndIndexDay = arr.length > 12 ? -1 : -2;
+      const dayTemp = arr.slice(0, sliceEndIndexDay).map((e) =>
         /**
-         * Для дня отбрасываем донные за последние сутки.
+         * Проверяем есть ли поле day в объекте с данными за сутки,
+         * а также значение температуры.
          */
-        .filter((f, i, a) => i !== a.length - 1);
-      const nightTemp = arr
-        // .slice(0, -1)
-        .map((e) =>
-          /**
-           * Проверяем есть ли поле night в объекте с данными за сутки,
-           * а также значение температуры.
-           */
-          e.night && e.night.temp_min !== undefined && e.night.temp_min !== null
-            ? e.night.temp_min
-            : null
-        )
+        e.day && e.day.temp_max !== undefined && e.day.temp_max !== null
+          ? e.day.temp_max
+          : null
+      );
+      const sliceEndIndexNight = arr.length > 12 ? 0 : -1;
+      const nightTemp = arr.slice(1, sliceEndIndexNight).map((e) =>
         /**
-         * Для ночи отбрасываем донные за текучие сутки.
+         * Проверяем есть ли поле night в объекте с данными за сутки,
+         * а также значение температуры.
          */
-        .filter((f, i) => i !== 0);
+        e.night && e.night.temp_min !== undefined && e.night.temp_min !== null
+          ? e.night.temp_min
+          : null
+      );
+      /**
+       * Для ночи отбрасываем донные за текущие сутки.
+       */
+      // .filter((f, i) => i !== 0);
       /**
        * Вычисляем минимальную и максимальную температуру для ограничения
        * границ графика.
@@ -379,11 +373,14 @@ export default new Vuex.Store({
      * @param datasetsTenDays Текущее состояние store.state.datasetsTenDays.
      * @param getLocales Языковая метка.
      */
-    tenDaysDetailsCard: ({ datasetsTenDays }, { getLocales }) => {
+    tenDaysDetailsCard: (
+      { datasetsTenDays },
+      { getLocales, tenDaysTabTempCharts }
+    ) => {
       const arr = Object.values(datasetsTenDays)
-        // .slice(0, -1)
-        .filter((f, i) => i !== 0)
-        .map((e, index, array) => {
+        .slice(1, -1)
+        // .filter((f, i) => i !== 0)
+        .map((e, index) => {
           const formatWeekday = ["D", "l"];
           const weekday = formatWeekday.map((el) =>
             setTimeFormat(e.start_date, el, getLocales)
@@ -464,14 +461,12 @@ export default new Vuex.Store({
               }`,
             },
             temp: {
-              min: `${
-                array[index + 1]?.night.temp_min > 0
-                  ? `+${array[index + 1]?.night.temp_min}`
-                  : array[index + 1]?.night.temp_min
-              }${languageExpressions(getLocales, "units", "temp")[0]}`,
-              max: `${
-                e.day.temp_max > 0 ? `+${e.day.temp_max}` : e.day.temp_max
-              }${languageExpressions(getLocales, "units", "temp")[0]}`,
+              min: `${addPlus(tenDaysTabTempCharts[1].value[index + 1])}${
+                languageExpressions(getLocales, "units", "temp")[0]
+              }`,
+              max: `${addPlus(tenDaysTabTempCharts[0].value[index + 1])}${
+                languageExpressions(getLocales, "units", "temp")[0]
+              }`,
             },
             uvi: {
               title: languageExpressions(
@@ -500,8 +495,8 @@ export default new Vuex.Store({
               polar: e.polar ?? undefined,
             },
           };
-        })
-        .slice(0, -1);
+        });
+      // .slice(0, -1);
       return arr;
     },
     /**

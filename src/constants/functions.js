@@ -144,3 +144,7 @@ export const daytime = (sunrise, sunset, separator) => {
 
   return convertMsToHM();
 };
+
+export const addPlus = (item) => {
+  return item > 0 ? `+${item}` : item;
+};
