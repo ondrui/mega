@@ -7,7 +7,7 @@
         v-for="(value, key) in tabsList"
         :key="key"
       >
-        <span>{{ value }}</span>
+        <span>{{ showTitle(value, key) }}</span>
       </button>
     </div>
 
@@ -41,11 +41,22 @@ export default {
     tabsList() {
       return languageExpressions(this.getLocales, "tabsDescr");
     },
+    tenDaysTabTable() {
+      return this.$store.getters.tenDaysTabTable;
+    },
   },
   methods: {
     languageExpressions,
     showContent(key) {
       this.currentTab = `${key}`;
+    },
+    showTitle(value, key) {
+      return key === "HourlyTabContent"
+        ? value
+        : `${value.slice(0, 18)}${this.tenDaysTabTable.length}${value.slice(
+            17,
+            30
+          )}`;
     },
   },
 };

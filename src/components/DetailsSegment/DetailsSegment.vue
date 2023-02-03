@@ -1,7 +1,11 @@
 <template>
   <div class="segment-container">
     <h1 class="segment-title">
-      {{ languageExpressions(getLocales, "detailsSegmentTitle") }}
+      {{ languageExpressions(getLocales, "detailsSegmentTitle").slice(0, 39)
+      }}{{ tenDaysDetailsCard.length
+      }}{{
+        languageExpressions(getLocales, "detailsSegmentTitle").slice(38, 43)
+      }}
     </h1>
     <div
       ref="item"
@@ -45,6 +49,11 @@ export default {
     },
     tenDaysDetailsChart() {
       return this.$store.getters.tenDaysDetailsChart;
+    },
+    showTitle() {
+      return this.tenDaysDetailsCard > 7
+        ? this.languageExpressions(this.getLocales, "detailsSegmentTitle")[0]
+        : this.languageExpressions(this.getLocales, "detailsSegmentTitle")[1];
     },
   },
   methods: {

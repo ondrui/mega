@@ -459,14 +459,12 @@ export default new Vuex.Store({
               }`,
             },
             temp: {
-              min: `${
-                array[index + 1]?.night.temp_min > 0
-                  ? `+${array[index + 1]?.night.temp_min}`
-                  : array[index + 1]?.night.temp_min
-              }${languageExpressions(getLocales, "units", "temp")[0]}`,
-              max: `${
-                e.day.temp_max > 0 ? `+${e.day.temp_max}` : e.day.temp_max
-              }${languageExpressions(getLocales, "units", "temp")[0]}`,
+              min: `${addPlus(array[index + 1]?.night.temp_min)}${
+                languageExpressions(getLocales, "units", "temp")[0]
+              }`,
+              max: `${addPlus(e.day.temp_max)}${
+                languageExpressions(getLocales, "units", "temp")[0]
+              }`,
             },
             uvi: {
               title: languageExpressions(
@@ -511,7 +509,7 @@ export default new Vuex.Store({
       };
 
       const filteredData = Object.keys(datasetsThreeHour)
-        .filter((key, index, arr) => key !== "0" && key !== `${arr.length - 1}`)
+        .slice(1, -1)
         .reduce((obj, key) => {
           obj[key] = datasetsThreeHour[key];
           return obj;
