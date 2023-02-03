@@ -258,7 +258,7 @@ export default new Vuex.Store({
           ? e.day.temp_max
           : null
       );
-      const sliceEndIndexNight = arr.length > 12 ? 0 : -1;
+      const sliceEndIndexNight = arr.length > 12 ? arr.length : -1;
       const nightTemp = arr.slice(1, sliceEndIndexNight).map((e) =>
         /**
          * Проверяем есть ли поле night в объекте с данными за сутки,
@@ -373,14 +373,12 @@ export default new Vuex.Store({
      * @param datasetsTenDays Текущее состояние store.state.datasetsTenDays.
      * @param getLocales Языковая метка.
      */
-    tenDaysDetailsCard: (
-      { datasetsTenDays },
-      { getLocales, tenDaysTabTempCharts }
-    ) => {
-      const arr = Object.values(datasetsTenDays)
-        .slice(1, -1)
-        // .filter((f, i) => i !== 0)
-        .map((e, index) => {
+    tenDaysDetailsCard: ({ datasetsTenDays }, { getLocales }) => {
+      const valuesArr = Object.values(datasetsTenDays);
+      const sliceEndIndex = valuesArr.length > 12 ? 12 : valuesArr.length;
+      const arr = valuesArr
+        .slice(1, sliceEndIndex)
+        .map((e, index, array) => {
           const formatWeekday = ["D", "l"];
           const weekday = formatWeekday.map((el) =>
             setTimeFormat(e.start_date, el, getLocales)
@@ -461,12 +459,14 @@ export default new Vuex.Store({
               }`,
             },
             temp: {
-              min: `${addPlus(tenDaysTabTempCharts[1].value[index + 1])}${
-                languageExpressions(getLocales, "units", "temp")[0]
-              }`,
-              max: `${addPlus(tenDaysTabTempCharts[0].value[index + 1])}${
-                languageExpressions(getLocales, "units", "temp")[0]
-              }`,
+              min: `${
+                array[index + 1]?.night.temp_min > 0
+                  ? `+${array[index + 1]?.night.temp_min}`
+                  : array[index + 1]?.night.temp_min
+              }${languageExpressions(getLocales, "units", "temp")[0]}`,
+              max: `${
+                e.day.temp_max > 0 ? `+${e.day.temp_max}` : e.day.temp_max
+              }${languageExpressions(getLocales, "units", "temp")[0]}`,
             },
             uvi: {
               title: languageExpressions(
@@ -495,8 +495,8 @@ export default new Vuex.Store({
               polar: e.polar ?? undefined,
             },
           };
-        });
-      // .slice(0, -1);
+        })
+        .slice(0, -1);
       return arr;
     },
     /**
