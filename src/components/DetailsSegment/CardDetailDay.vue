@@ -211,6 +211,7 @@ svg {
     }
   }
   .card-content__date {
+    align-self: start;
     display: block;
     grid-area: a;
     justify-self: start;

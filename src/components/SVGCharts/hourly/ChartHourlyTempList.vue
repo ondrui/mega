@@ -15,6 +15,7 @@
 
 <script>
 import ChartHourlyTempItem from "./ChartHourlyTempItem.vue";
+import { addPlus } from "@/constants/functions";
 
 export default {
   components: {
@@ -86,11 +87,8 @@ export default {
                 textYFeels:
                   this.calcY(temp.value, max, min) +
                   (this.circleRadius + this.textSizeMin + 2),
-                temp: temp.value > 0 ? `+${temp.value}` : temp.value,
-                feels_like:
-                  feels_like.value > 0
-                    ? `+${feels_like.value}`
-                    : feels_like.value,
+                temp: addPlus(temp.value),
+                feels_like: addPlus(feels_like.value),
                 unit: temp.unit,
                 feels_like_unit: feels_like.unit,
               };

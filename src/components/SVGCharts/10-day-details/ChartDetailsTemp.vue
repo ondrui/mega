@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { addPlus } from "@/constants/functions";
 export default {
   props: {
     numData: {
@@ -121,11 +122,8 @@ export default {
               textYFeels:
                 this.calcY(temp.value, max, min) +
                 (this.circleRadius + this.textSize + 2),
-              temp: temp.value > 0 ? `+${temp.value}` : temp.value,
-              feels_like:
-                feels_like.value > 0
-                  ? `+${feels_like.value}`
-                  : feels_like.value,
+              temp: addPlus(temp.value),
+              feels_like: addPlus(feels_like.value),
               unit: temp.unit,
             };
             total.push(obj);
