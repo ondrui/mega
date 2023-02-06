@@ -108,7 +108,12 @@ export const setTimeFormat = (date, format, locales) => {
   }
   return dateFormated;
 };
-
+/**
+ * Возвращает команду поворота иконки ветра в соответствие с направлением ветра.
+ * @param locales Языковая метка.
+ * @param obj Объект с данными для отображения, в котором есть поле wind_dir.
+ * Поле wind_dir - значение указывает направление ветра.
+ */
 export const windDirection = (locales, obj) => {
   const { wind_dir } = obj;
   return wind_dir

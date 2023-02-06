@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     /**
-     * Get data from API.
+     * Get data from Internal vs External APIs.
      */
     async getData() {
       try {

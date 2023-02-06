@@ -27,6 +27,9 @@ import TenDayTabContent from "./TenDayTabContent.vue";
 export default {
   data() {
     return {
+      /**
+       * @param currentTab Имя открытой вкладки (кампоненты).
+       */
       currentTab: "HourlyTabContent",
     };
   },
@@ -38,6 +41,9 @@ export default {
     getLocales() {
       return this.$store.getters.getLocales;
     },
+    /**
+     * Подписи для вкладок.
+     */
     tabsList() {
       return languageExpressions(this.getLocales, "tabsDescr");
     },
@@ -47,9 +53,18 @@ export default {
   },
   methods: {
     languageExpressions,
+    /**
+     * Обработчик для установки имени открытой вкладки. Передается через параметр.
+     * @param key Строка содержит имя вкладки.
+     */
     showContent(key) {
       this.currentTab = `${key}`;
     },
+    /**
+     * Возвращает название вкладки с учетом количества дней прогноза.
+     * @param value Значение свойства, котороое содержит название вкладки.
+     * @param key Имя свойства, котороое содержит название вкладки.
+     */
     showTitle(value, key) {
       return key === "HourlyTabContent"
         ? value

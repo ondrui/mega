@@ -67,6 +67,9 @@
 
 <script>
 import ChartsList from "../SVGCharts/10-day-temp/ChartsList.vue";
+/**
+ * RowCaption.vue - компонента для отрисовки подписей погодных параметров.
+ */
 import RowCaption from "@/components/RowCaption.vue";
 import { languageExpressions } from "@/constants/locales";
 import { windDirection } from "@/constants/functions";
@@ -77,6 +80,10 @@ export default {
     RowCaption,
   },
   computed: {
+    /**
+     * Возвращает из store значения температур и другие данные для
+     * таблицы и графика на вкладке "Прогноз погоды на 7-14 дней".
+     */
     tenDaysTabTable() {
       return this.$store.getters.tenDaysTabTable;
     },
@@ -85,9 +92,25 @@ export default {
     },
   },
   methods: {
+    /**
+     * Возвращает строковые константы с учетом локали.
+     */
     languageExpressions,
+    /**
+     * Возвращает команду поворота иконки ветра в соответствие с направлением ветра.
+     */
     windDirection,
+    /**
+     * Обработчик для перехода по клику на выбранный день.
+     * @param index Порядковый намер (код) выбранного дня для перехода к карточке и
+     * графику с подробным прогнозом.
+     */
     toggle(index) {
+      /**
+       * Если выбран текущий день переходим на вкладку с часовым прогнозом. В остальных случаях
+       * переходим  к карточке и графику с подробным прогнозом выбранного дня,
+       * путем изменения значения флага isOpen в сторе store.state.datasetsTenDays.
+       */
       if (index === 0) {
         this.$emit("go");
       } else {

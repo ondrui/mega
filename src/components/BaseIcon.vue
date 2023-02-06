@@ -3,6 +3,9 @@
 </template>
 
 <script>
+/**
+ * Компонента для вставки иконок в формате SVG.
+ */
 const icons = {};
 const requireComponents = require.context(
   "../assets/images?inline",
@@ -18,11 +21,23 @@ requireComponents.keys().forEach((fileName) => {
 
 export default {
   props: {
+    /**
+     * Имя папки где хранится файл с изображением.
+     * common - папка со служебными иконками.
+     * light - погодные значки для темного времени суток.
+     * light - погодные значки для светлого времени суток.
+     */
     pick: String,
+    /**
+     * Имя иконки должно совпадать с названием файла svg в папке \src\assets\images
+     */
     name: {
       type: String,
       required: true,
     },
+    /**
+     * Флаг используется для отрисовки всех иконок в тестовой компоненте.
+     */
     isTest: {
       type: Boolean,
       default: false,
@@ -30,6 +45,9 @@ export default {
   },
 
   computed: {
+    /**
+     * Возвращает компоненту с иконкой для отображения.
+     */
     iconComponent() {
       const nameComponent = !this.isTest
         ? this.name + "-" + this.pick

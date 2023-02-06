@@ -191,7 +191,7 @@ export default new Vuex.Store({
       ];
     },
     /**
-     * Возвращает данные для таблицы и графика осадков на вкладке
+     * Возвращает значения температур и другие данные для таблицы и графика на вкладке
      * "Прогноз погоды на 7-14 дней".
      * @param datasetsTenDays Текущее состояние store.state.datasetsTenDays.
      * @param getLocales Языковая метка.
@@ -888,5 +888,4 @@ export default new Vuex.Store({
       commit("toggleDetails", [index, num]);
     },
   },
-  modules: {},
 });

@@ -8,6 +8,9 @@
 </template>
 
 <script>
+/**
+ * Компонента для отображения всех иконок.
+ */
 export default {
   data() {
     return {
