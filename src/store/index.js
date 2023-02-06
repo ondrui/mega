@@ -1,6 +1,15 @@
 import Vue from "vue";
 import Vuex from "vuex";
+/**
+ * @func languageExpressions Функция возвращает зодонную порометрами языковую константу.
+ */
 import { languageExpressions } from "@/constants/locales";
+/**
+ * Вспомогательные функции:
+ * @func setTimeFormat Возвращает в заданном формате время, доту.
+ * @func daytime Возвращает долготу дня в часах и минутах.
+ * @func addPlus Добовляет знак +, если значение парометра больше нуля.
+ */
 import { setTimeFormat, daytime, addPlus } from "@/constants/functions";
 
 Vue.use(Vuex);
@@ -14,24 +23,24 @@ export default new Vuex.Store({
     /**
      * Объект с фактическими погодными данными, которые приходят с сервера.
      */
-    datasetsFact: null,
+    datasetsFact: {},
     /**
      * Объект с данными для отображения почасового прогноза.
      */
-    datasetsHourly: null,
+    datasetsHourly: {},
     /**
      * Объект с данными для отображения прогноза на 10-14 дней.
      */
-    datasetsTenDays: null,
+    datasetsTenDays: {},
     /**
      * Объект с данными для отображения подробного прогноза на 10 дней с
      * разбивкой по 3 часа.
      */
-    datasetsThreeHour: null,
+    datasetsThreeHour: {},
     /**
      * Данные со стороннего API.
      */
-    dataFromAPI: null,
+    dataFromAPI: {},
     /**
      * Настройки для отображения температурных графиков, а также
      * корректировки и выравнивания прогнозных и фактических
@@ -78,11 +87,15 @@ export default new Vuex.Store({
       return state.locales;
     },
     /**
-     * Лоадер
+     * Геттер с условиями для отображения лоадера.
      * @param state Текущее состояние store.
      */
     loading(state) {
-      return state.datasetsHourly;
+      return !(
+        state.datasetsHourly &&
+        Object.keys(state.datasetsHourly).length === 0 &&
+        state.datasetsHourly.constructor === Object
+      );
     },
     /**
      * Возвращает данные для отображения в шапке виджета.
@@ -91,10 +104,7 @@ export default new Vuex.Store({
      * @param getLocales Языковая метка.
      */
     current(state, { getLocales }) {
-      let obj = {};
-      if (!state.datasetsHourly) {
-        return obj;
-      }
+      if (Object.keys(state.datasetsHourly).length === 0) return {};
       /**
        * Данные используемые для отоброжения. Берем прогнозные данные
        * за текущий час из часового прогноза.
@@ -126,10 +136,7 @@ export default new Vuex.Store({
      * @param getLocales Языковая метка.
      */
     forecastForItemHeader(state, { getLocales }) {
-      let obj = {};
-      if (!state.datasetsHourly) {
-        return obj;
-      }
+      if (Object.keys(state.datasetsHourly).length === 0) return {};
       const data = state.datasetsHourly[0][1];
       return [
         {
@@ -185,12 +192,17 @@ export default new Vuex.Store({
     },
     /**
      * Возвращает данные для таблицы и графика осадков на вкладке
-     * "Прогноз погоды на 10 дней".
+     * "Прогноз погоды на 7-14 дней".
      * @param datasetsTenDays Текущее состояние store.state.datasetsTenDays.
      * @param getLocales Языковая метка.
      */
     tenDaysTabTable: ({ datasetsTenDays }, { getLocales }) => {
       const valuesArr = Object.values(datasetsTenDays);
+      if (valuesArr.length === 0) return {};
+      /**
+       * Если количество дней больше 12, то отбрасываем данные за последний
+       * день. Если меньше 12, то то отбрасываем данные за 2 последних дня.
+       */
       const sliceEndIndex = valuesArr.length > 12 ? -1 : -2;
       const arr = valuesArr.slice(0, sliceEndIndex).map((e) => {
         const weekday = setTimeFormat(e.start_date, "D", getLocales);
@@ -228,7 +240,7 @@ export default new Vuex.Store({
     },
     /**
      * Возвращает значения температур и другие данные  для графика на вкладке
-     * "Прогноз погоды на 10 дней".
+     * "Прогноз погоды на 7-14 дней".
      * @param datasetsTenDays Текущее состояние store.state.datasetsTenDays.
      * @example
      * [{
@@ -248,6 +260,11 @@ export default new Vuex.Store({
      */
     tenDaysTabTempCharts: ({ datasetsTenDays }, { getLocales }) => {
       const arr = Object.values(datasetsTenDays);
+      if (arr.length === 0) return {};
+      /**
+       * Если количество суток больше 12, то отбрасываем данные за последние
+       * сутки. Если меньше 12, то то отбрасываем данные за 2 последних.
+       */
       const sliceEndIndexDay = arr.length > 12 ? -1 : -2;
       const dayTemp = arr.slice(0, sliceEndIndexDay).map((e) =>
         /**
@@ -258,7 +275,14 @@ export default new Vuex.Store({
           ? e.day.temp_max
           : null
       );
+      /**
+       * Если количество суток больше 12, то отбрасываем данные за последние
+       * сутки.
+       */
       const sliceEndIndexNight = arr.length > 12 ? arr.length : -1;
+      /**
+       * Для ночи отбрасываем донные за текущие сутки.
+       */
       const nightTemp = arr.slice(1, sliceEndIndexNight).map((e) =>
         /**
          * Проверяем есть ли поле night в объекте с данными за сутки,
@@ -268,10 +292,6 @@ export default new Vuex.Store({
           ? e.night.temp_min
           : null
       );
-      /**
-       * Для ночи отбрасываем донные за текущие сутки.
-       */
-      // .filter((f, i) => i !== 0);
       /**
        * Вычисляем минимальную и максимальную температуру для ограничения
        * границ графика.
@@ -291,6 +311,11 @@ export default new Vuex.Store({
      * @param getLocales Языковая метка.
      */
     hourlyTabTable({ datasetsHourly }, { getLocales }) {
+      if (Object.keys(datasetsHourly).length === 0) return {};
+      /**
+       * Возвращает значение времени для последующей сортировки.
+       * @param el Дата в строковом формате.
+       */
       const sortData = (el) => {
         return parseInt(el.date.split("T")[1].slice(0, 2));
       };
@@ -370,11 +395,14 @@ export default new Vuex.Store({
     },
     /**
      * Возвращает данные для отображения карточки подробного прогноза на 10 дней.
+     * Подробный прогноз ограничен 10 днями.
+     * Из данных с сервера убираем текущие сутки и последние.
      * @param datasetsTenDays Текущее состояние store.state.datasetsTenDays.
      * @param getLocales Языковая метка.
      */
     tenDaysDetailsCard: ({ datasetsTenDays }, { getLocales }) => {
       const valuesArr = Object.values(datasetsTenDays);
+      if (valuesArr.length === 0) return {};
       const sliceEndIndex = valuesArr.length > 12 ? 12 : valuesArr.length;
       const arr = valuesArr
         .slice(1, sliceEndIndex)
@@ -500,10 +528,16 @@ export default new Vuex.Store({
     /**
      * Возвращает данные для отображения графика и таблицы подробного
      * прогноза на 10 дней с разбивкой на 3-х часовые интервалы.
+     * Из данных с сервера убираем текущие сутки и последние.
      * @param datasetsThreeHour Текущее состояние store.state.datasetsThreeHour.
      * @param getLocales Языковая метка.
      */
     tenDaysDetailsChart: ({ datasetsThreeHour }, { getLocales }) => {
+      if (Object.keys(datasetsThreeHour).length === 0) return {};
+      /**
+       * Возвращает значение времени для последующей сортировки.
+       * @param el Дата в строковом формате.
+       */
       const sortData = (el) => {
         return parseInt(el.date.split("T")[1].slice(0, 2));
       };
@@ -585,6 +619,7 @@ export default new Vuex.Store({
     calcAdjustingForecast:
       ({ datasetsFact, datasetsHourly }, { getLocales }) =>
       (elem) => {
+        if (Object.keys(datasetsHourly).length === 0) return {};
         const periodAdjusted = elem.periodAdjusted;
         const obsTimeFact = {
           time: datasetsFact.obs_time,
@@ -633,6 +668,9 @@ export default new Vuex.Store({
         }
         const ajustingDataArr = dataArr.map((e, index) => {
           let calcTemp;
+          /**
+           * Задаем условия применения функции корректировки.
+           */
           if (
             index < indexPointMerge &&
             periodAdjusted !== 0 &&
@@ -666,6 +704,12 @@ export default new Vuex.Store({
       { datasetsHourly, dataFromAPI, chartSettings },
       { getLocales, calcAdjustingForecast }
     ) => {
+      if (
+        Object.keys(datasetsHourly).length === 0 ||
+        Object.keys(dataFromAPI).length === 0
+      )
+        return {};
+
       const copyAPITime = [...dataFromAPI.time];
       const copyAPITemp = [...dataFromAPI.temperature_2m];
       const startTime = datasetsHourly[0][1].date;
@@ -706,6 +750,11 @@ export default new Vuex.Store({
       { chartSettings },
       { calcAdjustingForecast, datasetsAPI }
     ) => {
+      if (
+        Object.keys(calcAdjustingForecast).length === 0 &&
+        Object.keys(datasetsAPI).length === 0
+      )
+        return {};
       const data = chartSettings.map((e) => calcAdjustingForecast(e));
       data.push(datasetsAPI);
       const arr = data.reduce((total, current) => {
@@ -721,10 +770,22 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    /**
+     * Заполняет store данными, полученными с бэкэнда, предварительно их модифицировав.
+     * @param state Текущее состояние store.state.
+     * @param forecast_1 Прогноз по часу начиная с текущего часа.
+     * @param forecast_24  Прогноз по полусуткам "день" (с 9:00 до 21:00),
+     * "ночь" (с 21:00 до 09:00).
+     * @param forecast_3 Прогноз по 3 часа начиная с текущего часа.
+     * @param fact Информация о фактической погоде.
+     */
     setData(state, { forecast_1, forecast_24, forecast_3, fact }) {
       //fact datasets
       state.datasetsFact = fact;
-      //hourly datasets
+      /**
+       * Выбираем необходимые данные для часового прогноза.
+       * hourly datasets
+       */
       const filteredDatasets = Object.keys(forecast_1)
         .filter((key) => key !== "3" && key !== "start_date")
         .reduce((obj, key) => {
@@ -742,8 +803,10 @@ export default new Vuex.Store({
           return obj;
         }, {});
       state.datasetsHourly = filteredDatasets;
-
-      //Three Hour Datasets
+      /**
+       * Выбираем необходимые данные для подробного прогноза с разбивой на 3 часа.
+       * Three Hour Datasets
+       */
       const filteredThreeHourDatasets = Object.keys(forecast_3)
         .filter((key) => key !== "start_date")
         .reduce((obj, key) => {
@@ -761,8 +824,10 @@ export default new Vuex.Store({
           return obj;
         }, {});
       state.datasetsThreeHour = filteredThreeHourDatasets;
-
-      //ten days datasets
+      /**
+       * Выбираем необходимые данные для прогноза  на 7-14 дней.
+       * 7-14 days datasets
+       */
       const filteredTenDatasets = Object.keys(forecast_24).reduce(
         (obj, key, index) => {
           const addObj = Object.keys(forecast_24[key]).reduce((total, p) => {
@@ -783,9 +848,22 @@ export default new Vuex.Store({
       );
       state.datasetsTenDays = filteredTenDatasets;
     },
+    /**
+     *
+     * @param state Текущее состояние store.state.
+     * @param hourly Прогноз по часу начиная с текущего часа.
+     */
     setDataAPI(state, { hourly }) {
       state.dataFromAPI = hourly;
     },
+    /**
+     * Вызывается когда пользователь кликает на
+     * карточку с подробным прогнозом.
+     * Закрываем все открытые графики и открываем выбранный.
+     * Данное поведение реализовано через смену значения поля isOpen.
+     * @param state Текущее состояние store.state.
+     * @param index Код карточки.
+     */
     toggleDetails(state, [index]) {
       Object.keys(state.datasetsTenDays).map(
         (e) => (state.datasetsTenDays[e].isOpen = false)
@@ -800,6 +878,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    /**
+     * Вызывается когда пользователь кликает на
+     * карточку с подробным прогнозом.
+     * @param index Код карточки.
+     */
     index({ commit, getters }, index) {
       const num = getters.tenDaysDetailsChart.length + 1;
       commit("toggleDetails", [index, num]);

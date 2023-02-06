@@ -144,7 +144,10 @@ export const daytime = (sunrise, sunset, separator) => {
 
   return convertMsToHM();
 };
-
+/**
+ * Добовляет знак +, если значение парометра больше нуля.
+ * @param item значение параметра.
+ */
 export const addPlus = (item) => {
   return item > 0 ? `+${item}` : item;
 };
