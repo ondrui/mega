@@ -864,17 +864,17 @@ export default new Vuex.Store({
      * @param state Текущее состояние store.state.
      * @param index Код карточки.
      */
-    toggleDetails(state, [index]) {
-      Object.keys(state.datasetsTenDays).map(
-        (e) => (state.datasetsTenDays[e].isOpen = false)
-      );
-      state.datasetsTenDays[index].isOpen = true;
-      // if (index < num) {
-      //   Object.keys(state.datasetsTenDays).map(
-      //     (e) => (state.datasetsTenDays[e].isOpen = false)
-      //   );
-      //   state.datasetsTenDays[index].isOpen = true;
-      // }
+    toggleDetails(state, [index, num]) {
+      // Object.keys(state.datasetsTenDays).map(
+      //   (e) => (state.datasetsTenDays[e].isOpen = false)
+      // );
+      // state.datasetsTenDays[index].isOpen = true;
+      if (index < num) {
+        Object.keys(state.datasetsTenDays).map(
+          (e) => (state.datasetsTenDays[e].isOpen = false)
+        );
+        state.datasetsTenDays[index].isOpen = true;
+      }
     },
   },
   actions: {

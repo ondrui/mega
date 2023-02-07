@@ -150,13 +150,16 @@ export default {
     position: relative;
     flex: 1 0;
     min-width: 56px;
-    cursor: pointer;
     transition: box-shadow 0.5s ease-in-out;
     border-bottom: 1px solid #d8e9f3;
     border-right: 1px solid #d8e9f3;
 
     &:nth-last-child(2) {
       border-right: none;
+    }
+
+    &:nth-child(n + 12) .ten-days-chevron-down svg {
+      display: none;
     }
 
     &::before {
@@ -168,12 +171,13 @@ export default {
       z-index: 10;
     }
 
-    &:hover::before {
+    &:nth-child(-n + 11):hover::before {
       box-shadow: inset 0 0 0 3px #d2e7ff;
       border-radius: 1px;
     }
 
-    &:hover {
+    &:nth-child(-n + 11):hover {
+      cursor: pointer;
       & .ten-days-chevron-down svg {
         transform: scale(2);
       }

@@ -116,13 +116,27 @@ export default {
   },
   data() {
     return {
+      /**
+       * Отвечает за скрытие кнопок скролла графика.
+       */
       side: "left",
+      /**
+       * Объект-наблюдатель за пересечением элемента который содержит график с боковыми
+       * границами графика.
+       */
       observer: null,
+      /**
+       * Объект со свойствами отвечающие за перемещение графика с помощью
+       * мыши.
+       */
       dragMouseScroll: {
         isDown: false,
         startX: 0,
         scrollLeft: 0,
       },
+      /**
+       * Объект со свойствами отвечающие за кинетический (инерционный) скроллинг.
+       */
       momentum: {
         velX: 0,
         momentumID: null,
@@ -130,6 +144,9 @@ export default {
     };
   },
   mounted() {
+    /**
+     * Создаем объект-наблюдатель и задаем целевые наблюдаемые элементы.
+     */
     this.observer = new IntersectionObserver(this.observerCallback, {
       root: this.$refs["swiper-container"],
       threshold: 0.99,
@@ -138,18 +155,38 @@ export default {
     coolElement.forEach((elem) => this.observer.observe(elem));
   },
   beforeDestroy() {
+    /**
+     * Отключаем объект-наблюдатель.
+     */
     this.observer.disconnect();
   },
   computed: {
+    /**
+     * Возвращает объект данных для отображения графиков подробного
+     * почасового прогноза с разбивкой на часовые интервалы.
+
+     */
     datasetsForHourlyCharts() {
       return this.$store.getters.datasetsForHourlyCharts;
     },
+    /**
+     * Возвращает данные для отображения таблицы подробного
+     * почасового прогноза с разбивкой на часовые интервалы.
+     */
     hourlyTabTable() {
       return this.$store.getters.hourlyTabTable;
     },
+    /**
+     * Возвращает языковую метку.
+     * @example
+     * "ru"
+     */
     getLocales() {
       return this.$store.getters.getLocales;
     },
+    /**
+     * Возвращает количество пикселей, на которое необходимо прокрутить график.
+     */
     scrollSize() {
       return (
         (this.$refs["swiper-wrapper"].clientWidth /
@@ -161,6 +198,9 @@ export default {
   methods: {
     languageExpressions,
     windDirection,
+    /**
+     * Функция отвечает за выбор элемента согласно условиям и регистрации ссылки на него.
+     */
     addRef(indexParent, index, arrParent, arr) {
       return (+indexParent === 0 && index === 0) ||
         (+indexParent === Object.keys(arrParent).length - 1 &&
@@ -168,6 +208,12 @@ export default {
         ? "item"
         : null;
     },
+    /**
+     * Колбэк-функция вызывается при пересечении элемента, который содержит
+     * график с боковыми границами графика.
+     * @param entry Объект описывает пересечение между целевым элементом
+     * и его корневым контейнером в определенный момент перехода.
+     */
     observerCallback([entry]) {
       const firstItem = this.$refs.item[0];
       if (entry.isIntersecting && entry.intersectionRatio >= 0.9) {
@@ -178,12 +224,22 @@ export default {
         this.side = "";
       }
     },
+    /**
+     * Функция отвечает за прокручивание графика.
+     * @param direction В параметр передается строка со стороной,
+     * в которую нужно сдвинуть график.
+     */
     scroll(direction) {
       this.$refs["swiper-container"].scrollBy({
         left: direction === "right" ? this.scrollSize : -this.scrollSize,
         behavior: "smooth",
       });
     },
+
+    /**
+     * Блок функций, отвечающий за реализацию кинетического скроллинга
+     * при помощи мыши.
+     */
     mouseDown(event) {
       this.dragMouseScroll.isDown = true;
       this.dragMouseScroll.startX =

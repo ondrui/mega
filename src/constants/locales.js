@@ -95,7 +95,9 @@ const dataLocales = {
   },
   fr: {},
 };
-
+/**
+ * Функция возвращает языковую константу.
+ */
 export const languageExpressions = (locales, key, name) => {
   const lang = locales ?? "ru";
   return key !== undefined && name !== undefined
