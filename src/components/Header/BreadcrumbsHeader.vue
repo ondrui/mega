@@ -21,22 +21,43 @@ import { languageExpressions } from "@/constants/locales";
 export default {
   data() {
     return {
+      /**
+       * Массив содержит имена ссылок.
+       */
       crumbs: [],
     };
   },
   mounted() {
+    /**
+     * Задоем имена ссылок.
+     */
     this.breadcrumbs("breadcrumbs", ["main", "weather", "city"]);
   },
   computed: {
+    /**
+     * Возвращает языковую метку для определения локали.
+     * @example "ru"
+     */
     getLocales() {
       return this.$store.getters.getLocales;
     },
   },
   methods: {
+    /**
+     * Возвращает строковые константы с учетом локали.
+     */
     languageExpressions,
+    /**
+     * По условию отображает элемент ссылка.
+     */
     isLast(index) {
       return index !== this.crumbs.length - 1;
     },
+    /**
+     * Функция для создания массива с именами ссылок.
+     * @param key Ключ 1-го уровнядля объекта со строковыми константами.
+     * @param arr Массив с ключами 2-го уровня для объекта со строковыми константами.
+     */
     breadcrumbs(key, arr) {
       arr.forEach((element) => {
         this.crumbs.push(languageExpressions(this.getLocales, key, element));

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import ChartDetailsTemp from "@/components/SVGCharts/10-day-details/ChartDetailsTemp.vue";
+import ChartDetailsTemp from "@/components/SVGCharts/day-details/ChartDetailsTemp.vue";
 import RowCaption from "@/components/RowCaption.vue";
 import { languageExpressions } from "@/constants/locales";
 import { windDirection } from "@/constants/functions";
@@ -58,14 +58,27 @@ export default {
     ChartDetailsTemp,
     RowCaption,
   },
+  /**
+   * Масив с данными для отображения графика.
+   */
   props: ["data"],
   computed: {
+    /**
+     * Возвращает языковую метку для определения локали.
+     * @example "ru"
+     */
     getLocales() {
       return this.$store.getters.getLocales;
     },
   },
   methods: {
+    /**
+     * Возвращает строковые константы с учетом локали.
+     */
     languageExpressions,
+    /**
+     * Возвращает команду поворота иконки ветра в соответствие с направлением ветра.
+     */
     windDirection,
   },
 };

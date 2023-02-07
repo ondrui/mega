@@ -19,20 +19,33 @@
 import { addPlus } from "@/constants/functions";
 export default {
   props: {
+    /**
+     * Объект с данными для отображения блока восход/заход солнца.
+     */
     points: {
       type: Object,
       required: true,
     },
+    /**
+     * Размер шрифта значения температуры.
+     */
     textSize: {
       type: Number,
       required: true,
     },
+    /**
+     * Отступ текста от графика.
+     */
     marginText: {
       type: Number,
       required: true,
     },
   },
   methods: {
+    /**
+     * Возвращает объект, который содержат координаты и другие параметры
+     * необходимые для отображения текстовых меток.
+     */
     textMeter(index) {
       const value = addPlus(this.points.dataset[index].temp);
       const unit = this.points.unit;

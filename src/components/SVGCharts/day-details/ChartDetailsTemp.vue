@@ -72,11 +72,18 @@ export default {
     window.removeEventListener("resize", this.resizeBrowserHandler);
   },
   watch: {
+    /**
+     * Наблюдатель нужен для отрисовки графика при его открытии.
+     * При клике на карточку или на элемент во вкладке суточного прогноза.
+     */
     tenDaysDetailsCard() {
       this.resizeBrowserHandler();
     },
   },
   computed: {
+    /**
+     * Возвращает данные для отображения карточки подробного прогноза на 7-10 дней.
+     */
     tenDaysDetailsCard() {
       return this.$store.getters.tenDaysDetailsCard;
     },
@@ -100,8 +107,8 @@ export default {
       return `${d}`;
     },
     /**
-     * Возвращает массив объектов, которые содержат координаты для
-     * отображения графиков и меток температурных.
+     * Возвращает массив объектов, которые содержат координаты и другие параметры
+     * необходимые для отображения графиков и меток температурных.
      * @example
      *[
      *  { x: 27.35, y: 85, temp: 11, textYMax: 149, unit: '°' },

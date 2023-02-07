@@ -34,12 +34,22 @@ import { windDirection } from "@/constants/functions";
 export default {
   props: ["value"],
   computed: {
+    /**
+     * Возвращает языковую метку для определения локали.
+     * @example "ru"
+     */
     getLocales() {
       return this.$store.getters.getLocales;
     },
   },
   methods: {
+    /**
+     * Возвращает строковые константы с учетом локали.
+     */
     languageExpressions,
+    /**
+     * Возвращает команду поворота иконки ветра в соответствие с направлением ветра.
+     */
     windDirection,
   },
 };

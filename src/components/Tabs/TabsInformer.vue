@@ -22,7 +22,7 @@
 <script>
 import { languageExpressions } from "@/constants/locales";
 import HourlyTabContent from "./HourlyTabContent.vue";
-import TenDayTabContent from "./TenDayTabContent.vue";
+import DayTabContent from "./DayTabContent.vue";
 
 export default {
   data() {
@@ -35,7 +35,7 @@ export default {
   },
   components: {
     HourlyTabContent,
-    TenDayTabContent,
+    DayTabContent,
   },
   computed: {
     getLocales() {

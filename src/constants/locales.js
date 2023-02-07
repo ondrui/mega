@@ -12,7 +12,7 @@ const dataLocales = {
     },
     tabsDescr: {
       HourlyTabContent: "почасовой прогноз",
-      TenDayTabContent: "прогноз погоды на дней",
+      DayTabContent: "прогноз погоды на дней",
     },
     detailsSegmentTitle: "погода в Москве - подробный прогноз на дней",
     climateIndicators: {

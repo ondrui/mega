@@ -57,7 +57,7 @@
             </div>
           </div>
           <div class="ten-days-charts-temp">
-            <ChartsList />
+            <ChartsDayList />
           </div>
         </div>
       </div>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import ChartsList from "../SVGCharts/10-day-temp/ChartsList.vue";
+import ChartsDayList from "../SVGCharts/day/ChartsDayList.vue";
 /**
  * RowCaption.vue - компонента для отрисовки подписей погодных параметров.
  */
@@ -76,7 +76,7 @@ import { windDirection } from "@/constants/functions";
 
 export default {
   components: {
-    ChartsList,
+    ChartsDayList,
     RowCaption,
   },
   computed: {
@@ -87,6 +87,10 @@ export default {
     tenDaysTabTable() {
       return this.$store.getters.tenDaysTabTable;
     },
+    /**
+     * Возвращает языковую метку для определения локали.
+     * @example "ru"
+     */
     getLocales() {
       return this.$store.getters.getLocales;
     },

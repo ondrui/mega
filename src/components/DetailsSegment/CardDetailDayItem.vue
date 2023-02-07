@@ -11,6 +11,9 @@
 
 <script>
 export default {
+  /**
+   * Масив с данными для отображения информации.
+   */
   props: ["value"],
 };
 </script>

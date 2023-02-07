@@ -5,12 +5,12 @@
     :view-box.camel="viewbox"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <ChartsItem
+    <ChartsDayItem
       v-for="(points, index) in dataPoints"
       :key="`ch-${index}`"
       :points="points"
     />
-    <ChartsTextItem
+    <ChartsDayTextItem
       v-for="(value, index) in dataPoints"
       :key="`tx-${index}`"
       :points="value"
@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import ChartsItem from "./ChartsItem.vue";
-import ChartsTextItem from "./ChartsTextItem.vue";
+import ChartsDayItem from "./ChartsDayItem.vue";
+import ChartsDayTextItem from "./ChartsDayTextItem.vue";
 export default {
   components: {
-    ChartsItem,
-    ChartsTextItem,
+    ChartsDayItem,
+    ChartsDayTextItem,
   },
   data() {
     return {

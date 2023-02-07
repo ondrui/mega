@@ -36,6 +36,9 @@ export default {
     ContentDetailDay,
   },
   watch: {
+    /**
+     * Следим за изменениями в массиве с карточками - полем isOpen.
+     */
     tenDaysDetailsCard() {
       this.focus();
     },
@@ -50,14 +53,12 @@ export default {
     tenDaysDetailsChart() {
       return this.$store.getters.tenDaysDetailsChart;
     },
-    showTitle() {
-      return this.tenDaysDetailsCard > 7
-        ? this.languageExpressions(this.getLocales, "detailsSegmentTitle")[0]
-        : this.languageExpressions(this.getLocales, "detailsSegmentTitle")[1];
-    },
   },
   methods: {
     languageExpressions,
+    /**
+     * Устанавливаем фокус на выбранный элемент и скролим до него.
+     */
     focus() {
       const index = this.tenDaysDetailsCard.findIndex((i) => i.isOpen === true);
       // if (index !== -1) this.$refs.item[index].focus();
@@ -67,11 +68,11 @@ export default {
           behavior: "smooth",
         });
     },
+    /**
+     * Отображает график и рамку вокруг элемента если свойство isOpen равно true.
+     */
     isOpen(index) {
-      return (
-        this.tenDaysDetailsCard[index].isOpen &&
-        index < this.tenDaysDetailsChart.length
-      );
+      return this.tenDaysDetailsCard[index].isOpen === true;
     },
   },
 };

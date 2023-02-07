@@ -24,6 +24,9 @@
   </div>
 </template>
 <script>
+/**
+ * Блок восход/закат солнца для карточки под мобильную версию.
+ */
 import { languageExpressions } from "@/constants/locales";
 
 export default {

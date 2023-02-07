@@ -36,17 +36,32 @@ export default {
     ForecastHeaderItem,
   },
   computed: {
+    /**
+     * Возвращает языковую метку для определения локали.
+     * @example "ru"
+     */
     getLocales() {
       return this.$store.getters.getLocales;
     },
+    /**
+     * Возвращает данные для отображения в шапке виджета.
+     * Правая часть.
+     */
     forecastForItemHeader() {
       return this.$store.getters.forecastForItemHeader;
     },
+    /**
+     * Возвращает данные для отображения в шапке виджета.
+     * Левая часть.
+     */
     current() {
       return this.$store.getters.current;
     },
   },
   methods: {
+    /**
+     * Возвращает строковые константы с учетом локали.
+     */
     languageExpressions,
   },
 };
