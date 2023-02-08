@@ -96,11 +96,13 @@ export default {
     align-items: flex-start;
     flex: 1;
     cursor: pointer;
-    box-shadow: inset 0 1px 0 0 #b2d3e8;
+    // box-shadow: inset 0 1px 0 0 #b2d3e8;
     border: 1px solid #b2d3e8;
-    border-top: none;
+    // border-top: 3px solid transparent;
     background-color: #ffffff;
     outline: none;
+    border-radius: 3px 3px 0 0;
+
     &:nth-child(odd) {
       margin-right: -1px;
     }
@@ -129,12 +131,16 @@ export default {
 
     &.active {
       background-color: #f0f7fc;
-      box-shadow: inset 0 3px 0 0 #04569c;
+      box-shadow: none;
+      // box-shadow: inset 0 3px 0 0 #04569c;
+      border-top: none;
+      border-top: 3px solid #04569c;
       border-bottom: none;
 
       & span {
         color: #000000;
         text-decoration: none;
+        padding-top: 8px;
       }
     }
   }
