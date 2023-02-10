@@ -470,8 +470,16 @@ export default {
     touch-action: manipulation;
     transition: all 0.5s;
 
+    & svg {
+      transition: transform 0.5s;
+    }
+
     &:hover {
       background-color: rgba(29, 125, 188, 0.16);
+
+      & svg {
+        transform: scale(1.4);
+      }
     }
 
     &:active {
